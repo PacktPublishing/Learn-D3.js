@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+    const merge = d3.merge([[3,4], [5,6]]);
+    console.log("Merge", merge);
+
+    const concat = [3,4].concat([5,6]);
+    console.log("Concat", concat);
+
+
+
+    const permuted = d3.permute([1,2,3,4], [0,3,0,3,0,3]);
+    console.log("Permuter", permuted);
+
+    const permutedObj = d3.permute( {label: 'label2', value: 3}, ["value", "label"]);
+    console.log("Permuted objects", permutedObj);
+
+    const cross = d3.cross([3,4], [5,6]);
+    console.log("Cross", cross);
+
+    const crossMultiply = d3.cross([3,4], [5,6], (a,b) => a*b);
+    console.log("Cross Multiply", crossMultiply);
+
+    const pairs = d3.pairs([3,4,5,6]);
+    console.log("Pairs", pairs);
+
+    const pairsAdder = d3.pairs([3,4,5,6], (a,b) => a+b);
+    console.log("Pairs Adder", pairsAdder);
+
+    const objects = [{label: 'label1', value: 5}, {label: 'label2', value: 3}, {label: 'label3', value: 9}]
+    const pairsExtracter = d3.pairs(objects, (a,b) => [a.value, b.value]);
+    console.log("Pairs Extracter", pairsExtracter);
+
+
+
+    const zip = d3.zip([1,2,3],[4,5,6],[9,8,7,6]);
+    console.log("Zip", zip);
+
+    const transpose = d3.transpose([[1,2,3],[4,5,6],[9,8,7]]);
+    console.log("Transpose", transpose);
+
+
+
+    const array = [1,2,3,4,5,6,7,8,9];
+    const shuffled = d3.shuffle(array);
+    console.log("Shuffler array", array);
+    console.log("Shuffler shiffled", shuffled);
+
+    const shuffledStartStop = d3.shuffle([1,2,3,4,5,6,7,8,9], 2, 7);
+    console.log("Shuffle Middle", shuffledStartStop);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill-opacity: 1;
+            fill: red;
+        }
+        line, path {
+            stroke: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    //const data = d3.timeYears(new Date(2005,1,1),new Date(2015,1,1));
+    const data = [
+        new Date(2018,9,15,6,30,0),
+        new Date(2018,9,15,12,45,0),
+        new Date(2018,9,15,18,55,0)
+    ];
+
+    const scale = d3.scaleUtc()
+            .domain([new Date(2018,9,15,0,0,0),new Date(2018,9,15,23,59,59)])
+            .range([0,1000]);
+
+    const xAxis = d3.axisBottom().scale(scale).tickSize(25);
+
+    console.log(new Date(1950,1,1), scale(new Date(1950,1,1)));
+    console.log(new Date(1975,1,1), scale(new Date(1975,1,1)));
+    console.log(new Date(2000,1,1), scale(new Date(2000,1,1)));
+    console.log(new Date(2025,1,1), scale(new Date(2025,1,1)));
+    console.log(new Date(2050,1,1), scale(new Date(2050,1,1)));
+
+    d3.select("body").append("svg")
+            .append("g")
+            .attr("transform","translate(25,25)")
+            .call(xAxis);
+
+    d3.select("svg").attr("height", 550).attr("width", 1050)
+            .selectAll("circle")
+            .data(data).enter()
+            .append("circle")
+            .attr("r", 5)
+            .attr("cx", d=>scale(d)+25)
+            .attr("cy", 25);
+
+
+
+</script>
+
+</body>
+</html>

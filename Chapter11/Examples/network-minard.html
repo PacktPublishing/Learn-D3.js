@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const projection = d3.geoConicEquidistant()
+                         .center([32.5,57])
+                         .scale(25 * d3.geoStereographic().scale())
+                         .translate([width/2 + 40,height/2 - 230]);
+    const geoPath = d3.geoPath().projection(projection);
+
+    const armyScale = d3.scaleLinear().range([1,60]).domain([4000,422000]);
+
+    const map = {};
+
+    Promise.all([
+        d3.json('../Data/europe-russia.topojson'),
+        d3.csv('../Data/minard-cities.csv', function(row) {
+            return {
+                city: row.city,
+                coordinates: [+row.lon, +row.lat]
+            };
+        }),
+        d3.csv('../Data/minard-troops.csv', function(row) {
+            return {
+                id: row.id,
+                survivors: +row.survivors,
+                direction: row.direction == 'A' ? 1 : -1,
+                coordinates: [+row.lon, +row.lat],
+                line: [row.prev ? +row.prev : row.id, row.id]
+            };
+        }),
+    ])
+    .then(([shapes, cities, troops]) =>  {
+
+        map.topology   = shapes.objects['europe_russia'];
+        map.geometries = map.topology.geometries;
+        map.features   = topojson.feature(shapes, map.topology).features;
+        map.merged     = topojson.merge(shapes, map.topology.geometries);
+        map.mesh       = topojson.mesh(shapes, map.topology);
+
+        const featureSet = [];
+        troops.forEach(function(step) {
+            featureSet.push({
+                type: "Feature",
+                id: step.id,
+                properties: {
+                    survivors: +step.survivors,
+                    direction: step.direction
+                },
+                geometry: {
+                    type: "LineString",
+                    coordinates: [troops.filter(d => d.id == step.line[0])[0].coordinates,
+                                  troops.filter(d => d.id == step.line[1])[0].coordinates]
+               }
+            });
+        });
+        const armyObject = {type:"FeatureCollection", "features": featureSet};
+
+        drawGraticules();
+        //drawShape(); // use this for single merged shape (faster)
+        //drawMesh();  // use this for borders in single merged shape
+        drawShapes();  // use this for individual shapes
+        drawArmy(armyObject);
+        drawCities(cities);
+
+
+    });
+
+    function drawArmy(data) { console.log(data.features)
+        svg.selectAll("g.army")
+                .data(data.features.filter((d,i) => i>0))
+                .enter()
+                .append("g").attr("class", "army")
+                .on("mouseenter", showTroops)
+                .on("mouseleave", hideTroops)
+                .append("path")
+                .attr('d', geoPath)
+                .style("fill", 'none')
+                .style("stroke", d => d.properties.direction > 0 ? d3.rgb("#996b30").brighter() : "gray")
+                .style("stroke-linecap",(d,i) => i == 0 ? "butt" : "round")
+                .style("stroke-width", d => armyScale(d.properties.survivors))
+                .style("stroke-opacity", .95)
+
+    }
+
+
+    function showTroops(d) {
+        const g = d.geometry;
+        const interpolate = d3.geoInterpolate(g.coordinates[0], g.coordinates[1]);
+
+        const middle = projection(interpolate(.5));
+        svg.append("text").attr("class", "tooltip")
+                .style("fill", "brown")
+                .style("text-anchor", "middle")
+                .style("font-size", 13)
+                .attr("transform", `translate(${middle})`)
+                .text(d.properties.survivors + " survivors")
+    }
+    function hideTroops(d) {
+        d3.select(".tooltip").remove();
+    }
+
+    function drawMesh() {
+        svg.append("g").attr("class","borders")
+                .datum(map.mesh)
+                .style("fill", "none")
+                .style("fill-opacity", .4)
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .attr("strike-width", .25)
+    }
+
+    function drawShape() {
+        svg.append("g").attr("class","country")
+                .datum(map.merged)
+                .style("fill", '#eee')
+                .style("fill-opacity", .8)
+                .append("path")
+                .attr('d', geoPath);
+    }
+
+    function drawShapes() {
+        svg.selectAll("g.region")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","region")
+                .style("fill", '#ccc')
+                .style("fill-opacity", .5)
+                .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "black")
+                    .style("stroke-width", .25)
+    }
+
+    function drawCities(data) {
+        const city = svg.selectAll("g.city")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","city")
+                .attr('transform', d => `translate(${geoPath.projection()(d.coordinates)})`);
+        city.append("circle")
+                .style("fill", 'green')
+                .attr('r', 1)
+                .style("stroke-width", 2)
+                .style("stroke", "black");
+        city.append('text')
+                .style('font-size', 12)
+                .attr('x', 5)
+                .attr('transform', `rotate(-10)`)
+                .style('alignment-baseline', 'middle')
+                .text(d => d.city)
+    }
+
+    function drawGraticules() {
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style('stroke-width', d => '.25');
+    }
+
+</script>
+
+</body>
+</html>

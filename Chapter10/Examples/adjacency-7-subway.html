@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 17px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            color: #e5fba1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 600;
+    const height = 600;
+    const margin = 200;
+
+    const colors = ['blue', 'green', 'red', 'gold', 'purple', 'silver'];
+    const lines  = [1,2,3,4,5,15];
+    const colorScale = d3.scaleOrdinal().domain(lines).range(colors);
+
+    d3.json('../Data/metrosp.json').then(function(data) {
+
+        data.nodes = data.nodes.map(n => ({node: n.station+':'+n.line}));
+        data.links = data.links.map(n => ({source: n.source+':'+n.lines[0], target: n.target+':'+n.lines[1], lines: n.lines, value: 1}));
+
+        const filteredLinks = data.links.filter(d => d.lines[0] != d.lines[1]);
+        const connectionNodes = data.nodes.filter(d => filteredLinks.map(k => k.source).indexOf(d.node) >= 0)
+
+        filteredLinks.forEach(function(edge) {
+            edge.source = connectionNodes.map(n => n.node).indexOf(edge.source);
+            edge.target = connectionNodes.map(n => n.node).indexOf(edge.target);
+        });
+
+        const matrixLayout = dvj.adjacencyMatrix().size([width-margin,height-margin]);
+
+        const matrix = dvj.linksToMatrix(connectionNodes, filteredLinks);
+
+        const result = matrixLayout(connectionNodes, matrix);
+
+        draw(connectionNodes, result);
+
+    });
+
+    function draw(nodes, data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+
+        chart.selectAll("rect")
+                .data(data.filter(d => d.x > d.y)) // filters out lower diagonal and cells below it
+                .enter()
+                .append("rect")
+                .attr("x", d => d.value ? d.x : d.x + d.w/4)
+                .attr("y", d => d.value ? d.y : d.y + d.h/4)
+                .attr("height", d => d.value ? d.h : d.h / 2)
+                .attr("width", d => d.value ? d.w : d.w / 2)
+                .attr("rx",d => d.value ? d.w/4 : 0)
+                .attr("ry", d => d.value ? d.h/4 : 0)
+                .style("fill", d => d.value ? 'black' : 'lightgray');
+
+        chart.selectAll('text.source')
+                .data(data.filter(d => d.y == 0))
+                .enter()
+                .append("text").attr("class",'source')
+                .attr("y", d => d.x + d.w/2)
+                .style("text-anchor", 'start')
+                .attr("x", 5)
+                .attr("transform",`rotate(-90) `)
+                .text((d,i) => i>0 ? nodes[i].node : '')
+                .style("fill", (d,i) => d3.rgb(colorScale(nodes[i].node.split(':')[1])).darker(.5));
+
+        chart.selectAll('text.target')
+                .data(data.filter(d => d.x == 0))
+                .enter()
+                .append("text").attr("class",'target')
+                .attr("y", d => d.y + d.h/2)
+                .style("text-anchor", 'end')
+                .attr("x", (d,i) => d.w * (i+1) - 10)
+                .text((d,i) => i<nodes.length-1 ? nodes[i].node : '')
+                .style("fill", (d,i) => d3.rgb(colorScale(nodes[i].node.split(':')[1])).darker(.5));
+
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 120 ? '#333' : 'lightyellow';
+    }
+
+    function highlight(d) {
+        d3.selectAll("rect").classed('faded', k => !(k.x == d.x || k.y == d.y))
+        d3.selectAll("rect").classed('highlight', k => k.x == d.x || k.y == d.y)
+        d3.selectAll("text.source").classed('highlight', k => k.x == d.x)
+        d3.selectAll("text.target").classed('highlight', k => k.y == d.y)
+    }
+</script>
+</body>
+</html>

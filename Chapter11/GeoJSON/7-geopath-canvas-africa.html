@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        canvas {border: solid 1px gray;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    d3.json('../Data/africa-simple-multipolygon.geojson')
+            .then(function(data) {
+
+        console.log(data);
+
+        const context = d3.select("body")
+                          .append("canvas")
+                          .attr("width", width).attr("height", height)
+                          .node().getContext("2d");
+
+        const geoPath = d3.geoPath()
+                          .projection(d3.geoMercator())
+                          .context(context);
+
+        data.features.forEach(function(d,i) {
+            context.beginPath();
+            geoPath(d);
+            context.fillStyle = 'blue';
+            context.fill();
+        });
+
+    });
+</script>
+
+</body>
+</html>

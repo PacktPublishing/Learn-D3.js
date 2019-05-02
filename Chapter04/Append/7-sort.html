@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<div>
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+    <p id="a4">Four</p>
+    <p id="a5">Five</p>
+</div>
+
+<script>
+    const selection = d3.select("div").selectAll("p");
+    console.log(selection.nodes());
+
+    const bound = selection
+                    .data([6,3,2,1,4])
+                    .text((d,i,n) => d3.select(n[i]).text() + " " + d);
+    console.log(bound);
+
+    const sorted = bound.sort( (a,b) => a - b);
+    console.log(sorted.nodes());
+</script>
+</body>
+</html>

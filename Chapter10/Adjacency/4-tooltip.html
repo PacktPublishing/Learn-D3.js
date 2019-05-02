@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        .faded {
+            opacity: .3;
+        }
+        .highlight {
+            font-weight: bold;
+            font-size: 120%;
+        }
+        rect.highlight {
+            stroke-width: 3px;
+        }
+        .tooltip {
+            font-size: 300%
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 700;
+    const height = 700;
+    const margin = 100;
+
+    const color = d3.scaleSequential(d3.interpolateBuGn);
+
+    const nodes = [
+        {node: 'A', value: 123}, // value not used in this example
+        {node: 'B', value: 456},
+        {node: 'C', value: 995},
+        {node: 'D', value: 65},
+        {node: 'E', value: 79},
+    ];
+
+    const edges = [
+        {source: 0, target: 1, value: 6},
+        {source: 0, target: 2, value: 2},
+        {source: 1, target: 0, value: 8},
+        {source: 1, target: 2, value: 5},
+        {source: 2, target: 1, value: 1},
+        {source: 3, target: 1, value: 1},
+        {source: 3, target: 4, value: 1}
+    ];
+
+    const matrixLayout = dvj.adjacencyMatrix().size([width-margin,height-margin]);
+
+    const matrix = dvj.linksToMatrix(nodes, edges);
+
+    const data = matrixLayout(nodes, matrix);
+
+    color.domain([0, d3.max(edges, d => d.value)]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+
+    const cell = chart.selectAll('g.cell')
+            .data(data)
+            .enter()
+            .append("g").attr("class", 'cell')
+            .attr("transform", d => `translate(${[d.x, d.y]})`)
+            .on("mouseover", highlight)
+            .on("mouseout", unHighlight);
+
+    cell.append("rect")
+            .attr("height", d => d.h*.95)
+            .attr("width", d => d.w*.95)
+            .attr("rx",d => d.w/4)
+            .attr("ry", d => d.h/4)
+            .style("stroke", 'black')
+            .style("fill", d => d.value ? color(d.value) : 'white');
+
+    chart.selectAll('text.source')
+            .data(data.filter(d => d.y == 0))
+            .enter()
+            .append("text").attr("class",'source')
+            .attr("x", d => d.x + d.w/2)
+            .style("text-anchor", 'middle')
+            .attr("y", -15)
+            .text((d,i) => nodes[i].node)
+            .on("mouseover", highlight)
+            .on("mouseout", unHighlight);
+
+    chart.append("text")
+            .style("text-anchor", 'middle')
+            .attr("transform",`rotate(-90,${[0,height/2 - margin/2]}) translate(${[0, height/2 - margin/2 - 30]})`)
+            .text('FROM');
+
+    chart.selectAll('text.target')
+            .data(data.filter(d => d.x == 0))
+            .enter()
+            .append("text").attr("class",'target')
+            .attr("y", d => d.y + d.h/2 + 7)
+            .style("text-anchor", 'end')
+            .attr("x", -10)
+            .text((d,i) => nodes[i].node)
+            .on("mouseover", highlight)
+            .on("mouseout", unHighlight);
+
+    chart.append("text")
+            .style("text-anchor", 'middle')
+            .attr("transform",`translate(${[width/2 - margin/2, -35]})`)
+            .text('TO');
+
+    const tooltip = chart.append("g")
+            .attr("class",'tooltip')
+            .style("opacity", 0)
+            .style("pointer-events", 'none')
+
+    tooltip.append("rect")
+            .style("fill", 'white')
+            .style("stroke", 'black')
+    tooltip.append("text")
+            .style("alignment-baseline", 'middle')
+            .style("text-anchor", 'middle')
+
+    function unHighlight(d,i,nodes) {
+        d3.selectAll(".cell, text.source, text.target").classed('faded highlight', false);
+        d3.select('.tooltip').style("opacity", 0);
+    }
+
+    function highlight(d) {
+            d3.selectAll(".cell").classed('faded', k => !(k.x == d.x || k.y == d.y))
+            d3.selectAll(".cell").classed('highlight', k => k.x == d.x || k.y == d.y)
+            d3.selectAll("text.source").classed('highlight', k => k.x == d.x)
+            d3.selectAll("text.target").classed('highlight', k => k.y == d.y)
+
+            d3.select('.tooltip').select("text")
+                 .attr("x", d.w * .625)
+                 .attr("y", d.h * .625)
+                 .text(d.value ? d.value : 0);
+
+            d3.select('.tooltip')
+                .attr("transform", `translate(${[d.x -d.w/8, d.y -d.h/8]})`)
+                .style("opacity", 1)
+
+                .select("rect")
+                    .style("stroke-width", 3)
+                    .attr("rx", d.w/8)
+                    .attr("ry", d.h/8)
+                    .style("fill", d.value ? color(d.value) : 'white')
+                    .attr("width", 1.25 * d.w)
+                    .attr("height", 1.25 * d.w)
+    }
+
+
+</script>
+</body>
+</html>

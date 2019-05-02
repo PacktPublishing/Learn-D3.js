@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p>
+
+<script>
+
+    const selection = d3.selectAll("div p"); // 3 elements
+    console.log("Size: ", selection.size()); // 3
+
+    const empty = selection.filter(d => d);
+    console.log("Is it empty: ", empty.empty() ? "Yes" : "No"); // Yes
+
+    selection.data(["Odin", "Dva", "Tri", "Chetire", "Pyat", "Shest"]); // 6 data items
+
+    const not_empty = selection.filter(d => d);
+    console.log("Is it empty: ", not_empty.empty() ? "Yes" : "No"); // No
+    console.log("Size: ", not_empty.size()); // 3 (only first 3 items are used)
+
+    selection.text(d => d);
+
+
+    d3.select(":not(div) >p") // selects the first element
+        .datum("Syem") // binds with data item
+        .text(function(d,i,nodes) {
+            console.log(d, i, nodes, nodes[i], this); // this == nodes[i] in anon function
+            return d; // change contents
+        });
+
+</script>
+</body>
+</html>

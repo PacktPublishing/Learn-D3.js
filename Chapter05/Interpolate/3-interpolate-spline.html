@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 24px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            fill: navy;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const height=500, width=700;
+
+    const points = [300,0,600];
+    const inter = d3.interpolateBasis(points);
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const text = svg.append("text")
+            .attr("x", width/2)
+            .attr("y", height/2)
+            .text('');
+
+    const color = d3.scaleSequential(d3.interpolateSinebow).domain(points);
+
+    const format = d3.format('.0f');
+    const percent = d3.format('.0%');
+
+    // The circle will show the smooth zooming effect
+    svg.transition()
+            .duration(5000)
+            .delay(500)
+            .tween("position", function(d) {
+                return function(t) {
+                    const v = inter(t);
+
+                    text.text(`t: ${percent(t)}, v: ${format(v)}`);
+
+                    svg.append("circle")
+                            .style("fill", color(v))
+                            .attr("r", 25)
+                            .attr("cx", v + 50)
+                            .attr("cy", (t * 400) + 50);
+                }
+            })
+
+</script>
+</body>
+</html>

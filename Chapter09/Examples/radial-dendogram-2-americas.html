@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill: red;
+        }
+
+        path {
+            fill: none;
+            stroke: gray;
+            stroke-width: .5px;
+        }
+        rect {
+            stroke: blue;
+            fill: none;
+        }
+        text {
+            font-family: sans-serif;
+        }
+        .continent {
+            font-size: 9px;
+            font-weight: bold;
+            fill: blue;
+            transform: rotate(90deg) translate(3px,3px);
+        }
+        .world {
+            font-size: 12px;
+            font-weight: bold;
+            fill: red;
+            transform: rotate(89deg) translate(3px,3px);
+        }
+        .country {
+            font-size: 8px;
+        }
+
+    </style>
+</head>
+<body>
+<script>
+    const height = 1000;
+    const width = 1000;
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        const nested = d3.nest()
+                        .key(d => d.Supercontinent)
+                        .key(d => d.Continent)
+                        .key(d => d.UN_Region)
+                        .key(d => d.Country)
+                        .rollup(d => d.map(c => ({area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+                        .entries(result);
+
+        const hierData = d3.hierarchy(makeRoot(nested.filter(d => d.key == 'Americas')));
+
+        hierData.sort((a,b) => b.parent.id - a.parent.id);
+
+        console.log("Sorted", hierData)
+
+        const cluster = d3.cluster()
+                .size([180,(height/2)-120])
+                .separation((a,b) => (a.parent == b.parent ? 1 : 2) / a.depth );
+        const clusterData = cluster(hierData.sort((a,b) => b.height - a.height));
+
+        console.log("Tree", clusterData);
+
+        draw(clusterData);
+
+    });
+
+    function makeRoot(items) {
+        const object = {
+            key: 'World',
+            values: items
+        };
+        return makeSubtree(object);
+    }
+
+    function makeSubtree(item) {
+        let object = {
+            id: item.key,
+            data: {population: 0, area: 0},
+        };
+        if (item.values) {
+            if(item.values.length == 1) { // remove unnecessary nesting
+                object = makeSubtree(item.values[0]);
+            } else {
+                object.children = [];
+                item.values.forEach(function (value) {
+                    const subtree = makeSubtree(value);
+                    object.children.push(subtree);
+                    object.data.population += subtree.data.population;
+                    object.data.area += subtree.data.area;
+                });
+            }
+        } else if(item.value) {
+            object.data = item.value[0];
+        }
+        return object;
+    }
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", d => `rotate(180 ${[width/2,height/2]}) translate(${[width/2,height/2]})`);
+
+        drawLinks(chart.append("g").attr("class", "links"), data.links());
+        drawNodes(chart.append("g").attr("class", "nodes"), data.descendants());
+
+    }
+
+    function drawNodes(g, data) {
+        const node = g.selectAll("g.node")
+            .data(data)
+            .enter()
+            .append('g')
+            .attr("class", "node")
+            .attr("transform", d => "rotate("+d.x+") translate("+d.y+")");
+
+
+        node.append("circle")
+                .attr("r", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return 2;
+                    } else if (d.depth == 0){
+                        return 4;
+                    } else {
+                        return 1;
+                    }
+                })
+
+        node.append("text")
+                .attr('x', 5)
+                .attr('y', 0)
+                .attr("class", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return "continent";
+                    } else if (d.depth == 0){
+                        return "world";
+                    } else {
+                        return "country";
+                    }
+                })
+                .text(d => d.data.id);
+    }
+
+    const link = d3.linkRadial()
+            .angle(function(d) { return (d.x * Math.PI / 180) + Math.PI/2; })
+            .radius(function(d) { return d.y; });
+
+    function drawLinks(g, data) {
+        g.selectAll("path")
+                .data(data)
+                .enter()
+                .append('path')
+                .attr("d", link);
+    }
+
+</script>
+</body>
+</html>
+

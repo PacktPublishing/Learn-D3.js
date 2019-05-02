@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Moons</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Using free Yanone Kaffeesatz fonts: https://www.yanone.de/fonts/kaffeesatz/ -->
+    <style>
+        svg { border: solid 1px gray; }
+        * { font-family: 'Yanone Kaffeesatz', sans-serif; }
+        text { font-size: 11px; }
+
+    </style>
+</head>
+<body>
+
+<h1>The largest moons of <span id="planetName"></span></h1>
+<div id="container" width="500" height="300">
+    <svg height="100%" width="100%" id="moons"></svg>
+</div>
+<form></form>
+
+<script>
+
+    // This object contains data used for the application
+    const app = {
+        planets: [],   // data will be loaded from external file
+    }
+
+    // This object contains variables that change for each view
+    const current = {
+        moons: [],          // the moons to be displayed
+        id: undefined,      // key to select current object
+        planet: {},         // the object used in the current view
+        color: "black"      // color of the planet
+    }
+    current.id = "p5"; // start with Jupiter id = "p5"
+
+    // A function that will scale the diameters in km to pixels
+    const scale = d3.scaleLinear();
+
+    // Dimensions and spacing for the SVG graphics context
+    const WIDTH = 500, HEIGHT = 300;
+    const MARGIN_W = 20, MARGIN_H = 50;
+    const MARGIN_MOON = 10;    // space between moons
+    const MARGIN_PLANET = 100; // space that will be reserved for the planet
+
+    // Obtain a handle to the SVG element and set up the view port
+    const svg = d3.select("#moons")
+            .attr("viewBox", `0 0 ${WIDTH} ${HEIGHT}`);
+
+    // All moons will be anchored on this object (the orbital plane)
+    const plane = svg.append("g")
+            .attr("transform", `translate(${[MARGIN_PLANET, HEIGHT/2]})`);
+
+    // Loads the data file (take a look at it before proceeding)
+    d3.json("../Data/sol_2016.json")
+        .then(function(data) {
+            // only include planets with moons (p3 to p8)
+            app.planets = data.planets
+                            .filter(p => +p.id.substring(1) >= 3
+                                      && +p.id.substring(1) <= 8);
+            configureView(); // sets data and scales for each view
+            draw();  // draws and updates moons and planets
+        });
+
+    function configureView() {
+        // 1) Get the current data object
+        current.planet = app.planets.filter(p => p.id == current.id)[0];
+
+        // 2) Change page title
+        d3.select('#planetName').text(() => current.planet.name)
+
+        // 3) Configure scales for this view
+        // a) obtain the diameter of the largest moon
+        const maxDiameter = d3.max(current.planet.satellites, d => d.diameterKm);
+
+        // b) include only moons with 1/50 of the size of the largest moon or larger
+        current.moons = current.planet.satellites
+                        .filter(s => s.diameterKm > maxDiameter/50);
+
+        // c) add diameters (they will be drawn side by side)
+        const sumDiameters = d3.sum(current.moons,d => d.diameterKm);
+
+        // d) calculate space occupied by the circles
+        const horizSpace = WIDTH - (MARGIN_PLANET + MARGIN_W*2 + current.moons.length * MARGIN_MOON);
+        const vertSpace  = HEIGHT - MARGIN_H*2;
+
+        // e) configure the scale
+        scale.range([0, d3.min([vertSpace, horizSpace])])
+                .domain([0, sumDiameters]);
+
+        // 4) Sort the moons by their diameter
+        current.moons.sort((a,b) => d3.descending(a.diameterKm, b.diameterKm));
+
+        // 5) Compute cx center coordinates to position each moon
+        current.moons.forEach(function(moon, i) {
+            let space = 0;
+            if(i > 0) {
+                let previous = current.moons[i-1]
+                space = previous.cx
+                        + scale(previous.diameterKm)/2
+                        + MARGIN_MOON;
+            }
+            moon.cx = space + scale(moon.diameterKm)/2;
+        });
+    }
+
+    function draw() {
+        // 1) Draw a guide line showing the orbital plane
+        // plane.append("line").attr("x1",0).attr("x2",WIDTH) .style("stroke","red");
+
+        // 2) draw the planet
+        plane.append("circle").attr("class", "planet")
+            .datum(current.planet)
+            .attr("r", d => scale(d.diameterKm)/2)
+            .attr("cx", d => -(MARGIN_W + scale(d.diameterKm)/2));
+
+        // 3) draw the moons
+        plane.selectAll("g.moon")
+            .data(current.moons)
+            .enter()
+            .append("g").attr("class", "moon")
+            .attr("transform", d => `translate(${[d.cx,0]})`)
+            .each(function() {  // each g object contains a circle and text
+                const moon = d3.select(this); // current group
+                moon.append("circle")
+                    .attr("r", d => scale(d.diameterKm)/2);
+                moon.append("text")
+                    .text(d => d.name)
+                    .attr("transform", function(d) {
+                        const x = scale(d.diameterKm/2) + MARGIN_MOON;
+                        const y = this.getBBox().height/4;
+                        return `rotate(-90) translate(${[x,y]})`;
+                    });
+            });
+    }
+
+
+
+
+</script>
+
+
+</body>
+</html>

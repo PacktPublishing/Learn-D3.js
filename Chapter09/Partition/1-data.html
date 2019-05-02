@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+
+</head>
+<body>
+<h2>Open JavaScript console for details</h2>
+<script>
+    const width  = 1000, height = 800;
+
+    const root = d3.hierarchy(simpleHierarchy);
+
+    // sorting nodes by height
+    root.sort((a,b) => b.height - a.height);
+
+    // required to generate value attributes used by partition
+    root.sum(d => d.values ? d.values[0] : 0);
+
+    const partition = d3.partition()
+            .size([width - 100, height - 100])
+    const partitionData = partition(root);
+
+    const nodes = partitionData.descendants();
+
+    console.log("Partition data", partitionData);
+    console.log("Nodes", nodes);
+
+
+</script>
+</body>
+</html>

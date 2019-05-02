@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="../JavaScript/wgs84_resampling.js"></script>
+    <style>
+        .dragging {
+
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const projection = d3.geoOrthographic(),
+            scale = projection.scale(),
+            translate = projection.translate(),
+            geoPath = d3.geoPath().projection(projection);
+
+    const map = {};
+
+    const globe = svg.append("g")
+            .attr("class","globe");
+
+    d3.json('../Data/' + file)
+            .then(function(data) {
+                map.topology   = data.objects[key];
+                map.features   = topojson.feature(data, map.topology).features;
+                drawGraticules();
+                draw();
+            });
+
+    function drawGraticules() {
+        globe.append("path").attr("class","background")
+                .datum({type: 'Sphere'})
+                .attr("d", geoPath)
+                .style("fill", 'lightblue');
+        globe.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .attr("d", geoPath)
+                .style("fill", 'none')
+                .style("stroke", "green")
+                .style("stroke-width", .25);
+    }
+
+    function draw() {
+        globe.selectAll("path.country")
+                .data(map.features).enter()
+                .append("path")
+                .attr("class","country")
+                .attr("d", geoPath)
+                .on("click", zoom)
+                .on('mouseenter', showProjectedBoundsAndCentroid)
+                .on('mouseleave', hideProjectedBoundsAndCentroid)
+                .style("stroke", "white")
+                .style("stroke-width", .25)
+                .style("fill", 'gray');
+    }
+
+    function zoom(object) {
+        projection.fitSize([width, height], object);
+        render();
+    }
+
+    svg.on("dblclick", function() {
+        d3.event.stopPropagation();
+        projection.scale(scale).translate(translate);
+        render();
+    });
+
+    function render() {
+        globe.selectAll("path.country").attr('d', geoPath);
+        globe.selectAll("path.graticule").attr('d', geoPath);
+        globe.selectAll("path.background").attr('d', geoPath);
+    }
+
+    function computeShape(d) {
+        const minLngLat = d3.geoBounds(d)[0]; // left, bottom
+        const maxLngLat = d3.geoBounds(d)[1]; // right, top
+
+        const minLng = minLngLat[0];
+        const minLat = minLngLat[1];
+        const maxLng = maxLngLat[0];
+        const maxLat = maxLngLat[1];
+
+        const coords = [minLngLat, [minLng,maxLat], maxLngLat, [maxLng,minLat], minLngLat];
+
+        if(minLng > maxLng) { // antimeridian correction
+            coords[0][0] = coords[1][0] = coords[4][0] = minLng - 360;
+        }
+
+        return resample({type: 'Polygon', coordinates: [coords]});
+    }
+
+    function showProjectedBoundsAndCentroid(d) {
+        showProjectedBounds(this, d);
+        showGeoCentroid(this, d);
+    }
+
+    function showGeoCentroid(node, d) {
+        svg.append("path").attr("id", "geoCentroid_" + d.id)
+                .datum({type: "Point", coordinates: d3.geoCentroid(d)})
+                .style("fill", "white")
+                .style("fill-opacity", .7)
+                .style("stroke", "purple")
+                .style("stroke-width", 2)
+                .style("pointer-events", "none")
+                .attr("d", geoPath);
+    }
+    function showProjectedBounds(node, d) {
+        const shape = computeShape(d);
+        svg.append("path").attr("id", "projBounds_" + d.id)
+                .datum(shape)
+                .attr("d", geoPath)
+                .style("stroke", "black")
+                .style("fill", "aquamarine")
+                .style("fill-opacity", .3)
+                .attr("pointer-events", "none")
+    }
+
+    function hideProjectedBoundsAndCentroid(d) {
+        hideGeoCentroid(d);
+        hideProjectedBounds(d);
+    }
+    function hideProjectedBounds(d) {
+        svg.select("#projBounds_"+d.id).remove();
+    }
+    function hideGeoCentroid(d) {
+        svg.select("#geoCentroid_"+d.id).remove();
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://unpkg.com/versor"></script>
+    <!-- See https://github.com/Fil/d3-inertia -->
+    <script src="https://unpkg.com/d3-inertia"></script>
+    <style>
+        .graticule {
+            fill: none;
+            stroke: green;
+            stroke-width: .25;
+        }
+        .ocean {
+            fill: lightblue;
+        }
+        .country {
+            stroke: white;
+            stroke-width: .25;
+            fill: gray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const globe = svg.append("g").attr("class","globe");
+
+    var projection = d3.geoOrthographic();
+
+    const scale = projection.scale(),
+            geoPath = d3.geoPath().projection(projection);
+
+    let currentTransform= d3.zoomIdentity;
+
+    d3.geoInertiaDrag(svg, () => render(), projection);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(data) {
+                map.topology   = data.objects[key];
+                map.features   = topojson.feature(data, map.topology).features;
+
+                drawGraticules();
+                draw();
+            });
+
+    function drawGraticules() {
+        globe.append("path").attr("class","ocean")
+                .datum({type: 'Sphere'})
+                .attr("d", geoPath);
+        globe.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .attr("d", geoPath);
+    }
+
+    function draw() {
+        globe.selectAll("path.country")
+                .data(map.features).enter()
+                .append("path")
+                .attr("class","country")
+                .attr("d", geoPath)
+    }
+
+    // See https://bl.ocks.org/mbostock/3795040
+    const lambda = d3.scaleLinear()
+            .domain([-width, width])
+            .range([-180, 180])
+
+    const phi = d3.scaleLinear()
+            .domain([-height, height])
+            .range([90, -90]);
+
+    function zoomMap() {
+        var t = d3.event.transform;
+        if (d3.event.sourceEvent.type === "mousemove") {
+            projection.rotate([lambda(t.x), phi(t.y)]);
+            currentTransform.x = t.x;
+            currentTransform.y = t.y;
+        } else {
+            projection.scale(scale * t.k)
+            t.x = currentTransform.x;
+            t.y = currentTransform.y;
+        }
+        render();
+    }
+
+    function render() {
+        globe.selectAll("path.country").attr('d', geoPath);
+        globe.selectAll("path.graticule").attr('d', geoPath);
+        globe.selectAll("path.ocean").attr('d', geoPath);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+    const array = [4,2,9,12,6,23, NaN, 9,71,55, undefined, 49];
+    const objects = [{label: 'label1', value: 5},
+                   {label: 'label2', value: 3},
+                   {label: 'label3', value: 9}]
+
+    array.sort((a,b) => d3.descending(a,b));
+    console.log(array);
+
+    objects.sort((a,b) => d3.ascending(a.value, b.value));
+    console.log(objects);
+
+</script>
+</body>
+</html>

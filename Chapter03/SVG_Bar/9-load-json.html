@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale.v2.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-format.v1.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        .bar-chart {
+            border: solid 1px gray;
+            width: 800px;
+        }
+        .bar {
+            height: 20px;
+            fill: orange;
+        }
+        .label {
+            font-size: 9pt;
+        }
+        .category {
+            text-anchor: end;
+        }
+    </style>
+</head>
+<body>
+<h1>Distance from the Sun</h1>
+
+<script>
+
+    d3.json("../Data/sol_2016.json").then(function(data) {
+        const planets = [];
+        data.planets.forEach(function(obj) {
+            planets.push({name: obj.name, distance: obj.semiMajorAxisAU});
+        });
+        drawChart(planets);
+    });
+
+    function drawChart(distances) {
+        const barScale = d3.scaleLinear()
+                           .domain([0, d3.max(distances, d => d.distance)])
+                           .range([0, 600]);
+
+        distances.sort((a,b) => d3.ascending(a.distance, b.distance));
+
+        // a formatting function to format the distances with 2 decimal points
+        const fmt = d3.format(".2f");
+
+        // a color scale
+        colorScale = d3.scaleLinear()
+                       .domain([0, d3.max(distances, d => d.distance)])
+                       .range([0,1])
+
+
+        // selects the entire chart (one node)
+        const svg = d3.select("body")
+                      .append("svg").attr("class", "bar-chart")
+                      .style("height", distances.length * 21);
+
+        // selects each entry (a nodelist)
+        const entries = svg.selectAll("g").data(distances)
+                        .enter().append("g")
+                        .attr("class", "entry")
+                        .attr("transform", (d,i) => `translate(0, ${i * 21})`); // use attr instead of style
+
+        entries.each(function(d) {
+            const entry = d3.select(this); // the current entry
+
+            entry.append("text").attr("class", "label category")
+                    .attr("y", 15)
+                    .attr("x", 90)
+                    .text(d.name);
+
+            entry.append("rect").attr("class", "bar")
+                    .attr("x", 100)
+                    .style("width", barScale(d.distance) + "px")
+                    .style("fill", d3.color('orange')
+                                     .darker(colorScale(d.distance)))
+
+            entry.append("text").attr("class", "label value")
+                    .attr("y", 15)
+                    .attr("x", barScale(d.distance) + 105)
+                    .text(fmt(d.distance) + " AU");
+        });
+
+    }
+
+</script>
+</body>
+</html>

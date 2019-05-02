@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', 'Arial Narrow', sans-serif;
+            font-size: 10pt;
+        }
+
+        /* Legend configuration */
+        .legend text {
+            alignment-baseline: hanging;
+        }
+        .show {
+            stroke: black;
+            stroke-width: 4;
+        }
+        .fade {
+            opacity: .5;
+        }
+
+        /* Axes configuration */
+        .domain {
+            opacity: 0;
+        }
+        .y-axis line, .x-axis line {
+            stroke-width: .5;
+            stroke: rgba(114, 138, 74, 0.5);
+        }
+        .label {
+            font-size: 12pt;
+            text-anchor: middle;
+        }
+
+        /* Tooltip configuration */
+        .tooltip {
+            pointer-events: none;
+        }
+        .tooltip rect {
+            fill: #eee;
+            fill-opacity: 0.7;
+            stroke: gray;
+            stroke-opacity: .5;
+        }
+        .tooltip text {
+            font-size: 11pt;
+        }
+
+        /* Reset button configuration */
+        #zoom-reset {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+<svg width="800" height="600" viewBox="0 0 800 600"/>
+<br><button id="zoom-reset">Reset Zoom</button>
+
+<script>
+    // Viweport and globals configuration
+    const svg = d3.select("svg");
+    const margin  = 75,
+          width   = svg.attr("width") - margin*2,
+          height  = svg.attr("height") - margin*2;
+    const radius = 4;
+    const format = d3.format("$,.0f");
+
+    // Clipping path to use in zoomable view
+    svg.append("defs")
+            .append("clipPath").attr("id", "chart")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height);
+
+    // All elements are added to this object
+    const chart = svg.append("g")
+            .attr("transform",`translate(${[margin,margin]})`);
+
+    // The zoomable parts are added to this object
+    const view = chart.append("g") // the unclipped zoomable object
+            .attr("class", "view")
+            .attr("clip-path", "url(#chart)")
+            .append("g") // the clipped zoomable object
+
+    // Scales configuration
+    const scaleX = d3.scaleLinear().range([5, width - 5]);
+    const scaleY = d3.scaleLog().range([height - 5, 5]);
+    const color  = d3.scaleOrdinal(d3.schemeDark2);
+
+    // Axes configuration
+    const axisX = d3.axisBottom(scaleX)
+            .tickSize(height + 10)
+            .tickPadding(2);
+    const axisY = d3.axisLeft(scaleY)
+            .tickSize(width + 10)
+            .tickPadding(2)
+            .ticks(8, ',');
+
+    // Axes rendering
+    const xG = chart.append("g").attr("class", "x-axis")
+            .attr("transform", `translate(${[0,0]})`);
+
+    const yG = chart.append("g").attr("class", "y-axis")
+            .attr("transform", `translate(${[width,0]})`)
+
+    // Axes labels
+    chart.append("text").attr("class","label")
+            .text("Human Development Index (HDI)")
+            .attr("transform", `translate(${[width/2,height + margin - 5]})`)
+    chart.append("text").attr("class","label")
+            .text("Annual GDP per capita (USD)")
+            .attr("transform", `translate(${[-margin + 5,height/2]}) rotate(90)`);
+
+    // Brush configuration
+    let domain = {}; // saves current domain
+    const brush = d3.brush()
+            .on("end", detail);
+
+    function detail() {
+        if(d3.event.selection) {
+            const [[minX,minY],[maxX,maxY]] = d3.event.selection;
+
+            const newDomainX = [scaleX.invert(minX),
+                                scaleX.invert(maxX)]
+            scaleX.domain(newDomainX);
+
+            const newDomainY = [scaleY.invert(maxY),
+                                scaleY.invert(minY)]
+            scaleY.domain(newDomainY);
+
+            updateView();
+
+            view.call(brush.move, null); // hide the brush rectangle
+            d3.select("#zoom-reset").style("opacity", 1); // Show reset button
+        }
+    }
+
+    function updateView() {
+        // update axes
+        xG.call(axisX);
+        yG.call(axisY);
+
+        // update data view
+        view.selectAll("circle.dot")
+            .attr("cx", d => scaleX(d.hdi))
+            .attr("cy", d => scaleY(d.gdp));
+    }
+
+    d3.select("#zoom-reset")
+        .on("click", function() {
+            this.style.opacity = 0;
+            scaleX.domain(domain.x);
+            scaleY.domain(domain.y);
+            updateView();
+        });
+
+    view.call(brush); // Call brush on the data view
+
+    // Draw data visualization
+    function draw() {
+        view.selectAll("circle.dot")
+            .data(data.countries)
+            .enter()
+            .append("circle").attr("class", "dot")
+            .attr("r", radius)
+            .attr("cx", d => scaleX(d.hdi))
+            .attr("cy", d => scaleY(d.gdp))
+            .style("fill", d => color(d.continent))
+            .on("mouseenter", showDetails)
+            .on("mouseleave", clearDetails);
+    }
+
+    // Draw legend
+    function drawLegend() {
+        const legend = svg.append("g").attr("class", "legend")
+                .attr("transform", `translate(${[margin * 1.5, margin * 1.5]})`);
+
+        legend.selectAll("g.item")
+            .data(data.continents)
+            .enter()
+            .append("g").attr("class", "item")
+            .each(function(d, i) {
+                d3.select(this)
+                    .append("rect")
+                    .attr("y", i * 15)
+                    .attr("height", 10)
+                    .attr("width", 20)
+                    .style("fill", color(d));
+
+                d3.select(this)
+                    .append("text")
+                    .attr("y", i * 15)
+                    .attr("x", 24)
+                    .text(d);
+            })
+            .on("mouseenter", showContinents)
+            .on("mouseleave", clearContinents);
+    }
+
+    // Draw offscreen tooltips
+    function drawTooltips() {
+        const tooltip = chart.append("g")
+            .attr("class", "tooltip")
+            .attr("opacity", 0);
+
+        tooltip.append("rect")
+            .attr("width", 100)
+            .attr("height", 60)
+            .attr("rx", 3).attr("ry", 3)
+            .attr("x", -3).attr("y", -10);
+
+        tooltip.append("text").attr("class", "name").attr("y", 5);
+        tooltip.append("text").attr("class", "hdi").attr("y", 25);
+        tooltip.append("text").attr("class", "gdp").attr("y", 40);
+    }
+
+    // Tooltip event handlers
+    // Values must be adjusted for semantic zoom
+    function showDetails(d) {
+        d3.select(this)
+                .attr("r", radius * 3);
+
+        const padding = 20;
+        d3.select(".tooltip")
+                .attr("opacity", 1)
+                .attr("transform",
+                        `translate(${[scaleX(d.hdi)+padding,
+                                      scaleY(d.gdp)-padding]})`)
+
+        const text1 = d3.select(".tooltip .name")
+                        .text(d.name);
+        const text2 = d3.select(".tooltip .gdp")
+                        .text("GDP: " + format(d.gdp));
+        const text3 = d3.select(".tooltip .hdi")
+                        .text("HDI: " + d.hdi);
+
+        const boxWidth = 6 + d3.max([text1.node().getComputedTextLength(),
+                                     text2.node().getComputedTextLength(),
+                                     text3.node().getComputedTextLength()]);
+
+        d3.select(".tooltip rect").attr("width", boxWidth);
+    }
+    function clearDetails(d) {
+        d3.select(this).attr("r", radius);
+        d3.select(".tooltip").attr("opacity", 0)
+    }
+
+    // Legend event handlers
+    function showContinents(d) {
+        d3.selectAll(".item").classed("fade", k => k != d)
+        d3.selectAll(".dot").classed("show", k => k.continent == d);
+    }
+    function clearContinents(d) {
+        d3.selectAll(".item").classed("fade", false)
+        d3.selectAll(".dot").classed("show", false);
+    }
+
+    // Load data, set scale domains, call axes and draw chart
+    const data = {
+        continents: new Set()
+    }
+    d3.csv("../Data/un_regions_gdp.csv", function(row) {
+            if(row.HDI_2017 >0 && row.GDP_2017 >0) {
+                data.continents.add(row.Continent);
+                return {
+                    name: row.Country,
+                    code: row.Code,
+                    continent: row.Continent,
+                    population: +row.Pop_2016,
+                    hdi: +row.HDI_2017,
+                    gdp: +row.GDP_2017
+                }
+            }
+        })
+        .then(function(dataset) {
+            data.continents = [...data.continents].sort((a,b,) => d3.ascending(a,b));
+            data.countries = dataset;
+
+            scaleY.domain(d3.extent(data.countries, d => d.gdp));
+            scaleX.domain(d3.extent(data.countries, d => d.hdi));
+
+            domain.x = scaleX.domain();
+            domain.y = scaleY.domain();
+
+            xG.call(axisX);
+            yG.call(axisY);
+
+            drawTooltips();
+            drawLegend();
+            draw();
+        });
+</script>
+</body>
+</html>

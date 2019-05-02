@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill-opacity: 1;
+            fill: red;
+        }
+        line, path {
+            stroke: #ccc;
+        }
+    </style>
+</head>
+<body>
+<h1>See console for results</h1>
+<script>
+    const scale = d3.scaleLinear()
+            .domain([0,32])
+            .range([0,1000]);
+
+    const result1 = scale(64);  // returns 2000
+    console.log("no clamp", result1);
+
+    scale.clamp(true);
+    const result2 = scale(64);  // returns 1000
+    console.log("clamp above", result2);
+
+    const result3 = scale(-10); // returns 0
+    console.log("clamp below", result3);
+
+
+    const invert = scale.invert(500);  // returns 16
+    console.log("invert(500)", invert)
+
+
+
+</script>
+
+</body>
+</html>

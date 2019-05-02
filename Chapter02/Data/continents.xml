@@ -1,0 +1,39 @@
+<continents>
+    <continent>
+        <name>North America</name>
+        <population>579024000</population>
+        <area unit="km">24490000</area>
+    </continent>
+    <continent>
+        <name>Asia</name>
+        <population>4436224000</population>
+        <area unit="km">43820000</area>
+    </continent>
+    <continent>
+        <name>Europe</name>
+        <population>738849000</population>
+        <area unit="km">10180000</area>
+    </continent>
+    <continent>
+        <name>Africa</name>
+        <population>1216130000</population>
+        <area unit="km">30370000</area>
+    </continent>
+    <continent>
+        <name>South America</name>
+        <population>422535000</population>
+        <area>17840000</area>
+    </continent>
+    <continent>
+        <name>Oceania</name>
+        <population>39901000</population>
+        <area>9008500</area>
+    </continent>
+    <continent>
+        <name>Antarctica</name>
+        <population>1106</population>
+        <area>13720000</area>
+    </continent>
+</continents>
+
+

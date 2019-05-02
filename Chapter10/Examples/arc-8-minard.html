@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 28px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: 'black';
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .3;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 2000;
+    const height = 1000;
+    const margin = 100;
+
+    const color = d3.scaleSequential(d3.interpolateSpectral);
+    const widthScale = d3.scalePow().exponent(.75).range([0,40]);
+
+    const nodeMap = new Map();
+    let nodes = [];
+    const edges = [];
+
+    d3.csv("../Data/minard-steps.csv", function(row) {
+        if (row.direction != 0) {
+            nodeMap.set(row.from, {node: row.from, order: +row.order, direction: +row.direction});
+            return row;
+        }
+    }).then(function(rows) {
+        nodes = Array.from(nodeMap.values())
+                     .sort((a,b) => d3.ascending(a.order, b.order));
+
+        rows.forEach(function(row) {
+            const obj = {
+                value: +row.survivors,
+                direction: +row.direction,
+                target: row.to,
+                source: row.from
+            }
+            edges.push(obj);
+        });
+        edges.push({value: 10000, direction: -1, target: 'Kovno', source: 'W18'});
+
+        const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+        const arcData = arcDiagLayout(nodes, edges);
+
+        color.domain([0,edges.length]);
+        widthScale.domain([0, d3.max(edges, d => d.value)]);
+
+        console.log(arcData.nodes(), arcData.links())
+
+        draw(arcData);
+    });
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,height/2]})`);
+
+        const curve = dvj.curve().size([width-margin*4, height*4]);
+
+        chart.selectAll("path")
+                .data(data.links())
+                .enter()
+                .append("path")
+                .attr("d", curve)
+                .style("stroke-width", d => widthScale(d.value))
+                .style("stroke", (d,i) => d.direction > 0 ? "#c97b20" : "#252523")
+                .style("stroke-opacity", .3)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("id", d => d.node)
+                .attr("cx", d => d.x)
+                .style("fill", (d,i) => d.direction > 0 ? "#c97b20" : "#252523")
+                .attr("r", function(d) {
+                   const target = data.links().filter(k => k.target.node == d.node)[0];
+                   const source = data.links().filter(k => k.source.node == d.node)[0];
+                   if(target && source) {
+                       return .5 * widthScale(d3.max([target.value, source.value]));
+                   }
+                   if(target) return .5 * widthScale(target.value);
+                   else return .5 * widthScale(source.value);
+                })
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle").classed('faded', false));;
+
+        chart.selectAll('text.location')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'location')
+                .attr("x", d => d.x)
+                .attr("y", d => d.node == 'Polotsk' ? 30 : d.direction * (25 + +d3.select("#"+d.node).attr("r")))
+                .text(d => d.node.length > 3 ? d.node : '');
+
+        chart.selectAll('text.value')
+                .data(data.links())
+                .enter()
+                .append("text").attr("class",'value')
+                .attr("x", d => 0.5 * (d.source.x + d.target.x))
+                .attr("y", d => 1.25 * (d.source.x - d.target.x) - d.direction * (10 + widthScale(d.value/2)))
+                .style("font-size", 18)
+                .style("fill", '#555')
+                .text(d => d.value);
+    }
+
+    function highlight(d) {
+        d3.selectAll("path")
+                .classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle")
+                .classed('faded', n => !(n === d  || n.sources.filter(s => s.target === d).length > 0
+        || n.targets.filter(s => s.source === d).length > 0));
+    }
+
+</script>
+</body>
+</html>

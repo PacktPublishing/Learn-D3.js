@@ -1,0 +1,32 @@
+{
+  "sample": 26210094,
+  "source": "Project Gutemberg: top 50 books in the last 30 days",
+  "frequencies": [
+    {"letter": "e", "frequency": 3265094},
+    {"letter": "t", "frequency": 2391581},
+    {"letter": "a", "frequency": 2076976},
+    {"letter": "o", "frequency": 2026774},
+    {"letter": "n", "frequency": 1818435},
+    {"letter": "i", "frequency": 1813685},
+    {"letter": "h", "frequency": 1666735},
+    {"letter": "s", "frequency": 1644651},
+    {"letter": "r", "frequency": 1523829},
+    {"letter": "d", "frequency": 1156844},
+    {"letter": "l", "frequency": 1044330},
+    {"letter": "u", "frequency": 753825},
+    {"letter": "m", "frequency": 685123},
+    {"letter": "c", "frequency": 640686},
+    {"letter": "w", "frequency": 607543},
+    {"letter": "f", "frequency": 589048},
+    {"letter": "y", "frequency": 533905},
+    {"letter": "g", "frequency": 533671},
+    {"letter": "p", "frequency": 447862},
+    {"letter": "b", "frequency": 397059},
+    {"letter": "v", "frequency": 260925},
+    {"letter": "k", "frequency": 206821},
+    {"letter": "x", "frequency": 40989},
+    {"letter": "j", "frequency": 40157},
+    {"letter": "q", "frequency": 27304},
+    {"letter": "z", "frequency": 16242}
+  ]
+}

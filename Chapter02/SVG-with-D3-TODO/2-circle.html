@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG circle using D3</h2>
+<script>
+    const svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", 600)
+                    .attr("height", 300);
+
+    svg.append("circle").attr("r", 25);
+    svg.append("circle").attr("cx", 300).attr("cy", 150).attr("r", 50);
+    svg.append("circle").attr("cx", 100).attr("cy", 50).attr("r", 20);
+    svg.append("circle").attr("cx", 600).attr("cy", 300).attr("r", 50);
+</script>
+</body>
+</html>

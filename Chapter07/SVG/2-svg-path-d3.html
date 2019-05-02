@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG Path</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<script>
+    const svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", "800")
+                  .attr("height", "300");
+
+    svg.append("path")
+            .attr("d", "M50,20L200,200V140h70Z")
+            .attr("fill","yellow")
+            .attr("stroke","red")
+            .attr("stroke-width","3");
+
+    svg.append("path")
+            .attr("d", "M100,200C100,100,250,100,250,200S400,300,400,200")
+            .attr("fill","white")
+            .attr("stroke","blue")
+            .attr("stroke-width","4")
+            .attr("transform","translate(200, -80)");
+</script>
+
+</body>
+</html>

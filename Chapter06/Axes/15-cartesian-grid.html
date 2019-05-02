@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+        }
+        svg {
+            border: solid 1px lightgray;
+        }
+
+        .tick line {
+            opacity: .5
+        }
+        .x-axis .tick line {
+            stroke-dasharray: 5 5;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const height = 500, width = 800, marginX = 50, marginY = 50;
+    const bleed = 10;
+
+    const scaleX = d3.scaleLinear().range([marginX, width - marginX]),
+          scaleY = d3.scaleLinear().range([height - marginY, marginY]);
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height",height);
+
+    const axisX = d3.axisBottom(scaleX)
+                    .tickSize(height - marginY*2 + bleed)
+                    .tickPadding(5)
+                    .tickSizeOuter(5)
+                    .ticks(10, ',%');
+    const axisY = d3.axisLeft(scaleY)
+                    .tickSize(width - marginX*2 + bleed)
+                    .tickPadding(5)
+                    .tickSizeOuter(5);
+
+    // move each axis to the opposite side of the chart
+    svg.append("g").attr("class", "x-axis")
+            .attr("transform", `translate(0,${marginY})`)
+            .call(axisX);
+
+    svg.append("g").attr("class", "y-axis")
+            .attr("transform", `translate(${width - marginX},0)`)
+            .call(axisY);
+
+    // move domain lines back to their original places
+    d3.select(".y-axis .domain")
+            .attr("transform", `translate(${-width + marginX*2},0)`);
+    d3.select(".x-axis .domain")
+            .attr("transform", `translate(0,${height - marginY*2})`);
+
+
+</script>
+</body>
+</html>

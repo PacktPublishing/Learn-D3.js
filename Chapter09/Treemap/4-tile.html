@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        rect {
+            stroke: black;
+            stroke-width: .5px;
+            fill-opacity: .5;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+            alignment-baseline: hanging;
+            fill: black;
+            font-size: 20pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 1200, height = 900;
+
+    const svg = d3.select("body").append("svg")
+                    .attr("height", height)
+                    .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[25,25]})`);
+
+    const root = d3.hierarchy(simpleHierarchy)
+                    .sort((a,b) => b.height - a.height )
+                    .sum(d => d.values ? d.values[0] : 0);
+
+    root.eachBefore(function(d) {
+        d.number = d.parent ? `${d.parent.number}.${d.parent.children.indexOf(d) + 1}` : 1;
+    });
+
+    const colorScale = d3.scaleOrdinal(d3.schemeSpectral[5]);
+
+    const tiles = [
+        [d3.treemapSquarify.ratio(1.61), d3.treemapSquarify.ratio(1.25), d3.treemapBinary],
+        [d3.treemapDice, d3.treemapSlice, d3.treemapSliceDice]
+    ];
+    const labels = [
+        ["d3.treemapSquarify.ratio(1.61)", "d3.treemapSquarify.ratio(1.25)", "d3.treemapBinary"],
+        ["d3.treemapDice", "d3.treemapSlice", "d3.treemapSliceDice"]
+    ];
+
+    drawCharts();
+
+
+    function drawCharts() {
+        const w = width / 3 - 50;
+        const h = height / 2 - 100;
+        for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 2; j++) {
+                const c = chart.append("g")
+                                .attr("transform", d => `translate(${[i*w + 25, j*h + 50]})`);
+
+                const treemap = d3.treemap()
+                        .size([w-25, h-100])
+                        .padding(3)
+                        .tile(tiles[j][i]);
+                const nodes = treemap(root).descendants();
+                colorScale.domain(d3.extent(nodes, n => n.height));
+                drawTreemap(c, nodes)
+                c.append("text")
+                        .attr("x", w/2)
+                        .attr("y", h-80)
+                        .text(labels[j][i])
+            }
+        }
+    }
+
+    function drawTreemap(chart, nodes) {
+        chart.selectAll("rect")
+            .data(nodes)
+            .join("rect")
+                .attr("x", d => d.x0)
+                .attr("y", d => d.y0)
+                .attr("width", d => d.x1 - d.x0)
+                .attr("height", d => d.y1 - d.y0)
+                .attr("fill", d => colorScale(d.height));
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        rect.back {
+            fill: none;
+            stroke: green;
+        }
+        rect {
+            stroke-width: 1;
+        }
+        rect.red {
+            stroke: red;
+            fill: rgba(255,0,0,0.1);
+        }
+        rect.blue {
+            stroke: blue;
+            fill: rgba(0,0,255,0.1);
+        }
+        circle {
+            opacity: .3;
+            fill: black;
+        }
+        rect.blue {
+            pointer-events: none;
+        }
+        g.container {
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+<h3>Open JavaScript console for results</h3>
+<svg style="position:absolute; left:100px; top:100px"
+     height="400" width="800">
+    <g class="container">
+        <rect class="back" width="800" height="400" x="0" y="0"/>
+        <circle r="50" cx="120" cy="120"/>
+        <circle r="50" cx="280" cy="120"/>
+        <circle r="50" cx="120" cy="280"/>
+        <circle r="50" cx="280" cy="280"/>
+        <circle r="50" cx="520" cy="120"/>
+        <circle r="50" cx="680" cy="120"/>
+        <circle r="50" cx="520" cy="280"/>
+        <circle r="50" cx="680" cy="280"/>
+        <rect class="red"  width="300" height="300" x="50" y="50"/>
+        <rect class="blue" width="300" height="300" x="450" y="50"/>
+    </g>
+</svg>
+<script>
+    const g       = d3.select("g.container");
+    const circles = d3.selectAll("circle");
+    const rects   = d3.selectAll("rect");
+
+    rects.on("mouseover", function() { d3.select(this).style("stroke-width", 5) });
+    rects.on("mouseout", function() { d3.select(this).style("stroke-width", 1) });
+
+    circles.on('mouseover', function() { d3.select(this).style("opacity", 1) });
+    circles.on('mouseout',  function() { d3.select(this).style("opacity", .3) });
+</script>
+
+</body>
+</html>

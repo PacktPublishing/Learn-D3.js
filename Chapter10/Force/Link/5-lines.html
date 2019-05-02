@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../../JavaScript/force-examples.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        svg {
+            border: solid 1px #eaeaea;
+        }
+        .margin {
+            stroke: blue;
+            opacity: .1;
+        }
+        .reflink {
+            opacity: .2;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 500;
+    const height = 500;
+    const margin = 100;
+
+    const cols = 3;
+
+    const nodes = [
+        {node: 'A', value: 79},
+        {node: 'B', value: 15},
+        {node: 'C', value: 24},
+        {node: 'D', value: 44},
+        {node: 'E', value: 125},
+        {node: 'F', value: 22},
+        {node: 'G', value: 20},
+        {node: 'H', value: 64},
+        {node: 'I', value: 69},
+    ];
+
+    const links = [
+        {source: 0, target: 5, value: 1},
+        {source: 5, target: 6, value: 1},
+        {source: 6, target: 0, value: 1},
+        {source: 8, target: 3, value: 1},
+        {source: 3, target: 2, value: 1},
+        {source: 2, target: 8, value: 1},
+        {source: 1, target: 4, value: 1},
+        {source: 4, target: 7, value: 1}
+    ];
+
+    // Diverging colors (blue is negative, red is positive)
+    const colors = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'];
+
+    // Reference setup
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2,height/2]})`);
+
+
+    // SIMULATION SETUP
+    const sim = d3.forceSimulation(nodes);
+    sim.force("link", d3.forceLink(links).strength(.01)); // default strength is 1
+    drawReferenceBackgroundGrid(nodes, links);
+
+    // Update on ticks
+    sim.on("tick", updateChart)
+
+    // Results
+    drawChart();
+
+
+    // functions
+    function drawChart() {
+
+        chart.selectAll('line.simulation')
+                .data(links).enter()
+                .append('line').attr("class",'simulation')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+                .style("fill", 'none')
+                .style("stroke", 'black')
+                .style("stroke-width", 2)
+
+        chart.selectAll('g.simulation')
+                .data(nodes).enter()
+                .append("g").attr("class", "simulation")
+                .attr("transform", d => `translate(${[d.x, d.y]})`)
+                .each(function(d,i) {
+                    d3.select(this)
+                            .append("circle")
+                            .attr("r", 15)
+                            .style("fill", colors[i])
+                            .style("stroke", 'black')
+                    d3.select(this)
+                            .append("text")
+                            .text(d.node)
+                            .style("fill", contrast(colors[i]))
+                });
+    }
+
+</script>
+</body>
+</html>

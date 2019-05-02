@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISS World temperatures</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+            font-size: 8pt;
+        }
+        .zero-axis line {
+            stroke-opacity: .3;
+        }
+        .zero-axis text, .zero-axis .domain {
+            opacity: 0;
+        }
+        .x-axis .domain {
+            opacity: 0;
+        }
+        .x-axis line {
+            opacity: .3;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const w  = 800, h = 600, m = 50;
+    const width = w - m*2, height = h - m*2;
+    const labelPaddingX = 5, labelPaddingY = 5, tickBleed = 5;
+
+    // Viewport configuration
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",h)
+            .attr("width",w);
+
+    const chart = svg.append("g")
+            .attr("transform", `translate(${[m, m]})`);
+
+    const scaleY = d3.scaleLinear().range([height, 0]);
+    const scaleX = d3.scaleBand()
+            .range([width, 0])
+            .paddingInner(.1)  // 10% of bar is padding
+            .paddingOuter(.2);
+
+    const axisX = d3.axisBottom(scaleX) // this scale doesn't implement ticks!
+            .tickSize(height - m/2)
+            .tickPadding(10)
+            .tickFormat(d3.timeFormat("%Y"));
+
+    const axisY = d3.axisLeft(scaleY)
+            .tickPadding(tickBleed)
+            .tickSizeOuter(0);
+
+    const axisZero = d3.axisRight(scaleY)
+            .tickValues([0])
+            .tickSizeOuter(0)
+            .tickSizeInner(width);
+
+    // Axis rendering
+    const xG = chart.append("g").attr("class", "x-axis")
+            .attr("transform", `translate(${[0, m/2]})`);
+    const yG = chart.append("g").attr("class", "y-axis");
+    const zero = chart.append("g").attr("class", "zero-axis");
+
+    xG.append("text")
+            .attr("class","label")
+            .text("Years")
+            .attr("transform", `translate(${[(width/2),(height + m/2 - labelPaddingY)]})`)
+    yG.append("text")
+            .attr("class","label")
+            .text("Average global temperature anomaly (°C)")
+            .attr("transform", `translate(${[-(m - labelPaddingX),(height/2)]}) rotate(90)`)
+
+    const data = {};
+
+    d3.json('../Data/monthly_json.json')
+            .then(function(result) {
+                data.values = result.filter(d => d.Source == 'GISTEMP');
+
+                // Scales configuratoon
+                scaleY.domain(d3.extent(data.values, d => d.Mean))
+                scaleX.domain(data.values.map(d => d3.isoParse(d.Date)))
+
+                // Axis configuration
+                const tickValues = data.values.filter((d,i) => i % 72 == 0)
+                                              .map(d => d3.isoParse(d.Date));
+
+                axisX.tickValues(tickValues);
+                xG.call(axisX);
+                yG.call(axisY);
+                zero.call(axisZero);
+
+                // Bar chart
+                chart.selectAll("rect.bar")
+                        .data(data.values)
+                        .enter()
+                        .append("rect").attr("class", "bar")
+                        .attr("width", scaleX.bandwidth())
+                        .attr("height", d => Math.abs(scaleY(d.Mean) - scaleY(0)))
+                        .attr("x", d => scaleX(d3.isoParse(d.Date)))
+                        .attr("y", d => d.Mean < 0 ? scaleY(0) : scaleY(d.Mean))
+                        .style("fill", d => d.Mean < 0 ? "blue" : "red");
+
+            });
+</script>
+</body>
+</html>

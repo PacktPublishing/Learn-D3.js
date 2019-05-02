@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Moons</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <!-- Using free Yanone Kaffeesatz fonts: https://www.yanone.de/fonts/kaffeesatz/ -->
+    <style>
+        svg { border: solid 1px gray; }
+        * { font-family: 'Yanone Kaffeesatz', sans-serif; }
+        text { font-size: 11px; }
+
+    </style>
+</head>
+<body>
+
+<h1>The largest moons</h1>
+<div id="container" width="500" height="300">
+    <svg height="100%" width="100%" id="moons"></svg>
+</div>
+<form></form>
+
+<script>
+
+    // This object contains data used for the application
+    const app = {
+        planets: [],   // data will be loaded from external file
+    }
+
+    // This object contains variables that change for each view
+    const current = {
+        moons: [],          // the moons to be displayed
+        id: undefined,      // key to select current object
+        planet: {},         // the object used in the current view
+        color: "black"      // color of the planet
+    }
+    current.id = "p5"; // start with Jupiter id = "p5"
+
+    // A function that will scale the diameters in km to pixels
+    const scale = d3.scaleLinear();
+
+    // Dimensions and spacing for the SVG graphics context
+    const WIDTH = 500, HEIGHT = 300;
+    const MARGIN_W = 20, MARGIN_H = 50;
+    const MARGIN_MOON = 10;    // space between moons
+    const MARGIN_PLANET = 100; // space that will be reserved for the planet
+
+    // Obtain a handle to the SVG element and set up the view port
+    const svg = d3.select("#moons")
+            .attr("viewBox", `0 0 ${WIDTH} ${HEIGHT}`);
+
+    // All moons will be anchored on this object (the orbital plane)
+    const plane = svg.append("g")
+            .attr("transform", `translate(${[MARGIN_PLANET, HEIGHT/2]})`);
+
+    // Loads the data file (take a look at it before proceeding)
+    d3.json("../Data/sol_2016.json")
+        .then(function(data) {
+            // only include planets with moons (p3 to p8)
+            app.planets = data.planets
+                              .filter(p => +p.id.substring(1) >= 3
+                                        && +p.id.substring(1) <= 8);
+            configureView(); // sets data and scales for each view
+            draw();  // draws and updates moons and planets
+        });
+
+    // Functions
+    function configureView() {
+        console.log(app.planets); // check if data was correctly filtered
+    }
+    function draw() {}
+
+    // Next steps
+    // 2) Select the data for the initial view: configureView()
+    // 3) Bind the data to graphical elements and draw the view
+    // 4) Add interactive behavior: change planets and update moons
+
+</script>
+
+
+</body>
+</html>

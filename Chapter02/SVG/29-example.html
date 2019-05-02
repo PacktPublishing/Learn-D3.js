@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        svg {
+            border: solid black 1px;
+        }
+        text {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<svg width="300" height="300">
+    <defs>
+        <filter id="shadow">
+            <feDropShadow style="flood-color: green" dx="5" dy="5" stdDeviation="3"/>
+        </filter>
+        <linearGradient id="grad" x1="0" y1="0" x2="100%" y2="0">
+            <stop offset="0%" stop-color="magenta"/>
+            <stop offset="100%" stop-color="yellow"/>
+        </linearGradient>
+        <clipPath id="circle">
+            <circle r="40" cx="175" cy="75"/>
+        </clipPath>
+    </defs>
+
+    <!-- rectangle -->
+    <rect x="50" y="50"
+          height="50" width="50"
+          fill="red"
+          stroke="blue"
+          stroke-width="10"
+          stroke-opacity="0.5"/>
+
+    <!-- dashed shape -->
+    <path id="path1"
+          d="M150,200 L150,150 L100,150 C100,200 150,250 200,250 L200,200 Z"
+          stroke-dasharray="5 2 1 2"
+          stroke-width="2"
+          stroke="blue"
+          fill="none"
+          style="filter:url(#shadow)"/>
+
+    <!-- gray quarter-circle -->
+    <path d="M0,0 L0,-100 A100,100 0 0,0 -100,0 L0,0 Z"
+          transform="translate(100,250) scale(0.5) "
+          stroke="red"
+          stroke-opacity=".5"
+          stroke-width="4"
+          fill-opacity=".2"/>
+
+    <text fill="url(#grad)"
+          font-size="20" x="200" y="100">Scalable
+        <tspan dy="20" x="200">Vector</tspan>
+        <tspan dy="20" x="200">Graphics</tspan></text>
+
+    <image x="125" y="25"
+           height="100" width="100"
+           xlink:href="../Data/Images/pluto.jpg"
+           clip-path="url(#circle)"
+           opacity="0.75"/>
+
+    <!-- raindow half-circle -->
+    <path d="M100,200 C100,100 250,100 250,200"
+          transform="scale(0.6) rotate(180,295,225) "
+          fill="url(#grad)"/>
+
+</svg>
+</body>
+</html>

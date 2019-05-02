@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill: red;
+        }
+
+        line {
+            fill: none;
+            stroke: gray;
+            stroke-width: 1px;
+        }
+        rect {
+            stroke: blue;
+            fill: none;
+        }
+        text {
+            font-family: sans-serif;
+        }
+        .continent {
+            font-size: 9px;
+            font-weight: bold;
+            transform: rotate(-110deg) translate(0px,-3px);
+            fill: blue;
+        }
+        .world {
+            font-size: 12px;
+            font-weight: bold;
+            transform: rotate(-90deg) translate(-20px,-10px);
+            fill: red;
+        }
+        .country {
+            font-size: 7px;
+            transform: rotate(-45deg);
+        }
+
+    </style>
+</head>
+<body>
+<script>
+    const height = 2000;
+    const width = 1000;
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        const nested = d3.nest()
+                        .key(d => d.Supercontinent)
+                        .key(d => d.Continent)
+                        .key(d => d.UN_Region)
+                        .key(d => d.Country)
+                        .rollup(d => d.map(c => ({area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+                        .entries(result);
+        console.log("nested data", nested);
+
+        const hierarchy = makeRoot(nested);
+        console.log("hierarchical data", hierarchy);
+
+        const hierData = d3.hierarchy(hierarchy);
+
+        // tree
+        const tree = d3.tree().size([height-100,width-100]); // sideways
+        const treeData = tree(hierData);
+
+        console.log(treeData);
+
+       draw(treeData);
+
+    });
+
+    function makeRoot(items) {
+        const object = {
+            key: 'World',
+            values: items
+        };
+        return makeSubtree(object);
+    }
+
+    function makeSubtree(item) {
+        let object = {
+            id: item.key,
+            data: {population: 0, area: 0},
+        };
+        if (item.values) {
+            if(item.values.length == 1) { // remove unnecessary nesting
+                object = makeSubtree(item.values[0]);
+            } else {
+                object.children = [];
+                item.values.forEach(function (value) {
+                    const subtree = makeSubtree(value);
+                    object.children.push(subtree);
+                    object.data.population += subtree.data.population;
+                    object.data.area += subtree.data.area;
+                });
+            }
+        } else if(item.value) {
+            object.data = item.value[0];
+        }
+        return object;
+    }
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", "translate(20,50)");
+
+        drawLinks(chart.append("g").attr("class", "links"), data.links());
+        drawNodes(chart.append("g").attr("class", "nodes"), data.descendants());
+
+    }
+
+    function drawNodes(g, data) {
+        const node = g.selectAll("g.node")
+            .data(data)
+            .enter()
+            .append('g')
+            .attr("class", "node")
+            .attr('transform', function(d) {
+                return 'translate(' + [d.y, d.x] + ')';
+            });
+
+        node.append("circle")
+            .attr('r', 2);
+
+        node.append("text")
+                .attr('x', 5)
+                .attr('y', 5)
+                .attr("class", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return "continent";
+                    } else if (d.depth == 0){
+                        return "world";
+                    } else {
+                        return "country";
+                    }
+                })
+                .text(d => d.data.id);
+    }
+
+    function drawLinks(g, data) {
+        g.selectAll('line')
+            .data(data)
+            .enter()
+            .append('line')
+            .attr('x1', d => d.source.y)
+            .attr('y1', d => d.source.x)
+            .attr('x2', d => d.target.y)
+            .attr('y2', d => d.target.x);
+    }
+
+</script>
+</body>
+</html>
+

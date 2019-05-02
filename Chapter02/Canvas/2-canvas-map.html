@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../JavaScript/canvasmap.js" ></script>
+</head>
+<body>
+
+<canvas id="map" width="1000" height="500"></canvas>
+
+<script>
+    var canvas = document.getElementById("map");
+    var ctx = canvas.getContext("2d");
+
+    // Map ocean background
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // countries border and background
+    ctx.lineWidth = .25;
+    ctx.strokeStyle = 'white';
+    ctx.fillStyle = 'rgb(50,100,150)';
+
+    // load and draw map
+    fetch('../Data/world-lowres.geojson')
+    .then(response => response.text())
+    .then((jsonData) => {
+        let object = JSON.parse(jsonData);
+        drawMap(object.features); // see JavaScript/canvasmap.js
+    });
+
+
+
+</script>
+
+</body>
+</html>

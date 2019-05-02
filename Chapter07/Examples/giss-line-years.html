@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISS World temperatures</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+            font-size: 8pt;
+        }
+        .zero-axis line {
+            stroke-opacity: .3;
+        }
+        .zero-axis text {
+            opacity: 0;
+        }
+        path.line {
+            fill: none;
+            stroke-opacity: .8;
+            stroke-width: 2;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 600;
+    const margin = 100;
+    const labelPaddingX = 5;
+    const labelPaddingY = 5;
+    const tickBleed = 5;
+
+    const data = {};
+
+    d3.json('../Data/monthly_json.json')
+            .then(function(result) {
+                data.values = result.filter(d => d.Source == 'GISTEMP');
+
+                // Group by year
+                data.nested = d3.nest()
+                                .key(d => +d.Date.split("-")[0])
+                                .rollup(d => d.map(k => k.Mean))
+                                .entries(data.values);
+
+                // Scales configuration
+                const scaleY = d3.scaleLinear()
+                                 .domain(d3.extent(data.values, d => d.Mean))
+                                 .range([height - margin/2, margin/2]);
+
+                const tickValues = d3.range(1,13).reverse().map(d => d3.isoParse(`2000-${d}-15`));
+                const scaleX = d3.scalePoint()
+                                 .domain(tickValues)
+                                 .range([width - margin/2,margin/2])
+                                 .padding(.1);
+
+                const color = d3.scaleSequential(d3.interpolateSpectral)
+                                .domain(d3.extent(data.nested, d => d.key).reverse());
+
+                // Viewport configuration
+                const svg = d3.select("body")
+                        .append("svg")
+                        .attr("height",height)
+                        .attr("width",width);
+
+                // Axis configuration
+                const axisX = d3.axisBottom(scaleX) // this scale doesn't implement ticks!
+                        .tickPadding(5)
+                        .tickFormat(d3.timeFormat("%b"))
+
+                const axisY = d3.axisLeft(scaleY)
+                        .tickPadding(tickBleed)
+                        .tickSizeOuter(0);
+
+                const axisZero = d3.axisRight(scaleY)
+                        .tickValues([0])
+                        .tickSizeOuter(0)
+                        .tickSizeInner(width - margin);
+
+                // Axis rendering
+                const x = svg.append("g").attr("class", "x-axis")
+                        .attr("transform", `translate(${[0, height - margin/2]})`)
+                        .call(axisX);
+
+                const y = svg.append("g").attr("class", "y-axis")
+                        .attr("transform", `translate(${[margin/2,0]})`)
+                        .call(axisY);
+
+                svg.append("g").attr("class", "zero-axis")
+                        .attr("transform", `translate(${[margin/2,0]})`)
+                        .call(axisZero);
+
+                x.append("text")
+                        .attr("class","label")
+                        .text("Months")
+                        .attr("transform", `translate(${[(width/2),(margin/2 - labelPaddingY)]})`)
+                y.append("text")
+                        .attr("class","label")
+                        .text("Average global temperature anomaly (°C)")
+                        .attr("transform", `translate(${[-(margin/2 - labelPaddingX),(height/2)]}) rotate(90)`)
+
+                // Line chart
+                const line = d3.line()
+                               .x((d,i) => scaleX(d3.isoParse(`2000-${i+1}-15`)))
+                               .y(d => scaleY(d))
+                               .curve(d3.curveNatural);
+
+                svg.selectAll("path.line")
+                        .data(data.nested)
+                        .enter()
+                        .append("path").attr("class","line")
+                        .attr("d", d => line(d.value))
+                        .style("stroke", d => color(d.key));
+
+            });
+</script>
+</body>
+</html>

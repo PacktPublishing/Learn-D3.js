@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 17px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            color: #e5fba1;
+        }
+        .faded {
+            opacity: .1;
+        }
+        .highlight {
+            font-weight: bold;
+            font-size: 150%;
+        }
+        rect.highlight {
+            stroke-width: 1px;
+        }
+        text.node {
+            pointer-events: none;
+        }
+        .large {
+            font-size: 150%;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 600;
+    const height = 600;
+    const margin = 200;
+
+    const landColor = d3.scaleLinear().range(['#e5fba1','#4a5d2e']);
+    const waterColor = d3.scaleLinear().range(['lightcyan','navy']);
+
+    const format = d3.format('0.1f');
+
+    const nodes = [];
+
+    d3.csv("../Data/sa_borders.csv", function(row) {
+        const line = [];
+        for(key in row) {
+            if(isNaN(row[key])) continue;
+            line.push({value: +row[key], target: row.Country, source: key}); // adds only top diagonal
+        }
+        return line.filter(d => d.value != 0);
+    }).then(function(rows) {
+        const nodes = rows.columns.filter(d => d != 'Country');
+        const links = d3.merge(rows);
+
+        const matrix = dvj.linksToMatrix(nodes, links, true);
+
+        const matrixLayout = dvj.adjacencyMatrix().size([width-margin,height-margin]);
+        const data = matrixLayout(nodes, matrix);
+
+        landColor.domain(d3.extent(data, d => d.value ? (!(isCoastline(d.target) || isCoastline(d.source)) ? d.value : 0) : undefined));
+        waterColor.domain(d3.extent(data, d => d.value ? (isCoastline(d.target) || isCoastline(d.source) ? d.value : 0) : undefined));
+
+        console.log(nodes, data)
+
+        draw(nodes, data);
+    });
+
+    function isCoastline(node) {
+        return node == 'Atlantic' || node == 'Pacific';
+    }
+
+    function color(d) {
+        return isCoastline(d.target) || isCoastline(d.source) ? waterColor(d.value) : landColor(d.value);
+    }
+
+    function draw(nodes, data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+
+        chart.selectAll("rect")
+                .data(data.filter(d => d.x > d.y)) // filters out lower diagonal and cells below it
+                .enter()
+                .append("rect")
+                .attr("x", d => d.x)
+                .attr("y", d => d.y)
+                .attr("height", d => d.h)
+                .attr("width", d => d.w)
+                .attr("rx",d => d.w/4).attr("ry", d => d.h/4)
+                .style("stroke", 'black').style("stroke-width", 0.25)
+                .style("fill", d => d.value ? color(d) : 'white')
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("rect, text").classed('faded highlight large', false));
+
+        chart.selectAll('text.node')
+                .data(data.filter(d => d.x > d.y)) // filters out lower diagonal and cells below it
+                .enter()
+                .append("text").attr("class",'node')
+                .attr("y", d => d.h/2 + d.y)
+                .attr("x", d => d.w/2 + d.x)
+                .text((d,i) => d.value ? format(d.value/1000) : '')
+                .style("fill", d => d.value ? contrast(color(d)) : 'white');
+
+        chart.selectAll('text.source')
+                .data(data.filter(d => d.y == 0))
+                .enter()
+                .append("text").attr("class",'source')
+                .attr("y", d => d.x + d.w/2)
+                .style("text-anchor", 'start')
+                .attr("x", 5)
+                .attr("transform",`rotate(-90) `)
+                .text((d,i) => i>0 ? isCoastline(nodes[i]) ? nodes[i] + ' coast' : nodes[i] : '')
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("rect, text").classed('faded highlight large', false));
+
+        chart.selectAll('text.target')
+                .data(data.filter(d => d.x == 0))
+                .enter()
+                .append("text").attr("class",'target')
+                .attr("y", d => d.y + d.h/2)
+                .style("text-anchor", 'end')
+                .attr("x", (d,i) => d.w * (i+1) - 10)
+                .text((d,i) => i<nodes.length-1 ? isCoastline(nodes[i]) ? nodes[i] + ' coast' : nodes[i] : '')
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("rect, text").classed('faded highlight large', false));
+
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 120 ? '#333' : 'lightyellow';
+    }
+
+    function highlight(d) {
+        d3.selectAll("rect").classed('faded', k => !(k.x == d.x || k.y == d.y))
+        d3.selectAll("rect").classed('highlight', k => k.x == d.x || k.y == d.y)
+        d3.selectAll("text.node").classed('large', k => k === d)
+        d3.selectAll("text.source").classed('highlight', k => k.x == d.x)
+        d3.selectAll("text.target").classed('highlight', k => k.y == d.y)
+    }
+</script>
+</body>
+</html>

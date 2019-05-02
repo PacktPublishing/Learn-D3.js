@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {border: solid lightgray 1px}
+</style>
+<body>
+<svg width="800" height="300">
+
+    <text font-family="monospace" font-size="18"
+          transform="translate(150,25)" text-anchor="middle">
+        text-anchor
+    </text>
+
+    <text font-family="monospace" font-size="18"
+          transform="translate(400,25)" text-anchor="start">
+        alignment-baseline
+    </text>
+
+    <!-- text-anchor -->
+    <g transform="translate(150,115)" >
+        <g id="grid" stroke="blue" stroke-width="1" stroke-opacity=".8" stroke-dasharray="10 10">
+            <line x1="0" y1="-25" x2="0" y2="150"  />
+        </g>
+        <text font-family="monospace" font-size="24" font-weight="bold">
+            <tspan x="0" y="0"   text-anchor="start">start</tspan>
+            <tspan x="0" dy="60" text-anchor="middle">middle</tspan>
+            <tspan x="0" dy="60" text-anchor="end">end</tspan>
+        </text>
+    </g>
+
+    <-- alignment-baseline -->
+    <g transform="translate(350,50)">
+        <g transform="translate(50,50)" stroke="blue" stroke-width="1">
+            <line x1="0" y1="0"   x2="300" y2="0" />
+            <line x1="0" y1="50" x2="300" y2="50" />
+            <line x1="0" y1="100" x2="300" y2="100" />
+            <line x1="0" y1="150" x2="300" y2="150" />
+        </g>
+        <g transform="translate(50,50)" text-anchor="start" font-family="monospace" font-size="24" font-weight="bold">
+            <text x="0" y="0"    alignment-baseline="ideographic">ideographic</text>
+            <text x="0" y="50"   alignment-baseline="auto">auto</text>
+            <text x="0" y="100"  alignment-baseline="middle">middle</text>
+            <text x="0" y="150"  alignment-baseline="hanging">hanging</text>
+        </g>
+    </g>
+</svg>
+</body>
+</html>

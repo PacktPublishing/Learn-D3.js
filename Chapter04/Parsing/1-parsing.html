@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Open JavaScript console to see results</h1>
+<script>
+
+    // Data sets
+    const dsv1 =
+            'PROPERTY,UNIT,JUPITER,SATURN,URANUS,NEPTUNE\n'
+             +'Diameter,km,142984,120536,51118,49528\n'
+             +'Density,kg/m^3,1326,687,1271,1638\n'
+             +'Distance from Sun,10^6 km,778.6,1433.5,2872.5,4495.1';
+
+    const dsv3 = 'vehicle|date|miles\n'
+            +'M3C6L2|2012-03-05|66\n'
+            +'C9S1X9|2012-03-06|92\n'
+            +'M3C6L2|2012-03-12|66\n'
+            +'T2P8M5|2012-03-13|36\n'
+            +'T2P8M5|2012-03-19|35';
+
+    // Example 1 - CSV and headers
+    const data1 = d3.csvParse(dsv1);
+    console.log("data1", data1);
+
+    // Example 2 - CSV rows (ignoring header status)
+    const data2 = d3.csvParseRows(dsv1);
+    console.log("data2", data2);
+
+    // Example 3 - Removing the first (header) row
+    const data3 = d3.csvParseRows(dsv1, function(row, i) {
+        return [row[2], row[3], row[4], row[5]]
+    }).filter((d,i) => i > 0);
+    console.log("data3", data3);
+
+    // Example 4 - Using other delimiters and row function
+    const tsvParser = d3.dsvFormat("|");
+    const data4 = tsvParser.parse(dsv3, function(row, i) {
+        const date = row.date.split('-');
+        return {
+            vehicle: row.vehicle,
+            month: date[1],
+            year: date[0],
+            km: +row.miles * 1.609
+        };
+    });
+    console.log("data4", data4);
+
+    // Example 5 - Using autoType
+    const data5 = tsvParser.parse(dsv3, d3.autoType);
+    console.log("data5", data5);
+
+</script>
+</body>
+</html>

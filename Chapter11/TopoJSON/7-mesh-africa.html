@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://unpkg.com/topojson-simplify"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .mesh {
+            stroke: black;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const geoPath = d3.geoPath().projection(d3.geoMercator());
+
+    d3.json('../Data/africa.topojson')
+            .then(function(data) {
+
+        const geomesh = topojson.mesh(data)
+
+        svg.append("path").attr("class","mesh")
+                .datum(geomesh)
+                .attr("d", geoPath)
+    })
+</script>
+
+</body>
+</html>

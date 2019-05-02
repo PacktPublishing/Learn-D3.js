@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        h1 {
+            color: black; /* initial color */
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+<h1>A</h1>
+<h1>B</h1>
+<h1>C</h1>
+<script>
+// 1) Will transition from black to red
+const transition = d3.transition();
+transition.delay(1000);     // wait 1 second before starting
+transition.duration(2000);  // the transition will last 2 seconds
+transition.selectAll("h1")  // obtain selection to apply transition
+          .style("color", "red"); // final attributes and styles of selection
+
+// 2) Will transition from red to blue
+d3.selectAll("h1")  // select all <h1>
+        .transition()   // obtain a transition object from selection
+        .delay(3000)    // configure transition
+        .duration(2000)
+        .style("color", "blue");   // set final styles and attributes
+
+
+</script>
+</body>
+</html>

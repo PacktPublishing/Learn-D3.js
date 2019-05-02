@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 600;
+
+    const data = [
+        [0,0],
+        [100,200],
+        [200,400],
+        [300,150],
+        [400,50],
+        [500,350],
+        [600,500],
+        [700,100],
+        [800,250],
+    ]
+    const line = d3.line();
+    const pathData = line(data);
+    console.log(pathData);
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+    svg.append("path")
+            .attr("d", pathData)
+            .style("stroke", "red")
+            .style("fill", "none");
+
+</script>
+</body>
+</html>

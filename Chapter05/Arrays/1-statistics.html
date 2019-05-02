@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+    const array = [4,2,9,12,6,23, NaN, 9,71,55, undefined, 49];
+    const objects = [{label: 'label1', value: 5}, {label: 'label2', value: 3}, {label: 'label3', value: 9}]
+
+    // D3 ignores, NaN, undefined, null
+    const min = d3.min(array);
+    console.log("Min", min);
+
+    const min2 = d3.min(objects, function(d) {
+        return d.value;
+    });
+    console.log("Min2", min2);
+
+    // Does not ignore NaN, null, undefined
+    const min3 = Math.min(array);
+    console.log("Min3", min3);
+
+    const max = d3.max(array);
+    console.log("Max", max);
+
+    const max2 = d3.max(objects.map(d => d.value));
+    console.log("Max2", max2);
+
+    const extent = d3.extent(array);
+    console.log("Extent", extent);
+
+    const sum = d3.sum(array);
+    console.log("Sum", sum);
+
+    const mean = d3.mean(array);
+    console.log("Mean", mean);
+
+    const median = d3.median(array);
+    console.log("Median", median);
+
+    const variance = d3.variance(array);
+    console.log("Variance", variance);
+
+    const sqrtVariance = Math.sqrt(variance);
+    console.log("Sqrt variance", sqrtVariance);
+
+    const deviation = d3.deviation(array);
+    console.log("Deviation", deviation);
+
+    const array2 = [4,2,9,12,6,23,9,71,55,49];
+    array2.sort((a,b) => a-b);
+    const quartile50 = d3.quantile(array2, .5);
+    console.log("Quartile .5", quartile50);
+    const quartile25 = d3.quantile(array2, .25);
+    console.log("Quartile .25", quartile25);
+    const quartile75 = d3.quantile(array2, .75);
+    console.log("Quartile .75", quartile75);
+
+</script>
+</body>
+</html>

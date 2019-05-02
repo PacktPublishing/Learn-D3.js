@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Area</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        path.area {
+            stroke: red;
+            fill: rgba(255,0,0,.2)
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+    const margin = 50;
+
+    const data = [
+        [0,0],
+        [1,.2],
+        [2,.4],
+        [3,.15],
+        [4,.05],
+        [5,.35],
+        [6,.5],
+        [7,.1],
+        [8,.25],
+    ];
+
+    const scaleX = d3.scaleLinear()
+                     .domain(d3.extent(data, d => d[0]))
+                     .range([margin,width - margin]);
+
+    const scaleY = d3.scaleLinear()
+                     .domain(d3.extent(data, d => d[1]))
+                     .range([height - margin,margin]);
+
+    const area = d3.area()
+                   .x(d => scaleX(d[0]))
+                   .y1(d => scaleY(d[1]))
+                   .y0(d => scaleY(0));
+
+    const pathData = area(data);
+
+    const xAxis = d3.axisBottom(scaleX);
+    const yAxis = d3.axisLeft(scaleY);
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+
+    svg.append("path").attr("class", "area")
+            .attr("d", pathData)
+
+    svg.append('g')
+            .call(xAxis)
+            .attr("transform", "translate("+[0, height - margin]+")");
+    svg.append('g')
+            .call(yAxis)
+            .attr("transform", "translate("+[margin, 0]+")");;
+
+</script>
+</body>
+</html>

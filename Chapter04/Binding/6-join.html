@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Using HTML5 datasets</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        #list {
+            position: absolute;
+            width: 800px;
+        }
+        .planet {
+            background-color: burlywood;
+            position: relative;
+            padding: 2px;
+            margin: 2px;
+            font-family: 'Yanone Kaffeesatz', 'Arial Narrow', sans-serif;
+            font-size: 8pt;
+        }
+    </style>
+</head>
+<body>
+<h1>See more results in console.</h1>
+
+<div id="list"></div>
+
+<script>
+    const diameters = [
+        {planet: 'Mercury', diameterKm: 4879},
+        {planet: 'Venus', diameterKm: 12104},
+        {planet: 'Earth', diameterKm: 12756},
+        {planet: 'Mars', diameterKm: 6792},
+        {planet: 'Jupiter', diameterKm: 142984},
+        {planet: 'Saturn', diameterKm: 120536},
+        {planet: 'Uranus', diameterKm: 51118},
+        {planet: 'Neptune', diameterKm: 49528}
+    ];
+
+    const scale = d3.scaleLinear()
+            .range([0,800])
+            .domain([0, d3.max(diameters, d => d.diameterKm)]);
+
+    const sel = d3.select("#list");
+
+    sel.selectAll("div")
+        .data(diameters).join("div")
+        .attr("class", "planet")
+        .style("width", d => scale(d.diameterKm) + "px")
+        .text(d => d.planet);
+
+</script>
+
+</body>
+</html>

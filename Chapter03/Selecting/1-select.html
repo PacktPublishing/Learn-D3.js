@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+
+<body>
+<p>See results in console log.</p>
+<div id="section">
+    <p>Paragraph 1</p>
+    <p>Paragraph 2</p>
+</div>
+<p>Paragraph 3</p>
+
+<script>
+
+    const div = d3.select("#section");       // selects the element with the "section" ID
+    const domDiv = div.node();               // converts the object into a DOM node
+    const firstP = d3.select("p");           // selects the first <p> in the page
+    const allParagraphs = d3.selectAll("p"); // selects all four <p> nodes in the page
+    const allPDom = allParagraphs.nodes();   // converts the selection into a DOM nodelist
+
+    const sectionParagraphs =
+            d3.select("div")
+                    .selectAll("p");       // selects the two <p> nodes inside <div>
+
+    console.log("d3.select('#section')", domDiv);
+    console.log("d3.select('p')", firstP.node());
+    console.log("# of paragraphs: selectAll('p')", allPDom.length);
+    console.log("# of paragraphs in first div: select('div').selectAll('p')", sectionParagraphs.nodes().length);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        h1 {
+            display: inline;
+        }
+        #one {
+            color: red;
+            font-size: 50px;
+        }
+        #two {
+            color: green;
+            font-size: 200px;
+        }
+    </style>
+</head>
+<body>
+<h3>See console for results</h3>
+<h1 id="one">A</h1>
+<h1 id="two">B</h1>
+<script>
+
+
+    let count = 0;
+    const duration = 1000;
+    const delay = 500;
+    const ease = d3.easeElasticOut;
+
+    console.log(count + ": " + 0)
+    const initialSize = d3.select("#one").style("font-size");
+    console.log(initialSize)
+
+    d3.select("#one").transition().ease(ease).duration(duration).delay(delay)
+      .tween("style.font-size", function() {
+          const interpolator = d3.interpolateString(initialSize, "350px")
+          return function(t) {
+              this.style.fontSize = interpolator(t)
+              console.log(++count + ": " + t, this.style.fontSize)
+
+          }
+      });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 10px;
+            text-anchor: middle;
+            alignment-baseline: hanging;
+        }
+        .continent {
+            fill: #94923c;
+        }
+        .river {
+            fill: none;
+            stroke: aquamarine;
+        }
+        .city circle {
+            fill: yellow;
+            stroke: black;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const projection = d3.geoMercator();
+    const geoPath = d3.geoPath().projection(projection);
+
+    d3.json('../Data/africa-simple.geojson').then(function(data) {
+
+        const rivers    = data.features.filter(d => d.geometry.type == 'LineString' || d.geometry.type == 'MultiLineString');
+        const continent = data.features.filter(d => d.geometry.type == 'Polygon' || d.geometry.type == 'MultiPolygon');
+        const cities    = data.features.filter(d => d.geometry.type == 'Point');
+
+        svg.selectAll("path.continent").data(continent).enter()
+                .append("path").attr("class","continent")
+                .attr("d", geoPath)
+
+        svg.selectAll("path.river").data(rivers).enter()
+                .append("path").attr("class","river")
+                .attr("d", geoPath)
+
+        svg.selectAll("g.city").data(cities).enter()
+            .append("g").attr("class","city")
+            .attr("transform", d => `translate(${[geoPath.projection()(d.geometry.coordinates)]})`)
+            .each(function(d) {
+                d3.select(this).append("circle").attr('r', 3);
+                d3.select(this).append("text").attr('y', 2).text(d.properties.name);
+            });
+
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 18px;
+            alignment-baseline: middle;
+            text-anchor: end;
+            fill: 'black';
+        }
+        .faded {
+            opacity: .2;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1400;
+    const height = 600;
+    const margin = 100;
+
+    const weightScale = d3.scaleLinear().range([0,30]);
+
+    const format = d3.format('0.1f');
+
+    d3.csv("../Data/sa_borders.csv", function(row) {
+        const line = [];
+        for(key in row) {
+            if(isNaN(row[key])) continue;
+            line.push({value: +row[key], target: row.Country, source: key}); // adds only top diagonal
+        }
+        return line.filter(d => d.value != 0);
+    }).then(function(data) {
+        const nodes = data.columns.filter(d => d != 'Country').map(n => ({node: n}));
+        const edges = d3.merge(data);
+
+        weightScale.domain([0,d3.max(edges, d => d.value)]);
+
+        const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+        const arcData = arcDiagLayout(nodes, edges);
+
+        console.log(arcData.nodes(), arcData.links())
+
+        draw(arcData);
+
+    });
+
+    function isCoastline(node) {
+        return node == 'Atlantic' || node == 'Pacific';
+    }
+
+    function color(d) {
+        return isCoastline(d.target.node) || isCoastline(d.source.node) ? 'darkcyan' : '#4a5d2e';
+    }
+
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,height - margin]})`);
+
+        const border = dvj.curve().size([width-margin, height*1.8]);
+
+        chart.selectAll("path")
+                .data(data.links())
+                .enter()
+                .append("path")
+                .attr("d", border)
+                .style("stroke-width", d => weightScale(d.value))
+                .style("stroke", d => color(d))
+                .style("stroke-opacity", .7)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("id", d => d.node)
+                .attr("cx", d => d.x)
+                .attr("r", 15)
+                .style("fill", d => isCoastline(d.node) ? 'navy' : 'green')
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle").classed('faded', false));
+
+        chart.selectAll('text.location')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'location')
+                .attr("x", d => d.x - 20)
+                .attr("transform",d => `rotate(-90,${[d.x,0]})`)
+                .text(d => d.node);
+    }
+
+    function highlight(d) {
+        d3.selectAll("path")
+                .classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle")
+                .classed('faded', n => !(n === d  || n.sources.filter(s => s.target === d).length > 0
+        || n.targets.filter(s => s.source === d).length > 0));
+    }
+
+</script>
+</body>
+</html>

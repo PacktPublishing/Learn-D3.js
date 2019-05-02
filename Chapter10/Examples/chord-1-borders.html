@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+    d3.csv("../Data/sa_borders.csv", function(row) {
+        const line = [];
+        for(key in row) {
+            if(isNaN(row[key])) continue;
+            const obj = {
+                value: +row[key] ,
+                source: row.Country,
+                target: key
+            }
+            line.push(obj);
+        }
+        return line.filter(d => d.value != 0);
+    }).then(function(data) {
+        const links = d3.merge(data);
+        const groups = d3.nest()
+                         .key(d => d.source)
+                         .key(d => d.target)
+                         .rollup(d => d[0].value)
+                         .map(links);
+        const columns = data.columns.filter((d,i) => i>0);
+
+        const matrix = makeMatrix(columns, groups);
+
+        draw(columns, matrix);
+    });
+
+    function makeMatrix(columns, groups) {
+        const matrix = [];
+        columns.forEach(function(r) {
+            const row = [];
+            columns.forEach(function(c) {
+                let value = undefined;
+                let target = groups.get(c);
+                if(target) {
+                    value = groups.get(c).get(r);
+                }
+                if(!value) {
+                    target = groups.get(r);
+                    if(target) {
+                        value = groups.get(r).get(c);
+                    }
+                }
+                if(!value) {
+                    row.push(0);
+                } else {
+                    row.push(value);
+                }
+            });
+            matrix.push(row);
+        })
+        return matrix;
+    }
+
+    const width = 1000;
+    const height = 800;
+    const margin = 100;
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2 + margin/2, height/2 + margin/2]})`);
+
+    const color = d3.scaleSequential(d3.interpolateSinebow).domain([1,12]);
+
+    function draw(headers, matrix) {
+        console.log(matrix);
+
+        const chord = d3.chord();
+        const chords = chord(matrix);
+
+        const ribbon = d3.ribbon().radius(height/2 - margin/2);
+
+        chart.selectAll("path")
+                .data(chords)
+                .enter().append("path")
+                .attr("d", ribbon)
+                .style("opacity", .3)
+                .style("fill", d => color(d.target.index));
+    }
+
+</script>
+
+</body>
+</html>

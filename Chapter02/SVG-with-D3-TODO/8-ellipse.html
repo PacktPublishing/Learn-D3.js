@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG ellipse + stroke + opacity using D3</h2>
+<script>
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 300);
+
+    svg.append("ellipse")
+            .attr("cx", 150)
+            .attr("cy", 100)
+            .attr("rx", 150)
+            .attr("ry", 100)
+            .attr("fill", "yellow")
+            .attr("fill-opacity", 0.5)
+            .attr("stroke", "blue")
+            .attr("stroke-width", 1)
+            .attr("stroke-dasharray", "5 5")
+
+    svg.append("ellipse")
+            .attr("cx", 400)
+            .attr("cy", 150)
+            .attr("rx", 75)
+            .attr("ry", 125)
+            .attr("fill", "red")
+            .attr("fill-opacity", 0.2)
+            .attr("stroke", "red")
+            .attr("stroke-width", 5)
+            .attr("stroke-opacity", 0.5)
+
+    svg.append("ellipse")
+            .attr("cx", 400)
+            .attr("cy", 250)
+            .attr("rx", 150)
+            .attr("ry", 40)
+            .attr("fill", "black")
+            .attr("fill-opacity", 0)
+            .attr("stroke", "green")
+            .attr("stroke-width", 20)
+            .attr("stroke-opacity", 0.2)
+</script>
+</body>
+</html>

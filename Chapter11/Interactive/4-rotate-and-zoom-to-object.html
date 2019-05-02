@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="../JavaScript/wgs84_resampling.js"></script>
+    <style>
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            fill: black;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoOrthographic();
+    const scale = projection.scale();
+    const translate = projection.translate();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+    const zoomBox = {};
+    let dragged = false;
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                map.features.map(d => d.id = d.properties.ISO_A3);
+
+                drawGraticules();
+                draw();
+            });
+
+    const globe = svg.append("g").attr("class","globe");
+
+    function zoom(object) {
+        rotateToView(object);
+        projection.fitExtent([[50,50],[width-50, height-50]], object);
+        render(object.id);
+    }
+
+    function rotateToView(object) {
+        const rotate = d3.geoRotation(projection.rotate()),
+              centroid = d3.geoCentroid(object);
+
+        const rotation = rotate(centroid);
+
+        const lambda  = projection.rotate()[0] - rotation[0],
+              phi     = projection.rotate()[1] - rotation[1],
+              gamma   = projection.rotate()[2];
+
+        projection.rotate([lambda, phi, gamma]);
+
+        const epsilon = 1e-6;
+        if(Math.abs(rotation[0]) >= epsilon || Math.abs(rotation[1]) >= epsilon) {
+            return rotateToView(object);
+        }
+        return rotation;
+    }
+
+    function draw() {
+        globe.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("id", d => d.id)
+                .attr("class","country")
+                .on("click", d => zoom(d))
+                .style("fill", 'gray')
+                .each(function(d) {
+                    d3.select(this)
+                            .append("path")
+                            .attr('d', geoPath)
+                            .style("stroke", "white")
+                            .style('stroke-width', '.25');
+                    d3.select(this)
+                            .append("text")
+                            .attr("text-anchor", "middle")
+                            .text('')
+                });
+    }
+
+    svg.on("dblclick", function() {
+        d3.event.stopPropagation();
+        projection.scale(scale).translate(translate);
+        render();
+    });
+
+    function render(id) {
+        globe.selectAll("g.country")
+                .each(function(d) {
+                    d3.select(this)
+                        .select("path")
+                        .style('fill', d.id == id ? 'orange' : 'gray')
+                        .attr('d', geoPath);
+                    d3.select(this)
+                        .select('text')
+                        .attr("transform", d.id == id ? `translate(${geoPath.centroid(d)})` : '')
+                        .text(d.id == id ? d.properties.ADMIN : '');
+                })
+
+        globe.selectAll("path.graticule")
+                .attr('d', geoPath);
+        globe.selectAll("path.background")
+                .attr('d', geoPath);
+
+    }
+
+    function drawGraticules() {
+        globe.append("path").attr("class","background")
+                .datum({type: 'Sphere'})
+                .style("fill", 'lightblue')
+                .attr('d', geoPath);
+        globe.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', '.25');
+    }
+</script>
+
+</body>
+</html>

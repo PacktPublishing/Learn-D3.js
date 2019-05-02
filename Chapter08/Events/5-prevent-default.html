@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h3>Example with event.preventDefault()</h3>
+<form action="">
+    <input type="submit" id="b1" value="This button reloads the page">
+    <input type="submit" id="b2" value="This button doesn't reload the page">
+</form>
+<p></p>
+<script>
+    d3.select("#b1").on("click", function() {
+        alert("Default event not cancelled! Page will reload now.");
+        d3.select("p").text("Content added after event");
+    });
+
+    d3.select("#b2").on("click", function() {
+        event.preventDefault();
+        alert("Default event cancelled! Page not reloaded.");
+        d3.select("p").text("Content added after event");
+    });
+
+</script>
+
+</body>
+</html>

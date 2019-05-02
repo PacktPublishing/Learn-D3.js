@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    const set = new Set();
+
+    set.add(5);
+    set.add(7);
+
+    console.log(set);
+
+    set.add(1);
+    set.add(5);
+    set.add(7);
+
+    console.log(set);
+
+    console.log(set.has(3));
+     console.log(set.size);
+    const array = [... set];
+    console.log(array)
+
+    const map = new Map();
+    map.set("a", 123)
+    map.set("b", 456);
+
+    console.log(map.get("b"))
+
+    for (let key of map.keys()) {
+        console.log(key, map.get(key))
+    }
+
+    for (let [key, value] of map.entries()) {
+        console.log(key, value)
+    }
+
+    map.forEach ((k, v) => console.log(k, v))
+
+    const array2 = [... map.values()]
+    console.log(array2)
+
+    const array3 = Array.from(map.values())
+
+
+
+</script>
+</body>
+</html>

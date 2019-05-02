@@ -1,0 +1,1502 @@
+city,city_ascii,lat,lng,iso3,population,continent
+Pretoria,Pretoria,-25.7069,28.2294,ZAF,1338000,Africa
+Lebowakgomo,Lebowakgomo,-24.1996,29.5,ZAF,33308,Africa
+Potchefstroom,Potchefstroom,-26.6996,27.1,ZAF,123669,Africa
+Graaff Reinet,Graaff Reinet,-32.3,24.54,ZAF,62896,Africa
+Rustenburg,Rustenburg,-25.65,27.24,ZAF,165976,Africa
+Brandfort,Brandfort,-28.6996,26.47,ZAF,12091,Africa
+Vryheid,Vryheid,-27.76,30.79,ZAF,150012,Africa
+Vereeniging,Vereeniging,-26.6496,27.96,ZAF,1074000,Africa
+Brits,Brits,-25.6296,27.78,ZAF,122497,Africa
+Bethlehem,Bethlehem,-28.2196,28.3,ZAF,83654,Africa
+Ubomba,Ubomba,-27.5661,32.0833,ZAF,564,Africa
+Polokwane,Polokwane,-23.89,29.45,ZAF,220045,Africa
+Springbok,Springbok,-29.6667,17.8833,ZAF,10438,Africa
+Thohoyandou,Thohoyandou,-22.95,30.48,ZAF,269707,Africa
+Pietermaritzburg,Pietermaritzburg,-29.61,30.39,ZAF,750845,Africa
+Poffader,Poffader,-29.1329,19.3834,ZAF,4220,Africa
+Carnarvon,Carnarvon,-30.9496,22.1333,ZAF,5785,Africa
+Kroonstad,Kroonstad,-27.66,27.21,ZAF,103992,Africa
+Alexander Bay,Alexander Bay,-28.6083,16.5033,ZAF,1500,Africa
+Bloemhof,Bloemhof,-27.6496,25.59,ZAF,17122,Africa
+Hermanus,Hermanus,-34.4096,19.2299,ZAF,25153,Africa
+Bethal,Bethal,-26.4696,29.45,ZAF,101919,Africa
+Upington,Upington,-28.46,21.23,ZAF,71373,Africa
+Tzaneen,Tzaneen,-23.8195,30.17,ZAF,67245,Africa
+Vanhynsdorp,Vanhynsdorp,-31.6166,18.7333,ZAF,3331,Africa
+Musina,Musina,-22.34,30.03,ZAF,20191,Africa
+Kimberley,Kimberley,-28.7468,24.77,ZAF,165264,Africa
+Durban,Durban,-29.865,30.98,ZAF,2729000,Africa
+Klerksdorp,Klerksdorp,-26.88,26.62,ZAF,178921,Africa
+Welkom,Welkom,-27.97,26.73,ZAF,431944,Africa
+De Aar,De Aar,-30.65,24,ZAF,32318,Africa
+Prieska,Prieska,-29.6595,22.73,ZAF,11236,Africa
+Saldanha,Saldanha,-33.01,17.93,ZAF,68284,Africa
+Middelburg,Middelburg,-31.5,25.01,ZAF,18164,Africa
+Port St. Johns,Port St. Johns,-31.6279,29.5283,ZAF,5939,Africa
+Volksrust,Volksrust,-27.3596,29.89,ZAF,43378,Africa
+Ulundi,Ulundi,-28.3296,31.41,ZAF,20753,Africa
+Beaufort West,Beaufort West,-32.3496,22.57,ZAF,44737,Africa
+Komatipoort,Komatipoort,-25.4096,31.94,ZAF,20508,Africa
+Nelspruit,Nelspruit,-25.4745,30.9703,ZAF,,Africa
+Standerton,Standerton,-26.9395,29.24,ZAF,74021,Africa
+Johannesburg,Johannesburg,-26.17,28.03,ZAF,3435000,Africa
+Kuruman,Kuruman,-27.4496,23.42,ZAF,10006,Africa
+Paarl,Paarl,-33.6996,18.96,ZAF,187865,Africa
+Worcester,Worcester,-33.64,19.4399,ZAF,127597,Africa
+Colesberg,Colesberg,-30.7195,25.1,ZAF,12423,Africa
+Umtata,Umtata,-31.58,28.79,ZAF,137772,Africa
+Aliwal North,Aliwal North,-30.6896,26.71,ZAF,44436,Africa
+Middelburg,Middelburg,-25.7596,29.47,ZAF,154706,Africa
+Springs,Springs,-26.2696,28.43,ZAF,236083,Africa
+Benoni,Benoni,-26.1496,28.3299,ZAF,2986000,Africa
+Port Shepstone,Port Shepstone,-30.7195,30.46,ZAF,52793,Africa
+Oudtshoorn,Oudtshoorn,-33.58,22.19,ZAF,76708,Africa
+Port Elizabeth,Port Elizabeth,-33.97,25.6,ZAF,1021000,Africa
+Port Alfred,Port Alfred,-33.5995,26.88,ZAF,17959,Africa
+East London,East London,-32.97,27.87,ZAF,338627,Africa
+Mossel Bay,Mossel Bay,-34.17,22.13,ZAF,16743,Africa
+Vryburg,Vryburg,-26.96,24.73,ZAF,49588,Africa
+Uitenhage,Uitenhage,-33.7596,25.39,ZAF,228912,Africa
+Bhisho,Bhisho,-32.87,27.39,ZAF,160997,Africa
+Knysna,Knysna,-34.0329,23.0333,ZAF,63106,Africa
+Queenstown,Queenstown,-31.8996,26.88,ZAF,105309,Africa
+Cradock,Cradock,-32.1995,25.61,ZAF,32898,Africa
+Bredasdorp,Bredasdorp,-34.5295,20.03,ZAF,14936,Africa
+Swellendam,Swellendam,-34.0196,20.43,ZAF,13674,Africa
+Ladysmith,Ladysmith,-28.5495,29.78,ZAF,47375,Africa
+George,George,-33.95,22.45,ZAF,174582,Africa
+Grahamstown,Grahamstown,-33.2996,26.52,ZAF,91548,Africa
+Mmabatho,Mmabatho,-25.83,25.61,ZAF,104428,Africa
+Mahikeng,Mahikeng,-25.8652,25.6442,ZAF,,Africa
+Bloemfontein,Bloemfontein,-29.12,26.2299,ZAF,463064,Africa
+Cape Town,Cape Town,-33.92,18.435,ZAF,3215000,Africa
+Zambezi,Zambezi,-13.54,23.1099,ZMB,7074,Africa
+Solwezi,Solwezi,-12.1796,26.4,ZMB,65000,Africa
+Lusaka,Lusaka,-15.4166,28.2833,ZMB,1328000,Africa
+Kaoma,Kaoma,-14.7796,24.8,ZMB,14212,Africa
+Chipata,Chipata,-13.6296,32.64,ZMB,85963,Africa
+Senanga,Senanga,-16.1196,23.27,ZMB,10005,Africa
+Sesheke,Sesheke,-17.4695,24.3,ZMB,20149,Africa
+Chililabombwe,Chililabombwe,-12.3696,27.82,ZMB,82068,Africa
+Chingola,Chingola,-12.5396,27.85,ZMB,182015,Africa
+Kasempa,Kasempa,-13.4596,25.82,ZMB,5622,Africa
+Kitwe,Kitwe,-12.81,28.22,ZMB,404901,Africa
+Mufulira,Mufulira,-12.55,28.26,ZMB,153624,Africa
+Nchelenge,Nchelenge,-9.3496,28.73,ZMB,23693,Africa
+Mazabuka,Mazabuka,-15.86,27.76,ZMB,64006,Africa
+Lukulu,Lukulu,-14.3896,23.24,ZMB,3349,Africa
+Kafue,Kafue,-15.78,28.18,ZMB,47554,Africa
+Lundazi,Lundazi,-12.2895,33.17,ZMB,11635,Africa
+Mansa,Mansa,-11.2,28.89,ZMB,42277,Africa
+Mwinilunga,Mwinilunga,-11.7396,24.44,ZMB,13798,Africa
+Mumbwa,Mumbwa,-14.9796,27.07,ZMB,19086,Africa
+Kalabo,Kalabo,-14.9896,22.68,ZMB,7731,Africa
+Nyimba,Nyimba,-14.5495,30.81,ZMB,1336,Africa
+Kapiri Mposhi,Kapiri Mposhi,-13.9696,28.66,ZMB,37942,Africa
+Kabwe,Kabwe,-14.44,28.45,ZMB,188979,Africa
+Ndola,Ndola,-12.9999,28.65,ZMB,396339,Africa
+Kasama,Kasama,-10.1996,31.1799,ZMB,200000,Africa
+Mbala,Mbala,-8.84,31.37,ZMB,20570,Africa
+Kawambwa,Kawambwa,-9.7795,29.08,ZMB,20589,Africa
+Luanshya,Luanshya,-13.1333,28.4,ZMB,151993,Africa
+Mongu,Mongu,-15.2796,23.12,ZMB,52534,Africa
+Mpika,Mpika,-11.83,31.46,ZMB,28445,Africa
+Chinsali,Chinsali,-10.5496,32.06,ZMB,14015,Africa
+Livingstone,Livingstone,-17.86,25.86,ZMB,165480,Africa
+Choma,Choma,-16.8095,26.97,ZMB,46746,Africa
+Plumtree,Plumtree,-20.4795,27.82,ZWE,2148,Africa
+Kariba,Kariba,-16.5296,28.8,ZWE,25531,Africa
+Hwange,Hwange,-18.37,26.5,ZWE,33989,Africa
+Chiredzi,Chiredzi,-21.0496,31.66,ZWE,28205,Africa
+Mazowe,Mazowe,-17.5196,30.97,ZWE,9966,Africa
+Zvishavane,Zvishavane,-20.3296,30.05,ZWE,35896,Africa
+Shamva,Shamva,-17.3196,31.57,ZWE,10317,Africa
+Harare,Harare,-17.8178,31.0447,ZWE,1572000,Africa
+Kwekwe,Kwekwe,-18.9296,29.8,ZWE,99149,Africa
+Kadoma,Kadoma,-18.33,29.9099,ZWE,79174,Africa
+Gwanda,Gwanda,-20.9396,29.01,ZWE,14450,Africa
+Chinhoyi,Chinhoyi,-17.3596,30.18,ZWE,61739,Africa
+Beitbridge,Beitbridge,-22.2096,29.99,ZWE,26459,Africa
+Mutare,Mutare,-18.97,32.65,ZWE,249365,Africa
+Gweru,Gweru,-19.45,29.82,ZWE,183358,Africa
+Karoi,Karoi,-16.8196,29.68,ZWE,25030,Africa
+Masvingo,Masvingo,-20.0596,30.82,ZWE,76311,Africa
+Bulawayo,Bulawayo,-20.17,28.58,ZWE,699385,Africa
+Victoria Falls,Victoria Falls,-17.9296,25.84,ZWE,35761,Africa
+Chitungwiza,Chitungwiza,-18,31.1,ZWE,340360,Africa
+Bopolu,Bopolu,7.0667,-10.4875,LBR,,Africa
+Voinjama,Voinjama,8.4167,-9.75,LBR,26594,Africa
+Robertsport,Robertsport,6.7533,-11.3686,LBR,11969,Africa
+Buchanan,Buchanan,5.9161,-10.0525,LBR,48315,Africa
+Monrovia,Monrovia,6.3106,-10.8048,LBR,1041000,Africa
+Tubmanburg,Tubmanburg,6.8706,-10.8211,LBR,,Africa
+Buchanan,Buchanan,5.8811,-10.0447,LBR,,Africa
+Zwedru,Zwedru,6.0704,-8.13,LBR,25678,Africa
+Barclayville,Barclayville,4.8,-8.1667,LBR,2733,Africa
+Rivercess,Rivercess,5.465,-9.578,LBR,2578,Africa
+Fish Town,Fish Town,5.1974,-7.8758,LBR,,Africa
+Gbarnga,Gbarnga,7.0104,-9.49,LBR,45835,Africa
+Kakata,Kakata,6.526,-10.349,LBR,33945,Africa
+Sanniquellie,Sanniquellie,7.371,-8.685,LBR,11415,Africa
+Greenville,Greenville,5.0111,-9.0388,LBR,10374,Africa
+Bensonville,Bensonville,6.4333,-10.6,LBR,4089,Africa
+Harper,Harper,4.3754,-7.717,LBR,32661,Africa
+Maseru,Maseru,-29.3167,27.4833,LSO,361324,Africa
+Mokhotlong,Mokhotlong,-29.291,29.078,LSO,8809,Africa
+Thaba-Tseka,Thaba-Tseka,-29.522,28.6084,LSO,,Africa
+Moyeni,Moyeni,-30.411,27.716,LSO,24130,Africa
+Qacha’s Nek,Qacha's Nek,-30.1154,28.6894,LSO,,Africa
+Mafetang,Mafetang,-29.8166,27.25,LSO,57059,Africa
+Hlotse,Hlotse,-28.878,28.056,LSO,47675,Africa
+Teyateyaneng,Teyateyaneng,-29.153,27.753,LSO,5115,Africa
+Mohales Hoek,Mohales Hoek,-30.159,27.48,LSO,24992,Africa
+Butha-Buthe,Butha-Buthe,-28.75,28.25,LSO,16330,Africa
+Tripoli,Tripoli,32.8925,13.18,LBY,2189000,Africa
+Gharyan,Gharyan,32.1704,13.02,LBY,146810,Africa
+Surt,Surt,31.21,16.59,LBY,128123,Africa
+Marzuq,Marzuq,25.9044,13.8972,LBY,55071,Africa
+Sabha,Sabha,27.0333,14.4333,LBY,100249,Africa
+Misratah,Misratah,32.38,15.1,LBY,386120,Africa
+Al ‘Az_z_yah,Al `Aziziyah,32.5319,13.0175,LBY,,Africa
+Zuwarah,Zuwarah,32.9344,12.0791,LBY,180310,Africa
+Nalut,Nalut,31.8804,10.97,LBY,66609,Africa
+Hun,Hun,29.1167,15.9333,LBY,18878,Africa
+Darnah,Darnah,32.7648,22.6391,LBY,127974,Africa
+Al Bayda,Al Bayda,32.7604,21.62,LBY,1794,Africa
+Az Zawiyah,Az Zawiyah,32.7604,12.72,LBY,200000,Africa
+Tajarhi,Tajarhi,24.3704,14.4708,LBY,1500,Africa
+Al Jaghbub,Al Jaghbub,29.7504,24.5166,LBY,1744,Africa
+Awjilah,Awjilah,29.108,21.2869,LBY,6610,Africa
+Al Khums,Al Khums,32.6604,14.26,LBY,201943,Africa
+Ajdabiya,Ajdabiya,30.77,20.22,LBY,143833,Africa
+Al Kufrah,Al Kufrah,24.1667,23.2696,LBY,,Africa
+Al Jawf,Al Jawf,24.2,23.29,LBY,24132,Africa
+As Sidr,As Sidr,30.6704,18.2666,LBY,50,Africa
+Umm al Abid,Umm al Abid,27.517,15.0333,LBY,300,Africa
+Banghazi,Banghazi,32.1167,20.0667,LBY,1180000,Africa
+Dirj,Dirj,30.1679,10.4567,LBY,931,Africa
+Mizdah,Mizdah,31.4337,12.9833,LBY,26107,Africa
+Ghadamis,Ghadamis,30.1333,9.5,LBY,6623,Africa
+Qaminis,Qaminis,31.6606,20.0155,LBY,5348,Africa
+Awb_r_,Awbari,26.5903,12.7751,LBY,,Africa
+Ghat,Ghat,24.9647,10.1728,LBY,24347,Africa
+Bani Walid,Bani Walid,31.7704,13.99,LBY,65392,Africa
+Zillah,Zillah,28.5504,17.5834,LBY,10,Africa
+Tmassah,Tmassah,26.3666,15.8,LBY,500,Africa
+Idr_,Idri,27.4471,13.0517,LBY,,Africa
+El Agheila,El Agheila,30.257,19.2,LBY,100,Africa
+Birak,Birak,27.5333,14.2834,LBY,45421,Africa
+Maradah,Maradah,29.2337,19.2166,LBY,2500,Africa
+Shahhat,Shahhat,32.8281,21.8622,LBY,45000,Africa
+Al Marj,Al Marj,32.5005,20.83,LBY,169540,Africa
+Tubruq,Tubruq,32.08,23.96,LBY,263527,Africa
+Kenitra,Kenitra,34.2704,-6.58,MAR,551786,Africa
+Goulimine,Goulimine,28.98,-10.07,MAR,115267,Africa
+Fez,Fez,34.0546,-5.0004,MAR,1002000,Africa
+Casablanca,Casablanca,33.6,-7.6164,MAR,3181000,Africa
+Agadir,Agadir,30.44,-9.62,MAR,825467,Africa
+Béni Mellal,Beni Mellal,32.3373,-6.3498,MAR,,Africa
+Tangier,Tangier,35.7473,-5.8327,MAR,750060,Africa
+Settat,Settat,33.0104,-7.62,MAR,161748,Africa
+Oujda,Oujda,34.69,-1.91,MAR,409391,Africa
+Meknes,Meknes,33.9004,-5.56,MAR,697628,Africa
+Rabat,Rabat,34.0253,-6.8361,MAR,1705000,Africa
+Marrakesh,Marrakesh,31.63,-8,MAR,872000,Africa
+El Jadida,El Jadida,33.2604,-8.51,MAR,180470,Africa
+Er Rachidia,Er Rachidia,31.9404,-4.45,MAR,228489,Africa
+Tan Tan,Tan Tan,28.4304,-11.1,MAR,64868,Africa
+Taza,Taza,34.2204,-4.02,MAR,199633,Africa
+Larache,Larache,35.2004,-6.16,MAR,120082,Africa
+Ksar El Kebir,Ksar El Kebir,35.0204,-5.91,MAR,306600,Africa
+Safi,Safi,32.32,-9.24,MAR,353476,Africa
+Tiznit,Tiznit,29.7104,-9.74,MAR,57705,Africa
+Ouezzane,Ouezzane,34.8103,-5.57,MAR,69658,Africa
+Antananarivo,Antananarivo,-18.9166,47.5166,MDG,1697000,Africa
+Toamasina,Toamasina,-18.1818,49.405,MDG,210226,Africa
+Antalaha,Antalaha,-14.8833,50.2833,MDG,47224,Africa
+Maroantsetra,Maroantsetra,-15.4333,49.7333,MDG,38046,Africa
+Mandritsara,Mandritsara,-15.8328,48.8166,MDG,9705,Africa
+Besalampy,Besalampy,-16.7495,44.4833,MDG,1022,Africa
+Marovoay,Marovoay,-16.0995,46.6333,MDG,31253,Africa
+Andoany,Andoany,-13.4,48.2666,MDG,22680,Africa
+Mahajanga,Mahajanga,-15.67,46.345,MDG,154657,Africa
+Ambanja,Ambanja,-13.6829,48.45,MDG,30621,Africa
+Antsiranana,Antsiranana,-12.2765,49.3115,MDG,82937,Africa
+Miandrivazo,Miandrivazo,-19.5162,45.4666,MDG,20631,Africa
+Mananjary,Mananjary,-21.2167,48.3333,MDG,27686,Africa
+Morombe,Morombe,-21.7391,43.3657,MDG,16727,Africa
+Toliara,Toliara,-23.3568,43.69,MDG,115319,Africa
+Manja,Manja,-21.4329,44.3333,MDG,1536,Africa
+Fianarantsoa,Fianarantsoa,-21.4333,47.0833,MDG,184184,Africa
+Androka,Androka,-25.0219,44.0749,MDG,174,Africa
+Bekiy,Bekiy,-24.2162,45.3166,MDG,4286,Africa
+Antsirabe,Antsirabe,-19.85,47.0333,MDG,307921,Africa
+Antsohihy,Antsohihy,-14.8661,47.9834,MDG,21290,Africa
+Maintirano,Maintirano,-18.0666,44.0167,MDG,5925,Africa
+Ambatondrazaka,Ambatondrazaka,-17.8329,48.4167,MDG,43134,Africa
+Farafangana,Farafangana,-22.8166,47.8332,MDG,24764,Africa
+Ihosy,Ihosy,-22.3996,46.1167,MDG,16990,Africa
+Morondava,Morondava,-20.2833,44.2833,MDG,36803,Africa
+Tôlanaro,Tolanaro,-25.0268,46.99,MDG,16818,Africa
+Sambava,Sambava,-14.2662,50.1666,MDG,43465,Africa
+Aguelhok,Aguelhok,19.4549,0.8564,MLI,9000,Africa
+Bamako,Bamako,12.65,-8,MLI,1494000,Africa
+Kidal,Kidal,18.4411,1.4078,MLI,,Africa
+Bourem,Bourem,16.9004,-0.35,MLI,30000,Africa
+Mopti,Mopti,14.49,-4.18,MLI,108456,Africa
+Gao,Gao,16.2666,-0.05,MLI,116967,Africa
+Satadougou,Satadougou,12.617,-11.4066,MLI,706,Africa
+Koulikoro,Koulikoro,12.8833,-7.55,MLI,23919,Africa
+Sikasso,Sikasso,11.3204,-5.68,MLI,225753,Africa
+Araouane,Araouane,18.9,-3.53,MLI,4026,Africa
+Ségou,Segou,13.44,-6.26,MLI,122952,Africa
+Timbuktu,Timbuktu,16.7666,-3.0166,MLI,68872,Africa
+Markala,Markala,13.6704,-6.07,MLI,53738,Africa
+Taoudenni,Taoudenni,22.6666,-3.9834,MLI,3019,Africa
+Kayes,Kayes,14.45,-11.44,MLI,77207,Africa
+Sokolo,Sokolo,14.7337,-6.1333,MLI,4374,Africa
+Kita,Kita,13.0504,-9.4833,MLI,46435,Africa
+Nara,Nara,15.18,-7.28,MLI,18459,Africa
+Kati,Kati,12.7504,-8.08,MLI,66895,Africa
+Kangaba,Kangaba,11.9404,-8.44,MLI,17232,Africa
+San,San,13.3004,-4.9,MLI,41386,Africa
+Bougouni,Bougouni,11.4204,-7.49,MLI,35450,Africa
+Koutiala,Koutiala,12.3904,-5.47,MLI,104927,Africa
+Djenné,Djenne,13.9,-4.55,MLI,32944,Africa
+Yélimané,Yelimane,15.1337,-10.5666,MLI,988,Africa
+Bafoulabé,Bafoulabe,13.8004,-10.82,MLI,26823,Africa
+Nioro du Sahel,Nioro du Sahel,15.2304,-9.59,MLI,14421,Africa
+Goundam,Goundam,16.417,-3.6666,MLI,8456,Africa
+Ménaka,Menaka,15.9167,2.4,MLI,9110,Africa
+Tessalit,Tessalit,20.2014,1.0888,MLI,6000,Africa
+Banamba,Banamba,13.5504,-7.45,MLI,30591,Africa
+Bogue,Bogue,16.5904,-14.27,MRT,10415,Africa
+Chegga,Chegga,25.3804,-5.78,MRT,10,Africa
+Boutilimit,Boutilimit,17.5504,-14.7,MRT,14142,Africa
+Timbedra,Timbedra,16.2504,-8.1666,MRT,245,Africa
+Bir Mogrein,Bir Mogrein,25.2333,-11.5833,MRT,10,Africa
+Fderik,Fderik,22.679,-12.707,MRT,5760,Africa
+Sélibaby,Selibaby,15.167,-12.1833,MRT,460,Africa
+Aleg,Aleg,17.058,-13.909,MRT,8388,Africa
+Akjoujt,Akjoujt,19.747,-14.391,MRT,370,Africa
+Kiffa,Kiffa,16.62,-11.4,MRT,73930,Africa
+Nema,Nema,16.6171,-7.25,MRT,200000,Africa
+Nouadhibou,Nouadhibou,20.9,-17.056,MRT,86738,Africa
+Rosso,Rosso,16.524,-15.8127,MRT,47203,Africa
+Tidjikdja,Tidjikdja,18.55,-11.4166,MRT,19981,Africa
+Atar,Atar,20.5166,-13.05,MRT,44265,Africa
+Kaédi,Kaedi,16.1503,-13.5037,MRT,,Africa
+Zouirat,Zouirat,22.7304,-12.4833,MRT,56345,Africa
+Arafat,Arafat,18.0583,-15.9621,MRT,,Africa
+Dar Naim,Dar Naim,18.0973,-15.9327,MRT,,Africa
+Tevragh Zeina,Tevragh Zeina,18.0989,-15.9885,MRT,,Africa
+Nouakchott,Nouakchott,18.0864,-15.9753,MRT,742144,Africa
+Ayoun el Atrous,Ayoun el Atrous,16.6666,-9.6167,MRT,1423,Africa
+Port Louis,Port Louis,-20.1666,57.5,MUS,595491,Africa
+Curepipe,Curepipe,-20.3162,57.5166,MUS,299975,Africa
+Thyolo,Thyolo,-16.0703,35.1471,MWI,,Africa
+Mwanza,Mwanza,-15.6167,34.5167,MWI,11379,Africa
+Chiradzulu,Chiradzulu,-15.7,35.1833,MWI,1580,Africa
+Karonga,Karonga,-9.9329,33.9333,MWI,34207,Africa
+Neno,Neno,-15.3981,34.6534,MWI,,Africa
+Zomba,Zomba,-15.39,35.31,MWI,80932,Africa
+Chikwawa,Chikwawa,-16.042,34.8019,MWI,,Africa
+Mulanje,Mulanje,-16.0333,35.5,MWI,16483,Africa
+Blantyre,Blantyre,-15.79,34.9899,MWI,584877,Africa
+Chiromo,Chiromo,-16.55,35.1332,MWI,25235,Africa
+Phalombe,Phalombe,-15.8064,35.6507,MWI,,Africa
+Nsanje,Nsanje,-16.9167,35.2667,MWI,21774,Africa
+Nkhata Bay,Nkhata Bay,-11.5996,34.3,MWI,22108,Africa
+Rumphi,Rumphi,-11.0195,33.8546,MWI,,Africa
+Chitipa,Chitipa,-9.7162,33.2666,MWI,13412,Africa
+Mzuzu,Mzuzu,-11.46,34.02,MWI,110201,Africa
+Mzimba,Mzimba,-11.9,33.6,MWI,19308,Africa
+Ntchisi,Ntchisi,-13.3753,34.0036,MWI,,Africa
+Dowa,Dowa,-13.6532,33.9385,MWI,,Africa
+Mchinji,Mchinji,-13.8,32.9,MWI,18305,Africa
+Nkhotakota,Nkhotakota,-12.9163,34.3,MWI,59854,Africa
+Kasungu,Kasungu,-13.0364,33.4822,MWI,,Africa
+Ntcheu,Ntcheu,-14.8167,34.6333,MWI,10445,Africa
+Dedza,Dedza,-14.3667,34.3333,MWI,15608,Africa
+Salima,Salima,-13.7829,34.4333,MWI,71181,Africa
+Lilongwe,Lilongwe,-13.9833,33.7833,MWI,646750,Africa
+Mangochi,Mangochi,-14.4596,35.27,MWI,97711,Africa
+Balaka,Balaka,-14.9889,34.9591,MWI,,Africa
+Machinga,Machinga,-14.9667,35.5167,MWI,1418,Africa
+Espungabera,Espungabera,-20.4501,32.77,MOZ,393,Africa
+Quelimane,Quelimane,-17.88,36.89,MOZ,188964,Africa
+Nicuadala,Nicuadala,-17.6077,36.8197,MOZ,6945,Africa
+Mapai,Mapai,-22.8427,31.9631,MOZ,201,Africa
+Mocimboa,Mocimboa,-11.3196,40.35,MOZ,27909,Africa
+Maxixe,Maxixe,-23.866,35.3886,MOZ,119868,Africa
+Mocambique,Mocambique,-15.0399,40.6822,MOZ,54315,Africa
+Nampula,Nampula,-15.136,39.293,MOZ,388526,Africa
+Massangena,Massangena,-21.5373,32.9564,MOZ,650,Africa
+Quissico,Quissico,-24.7257,34.766,MOZ,1210,Africa
+Chiramba,Chiramba,-16.8921,34.6559,MOZ,556,Africa
+Xai-Xai,Xai-Xai,-25.04,33.64,MOZ,128805,Africa
+Ligonha,Ligonha,-15.1757,37.74,MOZ,3500,Africa
+Vilanculos,Vilanculos,-21.9995,35.3166,MOZ,177,Africa
+Dondo,Dondo,-19.6196,34.73,MOZ,78648,Africa
+Macia,Macia,-25.0195,33.09,MOZ,23156,Africa
+Moatize,Moatize,-16.0995,33.95,MOZ,42000,Africa
+Angoche,Angoche,-16.23,39.91,MOZ,57835,Africa
+Cuamba,Cuamba,-14.7896,36.54,MOZ,73268,Africa
+Inhambane,Inhambane,-23.858,35.3398,MOZ,115776,Africa
+Beira,Beira,-19.82,34.87,MOZ,530604,Africa
+Lichinga,Lichinga,-13.3,35.24,MOZ,109839,Africa
+Pemba,Pemba,-12.983,40.5323,MOZ,110643,Africa
+Panda,Panda,-24.0629,34.7303,MOZ,602,Africa
+Manica,Manica,-18.9696,32.88,MOZ,4000,Africa
+Nacala,Nacala,-14.5186,40.715,MOZ,224795,Africa
+Montepuez,Montepuez,-13.1196,39,MOZ,72279,Africa
+Maputo,Maputo,-25.9553,32.5892,MOZ,1446000,Africa
+Mocuba,Mocuba,-16.8496,38.26,MOZ,68984,Africa
+Marrupa,Marrupa,-13.1984,37.4995,MOZ,8762,Africa
+Chimoio,Chimoio,-19.12,33.47,MOZ,256936,Africa
+Tete,Tete,-16.17,33.58,MOZ,129316,Africa
+Matola,Matola,-25.9696,32.46,MOZ,543907,Africa
+Oshikango,Oshikango,-17.3995,15.88,NAM,12423,Africa
+Okahandja,Okahandja,-21.9796,16.91,NAM,20879,Africa
+Ongwediva,Ongwediva,-17.78,15.77,NAM,25032,Africa
+Windhoek,Windhoek,-22.57,17.0835,NAM,268132,Africa
+Oranjemund,Oranjemund,-28.5495,16.43,NAM,8496,Africa
+Otavi,Otavi,-19.64,17.342,NAM,4562,Africa
+Rehoboth,Rehoboth,-23.3196,17.08,NAM,25219,Africa
+Bethanie,Bethanie,-26.4995,17.15,NAM,10363,Africa
+Karasburg,Karasburg,-28.0196,18.74,NAM,6054,Africa
+Omaruru,Omaruru,-21.436,15.951,NAM,11547,Africa
+Walvis Bay,Walvis Bay,-22.9575,14.5053,NAM,52058,Africa
+Karibib,Karibib,-21.939,15.853,NAM,6898,Africa
+Lüderitz,Luderitz,-26.648,15.1594,NAM,15137,Africa
+Grootfontein,Grootfontein,-19.5666,18.1166,NAM,24099,Africa
+Usakos,Usakos,-21.9995,15.58,NAM,9147,Africa
+Outjo,Outjo,-20.1095,16.14,NAM,6557,Africa
+Katima Mulilo,Katima Mulilo,-17.4996,24.26,NAM,25027,Africa
+Outapi,Outapi,-17.5,14.9833,NAM,,Africa
+Eenhana,Eenhana,-17.4667,16.3333,NAM,,Africa
+Oshakati,Oshakati,-17.7833,15.6833,NAM,,Africa
+Gobabis,Gobabis,-22.455,18.963,NAM,16321,Africa
+Maltahöhe,Maltahohe,-24.84,16.94,NAM,2329,Africa
+Opuwo,Opuwo,-18.0596,13.82,NAM,4857,Africa
+Swakopmund,Swakopmund,-22.6689,14.535,NAM,29491,Africa
+Keetmanshoop,Keetmanshoop,-26.5739,18.13,NAM,18039,Africa
+Otjiwarongo,Otjiwarongo,-20.4595,16.64,NAM,24815,Africa
+Mariental,Mariental,-24.6196,17.9599,NAM,13380,Africa
+Rundu,Rundu,-17.92,19.7499,NAM,58172,Africa
+Nkurenkuru,Nkurenkuru,-17.6167,18.6,NAM,,Africa
+Tsumeb,Tsumeb,-19.24,17.71,NAM,14959,Africa
+Omuthiya,Omuthiya,-18.3611,16.5814,NAM,,Africa
+Niamey,Niamey,13.5167,2.1167,NER,915000,Africa
+Maradi,Maradi,13.4916,7.0964,NER,232555,Africa
+Zinder,Zinder,13.8,8.9833,NER,230358,Africa
+Ayorou,Ayorou,14.7318,0.9195,NER,26290,Africa
+Gaya,Gaya,11.8882,3.4467,NER,33051,Africa
+Arlit,Arlit,18.82,7.33,NER,100000,Africa
+Birni Nkonni,Birni Nkonni,13.7904,5.2599,NER,65252,Africa
+Madaoua,Madaoua,14.0762,5.9586,NER,24804,Africa
+Tahoua,Tahoua,14.9,5.2599,NER,115956,Africa
+Nguigmi,Nguigmi,14.2532,13.1108,NER,17897,Africa
+Dosso,Dosso,13.05,3.2,NER,49750,Africa
+Gouré,Goure,13.9874,10.27,NER,14639,Africa
+Diffa,Diffa,13.3171,12.6089,NER,30988,Africa
+Tillabéri,Tillaberi,14.212,1.4531,NER,19262,Africa
+Djado,Djado,21.015,12.3075,NER,10,Africa
+Agadez,Agadez,16.9959,7.9828,NER,117770,Africa
+Abuja,Abuja,9.0833,7.5333,NGA,1576000,Africa
+Uyo,Uyo,5.008,7.85,NGA,554906,Africa
+Akure,Akure,7.2504,5.2,NGA,420594,Africa
+Koko,Koko,11.4232,4.517,NGA,25792,Africa
+Port Harcourt,Port Harcourt,4.81,7.01,NGA,1020000,Africa
+Gombe,Gombe,10.2904,11.17,NGA,270366,Africa
+Nsukka,Nsukka,6.867,7.3834,NGA,111017,Africa
+Potiskum,Potiskum,11.7104,11.08,NGA,86002,Africa
+Damaturu,Damaturu,11.749,11.966,NGA,255895,Africa
+Wukari,Wukari,7.8704,9.78,NGA,92933,Africa
+Maiduguri,Maiduguri,11.85,13.16,NGA,896000,Africa
+Kontagora,Kontagora,10.4004,5.4699,NGA,98754,Africa
+Jos,Jos,9.93,8.89,NGA,816824,Africa
+Abakaliki,Abakaliki,6.3249,8.1137,NGA,,Africa
+Ife,Ife,7.4804,4.56,NGA,482365,Africa
+Abeokuta,Abeokuta,7.1604,3.35,NGA,593100,Africa
+Ikeja,Ikeja,6.5965,3.3421,NGA,,Africa
+Lagos,Lagos,6.4433,3.3915,NGA,9466000,Africa
+Ijebu Ode,Ijebu Ode,6.8204,3.92,NGA,209175,Africa
+Iwo,Iwo,7.63,4.18,NGA,250443,Africa
+Oshogbo,Oshogbo,7.7704,4.56,NGA,408245,Africa
+Ilorin,Ilorin,8.49,4.55,NGA,771000,Africa
+Gusau,Gusau,12.1704,6.66,NGA,226857,Africa
+Yenagoa,Yenagoa,4.9267,6.2676,NGA,,Africa
+Minna,Minna,9.62,6.55,NGA,291905,Africa
+Ado Ekiti,Ado Ekiti,7.6304,5.22,NGA,446749,Africa
+Ibadan,Ibadan,7.38,3.93,NGA,2628000,Africa
+Iseyin,Iseyin,7.97,3.59,NGA,98071,Africa
+Funtua,Funtua,11.5204,7.32,NGA,180475,Africa
+Katsina,Katsina,12.9904,7.6,NGA,432149,Africa
+Oyo,Oyo,7.8504,3.93,NGA,736072,Africa
+Ogbomosho,Ogbomosho,8.13,4.24,NGA,951000,Africa
+Benin City,Benin City,6.3405,5.62,NGA,1190000,Africa
+Keffi,Keffi,8.849,7.8736,NGA,85911,Africa
+Lafia,Lafia,8.4904,8.52,NGA,127236,Africa
+Ondo,Ondo,7.0904,4.84,NGA,257005,Africa
+Lokoja,Lokoja,7.8004,6.7399,NGA,60579,Africa
+Sokoto,Sokoto,13.06,5.24,NGA,732178,Africa
+Kaduna,Kaduna,10.52,7.44,NGA,1442000,Africa
+Kano,Kano,12,8.52,NGA,3140000,Africa
+Zaria,Zaria,11.08,7.71,NGA,889000,Africa
+Ikare,Ikare,7.5304,5.76,NGA,1099931,Africa
+Owo,Owo,7.2004,5.59,NGA,276574,Africa
+Dutse,Dutse,11.7992,9.3503,NGA,17129,Africa
+Idah,Idah,7.1104,6.7399,NGA,75087,Africa
+Mubi,Mubi,10.2703,13.27,NGA,225705,Africa
+Orlu,Orlu,5.7837,7.0333,NGA,9351,Africa
+Bama,Bama,11.5204,13.69,NGA,118121,Africa
+Bauchi,Bauchi,10.3104,9.84,NGA,316149,Africa
+Makurdi,Makurdi,7.73,8.53,NGA,292645,Africa
+Oturkpo,Oturkpo,7.1904,8.13,NGA,68220,Africa
+Onitsha,Onitsha,6.1404,6.78,NGA,73374,Africa
+Awka,Awka,6.2104,7.07,NGA,500000,Africa
+Enugu,Enugu,6.45,7.5,NGA,688862,Africa
+Biu,Biu,10.6204,12.19,NGA,95005,Africa
+Owerri,Owerri,5.493,7.026,NGA,215038,Africa
+Calabar,Calabar,4.9604,8.33,NGA,461796,Africa
+Sapele,Sapele,5.8904,5.68,NGA,309162,Africa
+Opobo,Opobo,4.5704,7.56,NGA,34911,Africa
+Aba,Aba,5.1004,7.35,NGA,897560,Africa
+Umuahia,Umuahia,5.532,7.486,NGA,264662,Africa
+Warri,Warri,5.52,5.76,NGA,830106,Africa
+Asaba,Asaba,6.1985,6.7274,NGA,,Africa
+Bida,Bida,9.0804,6.01,NGA,173849,Africa
+Kumo,Kumo,10.0457,11.2131,NGA,35712,Africa
+Azare,Azare,11.6804,10.19,NGA,105687,Africa
+Gashua,Gashua,12.8705,11.04,NGA,125817,Africa
+Yola,Yola,9.21,12.48,NGA,96006,Africa
+Nguru,Nguru,12.8804,10.45,NGA,111014,Africa
+Jalingo,Jalingo,8.9004,11.36,NGA,117757,Africa
+Numan,Numan,9.4604,12.04,NGA,77617,Africa
+Birnin Kebbi,Birnin Kebbi,12.4504,4.1999,NGA,108164,Africa
+Cyangugu,Cyangugu,-2.4796,28.9,RWA,19900,Africa
+Kigali,Kigali,-1.9536,30.0605,RWA,860000,Africa
+Ruhengeri,Ruhengeri,-1.4996,29.63,RWA,86685,Africa
+Nyanza,Nyanza,-2.3496,29.74,RWA,225209,Africa
+Rwamagana,Rwamagana,-1.9487,30.4347,RWA,,Africa
+Butare,Butare,-2.5896,29.73,RWA,77000,Africa
+Kibungo,Kibungo,-2.1667,30.5333,RWA,46240,Africa
+Byumba,Byumba,-1.5796,30.06,RWA,70593,Africa
+Gikongoro,Gikongoro,-2.4833,29.5667,RWA,15000,Africa
+Kibuye,Kibuye,-2.05,29.35,RWA,48024,Africa
+Gisenyi,Gisenyi,-1.6847,29.2629,RWA,83623,Africa
+Gitarama,Gitarama,-2.0696,29.76,RWA,87613,Africa
+Victoria,Victoria,-4.6166,55.45,SYC,33576,Africa
+Omdurman,Omdurman,15.6167,32.48,SDN,2395159,Africa
+Shendi,Shendi,16.6805,33.42,SDN,186611,Africa
+El Manaqil,El Manaqil,14.2504,32.98,SDN,151827,Africa
+Khartoum,Khartoum,15.5881,32.5342,SDN,4754000,Africa
+Atbara,Atbara,17.71,33.98,SDN,168612,Africa
+Ed Dueim,Ed Dueim,13.9904,32.3,SDN,87068,Africa
+Haiya,Haiya,18.3362,36.3842,SDN,20000,Africa
+Tokar,Tokar,18.4333,37.7333,SDN,73202,Africa
+Merowe,Merowe,18.4833,31.8167,SDN,10234,Africa
+Kosti,Kosti,13.17,32.66,SDN,345068,Africa
+Wadi Halfa,Wadi Halfa,21.8,31.35,SDN,17121,Africa
+Sennar,Sennar,13.55,33.6,SDN,130122,Africa
+Kerma,Kerma,19.6337,30.4166,SDN,3928,Africa
+Berber,Berber,18.017,33.9833,SDN,49556,Africa
+Umm Ruwaba,Umm Ruwaba,12.9104,31.2,SDN,55742,Africa
+Muglad,Muglad,11.0337,27.7333,SDN,19997,Africa
+Babanusa,Babanusa,11.3334,27.8,SDN,19700,Africa
+En Nuhud,En Nuhud,12.6904,28.42,SDN,108008,Africa
+Geneina,Geneina,13.45,22.44,SDN,162981,Africa
+Gedaref,Gedaref,14.04,35.38,SDN,201282,Africa
+Ed Daein,Ed Daein,11.4672,26.1317,SDN,,Africa
+EdDamer,EdDamer,17.59,33.96,SDN,103941,Africa
+Ad Damaz_n,Ad Damazin,11.7704,34.35,SDN,186051,Africa
+El Fasher,El Fasher,13.63,25.35,SDN,252609,Africa
+Port Sudan,Port Sudan,19.6158,37.2164,SDN,489725,Africa
+El Obeid,El Obeid,13.1833,30.2167,SDN,393311,Africa
+Kadugli,Kadugli,11.01,29.7,SDN,176931,Africa
+Niyala,Niyala,12.06,24.89,SDN,392373,Africa
+Dongola,Dongola,19.1666,30.4833,SDN,26404,Africa
+Rabak,Rabak,13.188,32.7437,SDN,,Africa
+Zalingei,Zalingei,12.9092,23.4706,SDN,,Africa
+El Fula,El Fula,11.712,28.3462,SDN,,Africa
+Singa,Singa,13.1483,33.9312,SDN,,Africa
+Kassala,Kassala,15.46,36.39,SDN,401477,Africa
+Medani,Medani,14.4,33.52,SDN,332714,Africa
+Bo,Bo,7.97,-11.74,SLE,174354,Africa
+Makeni,Makeni,8.8804,-12.05,SLE,87679,Africa
+Koidu,Koidu,8.4405,-10.85,SLE,87539,Africa
+Freetown,Freetown,8.47,-13.2342,SLE,827000,Africa
+Kenema,Kenema,7.8804,-11.19,SLE,143137,Africa
+Port Loko,Port Loko,8.7661,-12.787,SLE,,Africa
+Louga,Louga,15.6104,-16.25,SEN,85075,Africa
+Sédhiou,Sedhiou,12.7081,-15.5569,SEN,,Africa
+Matam,Matam,15.6559,-13.2554,SEN,,Africa
+Dakar,Dakar,14.7158,-17.4731,SEN,2604000,Africa
+Kaédi,Kaedi,16.15,-13.5,SEN,21656,Africa
+Saint-Louis,Saint-Louis,16.0186,-16.4906,SEN,,Africa
+Diourbel,Diourbel,14.6604,-16.24,SEN,148024,Africa
+Tambacounda,Tambacounda,13.7804,-13.68,SEN,89212,Africa
+Thiès,Thies,14.8104,-16.93,SEN,293001,Africa
+Fatick,Fatick,14.344,-16.416,SEN,24243,Africa
+Kaolack,Kaolack,14.15,-16.1,SEN,277812,Africa
+Kolda,Kolda,12.9104,-14.95,SEN,69267,Africa
+Ziguinchor,Ziguinchor,12.59,-16.29,SEN,191716,Africa
+Kaffrine,Kaffrine,14.1016,-15.5467,SEN,,Africa
+Kédougou,Kedougou,12.5604,-12.18,SEN,18226,Africa
+Hargeysa,Hargeysa,9.56,44.065,SOM,,Africa
+Mereeg,Mereeg,3.7666,47.3,SOM,548,Africa
+Mogadishu,Mogadishu,2.0667,45.3667,SOM,1100000,Africa
+Qardho,Qardho,9.5004,49.166,SOM,1341,Africa
+Garoowe,Garoowe,8.4,48.5,SOM,2568,Africa
+Laascaanood,Laascaanood,8.4774,47.3597,SOM,,Africa
+Luuq,Luuq,3.8005,42.55,SOM,33820,Africa
+Jamaame,Jamaame,0.0722,42.7506,SOM,185270,Africa
+Bandarbeyla,Bandarbeyla,9.4833,50.8167,SOM,13753,Africa
+Buurhakaba,Buurhakaba,2.7837,44.0833,SOM,31267,Africa
+Baki,Baki,9.8921,43.3853,SOM,,Africa
+Burco,Burco,9.5221,45.5336,SOM,,Africa
+Dhuusa Mareeb,Dhuusa Mareeb,5.742,46.508,SOM,447,Africa
+Gaalkacyo,Gaalkacyo,6.77,47.43,SOM,61200,Africa
+Eyl,Eyl,7.9833,49.8333,SOM,18904,Africa
+Hurdiyo,Hurdiyo,10.582,51.1233,SOM,176,Africa
+Ceerigaabo,Ceerigaabo,10.6162,47.3679,SOM,,Africa
+Bu'aale,Bu'aale,1.0833,42.5833,SOM,1490,Africa
+Hudur,Hudur,4.1833,43.8667,SOM,1639,Africa
+Marka,Marka,1.7766,44.8533,SOM,1958,Africa
+Jawhar,Jawhar,2.767,45.5166,SOM,111308,Africa
+Beledweyne,Beledweyne,4.74,45.2,SOM,62945,Africa
+Kismaayo,Kismaayo,-0.3566,42.5183,SOM,234852,Africa
+Garbahaarey,Garbahaarey,3.327,42.227,SOM,12652,Africa
+Boosaaso,Boosaaso,11.28,49.18,SOM,46969,Africa
+Caluula,Caluula,11.967,50.75,SOM,513,Africa
+Baydhabo,Baydhabo,3.12,43.65,SOM,129839,Africa
+Buur Gaabo,Buur Gaabo,-1.2009,41.852,SOM,3096,Africa
+Juba,Juba,4.83,31.58,SSD,111975,Africa
+Melut,Melut,10.4337,32.2,SSD,6407,Africa
+Gogrial,Gogrial,8.5337,28.1167,SSD,50065,Africa
+Malakal,Malakal,9.5369,31.656,SSD,160765,Africa
+Nimule,Nimule,3.6,32.05,SSD,242,Africa
+Torit,Torit,4.4118,32.5705,SSD,,Africa
+Maridi,Maridi,4.9151,29.4769,SSD,14224,Africa
+Kapoeta,Kapoeta,4.7721,33.5902,SSD,7042,Africa
+Nasir,Nasir,8.6004,33.0666,SSD,1741,Africa
+Yei,Yei,4.0904,30.68,SSD,185000,Africa
+Aweil,Aweil,8.7666,27.4,SSD,46705,Africa
+Rumbek,Rumbek,6.8,29.6833,SSD,32083,Africa
+Yambio,Yambio,4.5705,28.4163,SSD,40382,Africa
+Bor,Bor,6.2072,31.5591,SSD,26782,Africa
+Bentiu,Bentiu,9.2333,29.8333,SSD,7653,Africa
+Kuacjok,Kuacjok,8.3028,27.98,SSD,,Africa
+Wau,Wau,7.7,27.99,SSD,127384,Africa
+Santo António,Santo Antonio,1.645,7.412,STP,1156,Africa
+São Tomé,Sao Tome,0.3334,6.7333,STP,88219,Africa
+Mbabane,Mbabane,-26.3167,31.1333,SWZ,90138,Africa
+Lobamba,Lobamba,-26.4667,31.2,SWZ,9782,Africa
+Golela,Golela,-27.2962,31.9,SWZ,3695,Africa
+Hlatikulu,Hlatikulu,-27,31.4167,SWZ,2748,Africa
+Nhlangano,Nhlangano,-27.1122,31.1983,SWZ,,Africa
+Piggs Peak,Piggs Peak,-25.961,31.247,SWZ,5750,Africa
+Siteki,Siteki,-26.455,31.952,SWZ,6152,Africa
+Manzini,Manzini,-26.495,31.388,SWZ,110537,Africa
+Doba,Doba,8.6504,16.85,TCD,29597,Africa
+Massakory,Massakory,12.996,15.7293,TCD,,Africa
+Koumra,Koumra,8.9126,17.5539,TCD,,Africa
+Pala,Pala,9.3642,14.9046,TCD,,Africa
+Moundou,Moundou,8.55,16.09,TCD,156705,Africa
+Bol,Bol,13.459,14.7147,TCD,3303,Africa
+Zouar,Zouar,20.4587,16.5278,TCD,204,Africa
+Ndjamena,Ndjamena,12.1131,15.0491,TCD,989000,Africa
+Bongor,Bongor,10.2859,15.3872,TCD,193941,Africa
+Oum Hadjer,Oum Hadjer,13.3004,19.6833,TCD,19271,Africa
+Laï,Lai,9.395,16.305,TCD,19382,Africa
+Kelo,Kelo,9.3171,15.8,TCD,96224,Africa
+Ati,Ati,13.2171,18.3333,TCD,25373,Africa
+Am Timan,Am Timan,11.0333,20.2833,TCD,30443,Africa
+Pala,Pala,9.3504,14.9666,TCD,35466,Africa
+Massenya,Massenya,11.4039,16.1705,TCD,,Africa
+Mongo,Mongo,12.1837,18.7,TCD,27763,Africa
+Mao,Mao,14.1194,15.3133,TCD,18031,Africa
+Fada,Fada,17.1847,21.5902,TCD,448,Africa
+Bardaï,Bardai,21.3549,17.0012,TCD,,Africa
+Moussoro,Moussoro,13.6414,16.4894,TCD,,Africa
+Goz Beïda,Goz Beida,12.2248,21.4103,TCD,,Africa
+Am Djarass,Am Djarass,16.0659,22.8431,TCD,,Africa
+Biltine,Biltine,14.5333,20.9167,TCD,11000,Africa
+Abéché,Abeche,13.84,20.83,TCD,158317,Africa
+Faya Largeau,Faya Largeau,17.9167,19.1167,TCD,13400,Africa
+Sarh,Sarh,9.15,18.39,TCD,169196,Africa
+Lomé,Lome,6.1319,1.2228,TGO,1452000,Africa
+Kpalimé,Kpalime,6.9004,0.63,TGO,100479,Africa
+Atakpamé,Atakpame,7.53,1.12,TGO,80683,Africa
+Mango,Mango,10.3596,0.4708,TGO,42626,Africa
+Kara,Kara,9.5511,1.1861,TGO,,Africa
+Sokodé,Sokode,8.9905,1.15,TGO,117811,Africa
+Dapaong,Dapaong,10.8623,0.2076,TGO,,Africa
+Bassar,Bassar,9.261,0.789,TGO,61845,Africa
+Sotouboua,Sotouboua,8.557,0.985,TGO,21054,Africa
+Dehibat,Dehibat,32.017,10.7,TUN,3525,Africa
+Zarzis,Zarzis,33.5104,11.1,TUN,159161,Africa
+Gabès,Gabes,33.9004,10.1,TUN,219517,Africa
+Gafsa,Gafsa,34.4204,8.78,TUN,126803,Africa
+Qasserine,Qasserine,35.1804,8.83,TUN,81987,Africa
+Sdid Bouzid,Sdid Bouzid,35.0167,9.5,TUN,42098,Africa
+Sfax,Sfax,34.75,10.72,TUN,453050,Africa
+Mahdia,Mahdia,35.4839,11.0409,TUN,45977,Africa
+Monastir,Monastir,35.7307,10.7673,TUN,71546,Africa
+Sousse,Sousse,35.83,10.625,TUN,327004,Africa
+Qairouan,Qairouan,35.6804,10.1,TUN,144522,Africa
+El Kef,El Kef,36.1826,8.7148,TUN,47979,Africa
+Jendouba,Jendouba,36.5,8.75,TUN,51408,Africa
+Béja,Beja,36.7304,9.19,TUN,59567,Africa
+Bizerte,Bizerte,37.2904,9.855,TUN,139843,Africa
+L'Ariana,L'Ariana,36.8667,10.2,TUN,97687,Africa
+Ben Arous,Ben Arous,36.7531,10.2189,TUN,,Africa
+Zaghouan,Zaghouan,36.4,10.147,TUN,16911,Africa
+Siliana,Siliana,36.0833,9.3833,TUN,26960,Africa
+Nabeul,Nabeul,36.4603,10.73,TUN,115149,Africa
+Manouba,Manouba,36.808,10.0972,TUN,,Africa
+Kebili,Kebili,33.69,8.971,TUN,19875,Africa
+Tataouine,Tataouine,33,10.4667,TUN,62577,Africa
+Medenine,Medenine,33.4,10.4167,TUN,61705,Africa
+Tozeur,Tozeur,33.9304,8.13,TUN,39504,Africa
+Tunis,Tunis,36.8028,10.1797,TUN,2412500,Africa
+Ben Gardane,Ben Gardane,33.1404,11.22,TUN,19843,Africa
+Sumbawanga,Sumbawanga,-7.9596,31.62,TZA,89161,Africa
+Mtwara,Mtwara,-10.2696,40.19,TZA,96602,Africa
+Koani,Koani,-6.1333,39.2833,TZA,,Africa
+Mbeya,Mbeya,-8.89,33.43,TZA,291649,Africa
+Zanzibar,Zanzibar,-6.16,39.2,TZA,403658,Africa
+Uvinza,Uvinza,-5.1196,30.39,TZA,80350,Africa
+Musoma,Musoma,-1.4896,33.8,TZA,133156,Africa
+Tanga,Tanga,-5.07,39.09,TZA,224876,Africa
+Kigoma,Kigoma,-4.8796,29.61,TZA,164268,Africa
+Kakonko,Kakonko,-3.2796,30.96,TZA,24688,Africa
+Moshi,Moshi,-3.3396,37.34,TZA,721018,Africa
+Arusha,Arusha,-3.36,36.67,TZA,341136,Africa
+Lindi,Lindi,-10,39.7,TZA,41912,Africa
+Kilindoni,Kilindoni,-7.9163,39.65,TZA,12409,Africa
+Kibiti,Kibiti,-7.7296,38.95,TZA,30163,Africa
+Mikumi,Mikumi,-7.3996,36.98,TZA,16780,Africa
+Chake Chake,Chake Chake,-5.2395,39.77,TZA,49959,Africa
+Kasulu,Kasulu,-4.5796,30.1,TZA,37349,Africa
+Biharamulo,Biharamulo,-2.6296,31.31,TZA,34038,Africa
+Bukoba,Bukoba,-1.3196,31.8,TZA,100504,Africa
+Iringa,Iringa,-7.7696,35.69,TZA,111820,Africa
+Songea,Songea,-10.68,35.65,TZA,126449,Africa
+Ngara,Ngara,-2.4695,30.65,TZA,16890,Africa
+Mwanza,Mwanza,-2.52,32.93,TZA,493944,Africa
+Wete,Wete,-5.0635,39.7258,TZA,26450,Africa
+Babati,Babati,-4.2195,35.75,TZA,34291,Africa
+Singida,Singida,-4.8196,34.74,TZA,62432,Africa
+Morogoro,Morogoro,-6.82,37.66,TZA,250902,Africa
+Tabora,Tabora,-5.02,32.8,TZA,146495,Africa
+Dodoma,Dodoma,-6.1833,35.75,TZA,218269,Africa
+Dar es Salaam,Dar es Salaam,-6.8,39.2683,TZA,2930000,Africa
+Ifakara,Ifakara,-8.1296,36.68,TZA,49528,Africa
+Tunduma,Tunduma,-9.2846,32.7749,TZA,36556,Africa
+Tunduru,Tunduru,-11.0896,37.37,TZA,600,Africa
+Itigi,Itigi,-5.6996,34.48,TZA,19711,Africa
+Masasi,Masasi,-10.7296,38.7999,TZA,36032,Africa
+Kipili,Kipili,-7.4329,30.6,TZA,1533,Africa
+Tukuyu,Tukuyu,-9.2496,33.64,TZA,127570,Africa
+Manyoni,Manyoni,-5.7796,34.9,TZA,310,Africa
+Mbamba Bay,Mbamba Bay,-11.2829,34.7666,TZA,8997,Africa
+Nzega,Nzega,-4.2096,33.18,TZA,26584,Africa
+Ngorongoro,Ngorongoro,-3.2496,35.52,TZA,10836,Africa
+Kanyato,Kanyato,-4.4565,30.2614,TZA,232,Africa
+Kilosa,Kilosa,-6.8396,36.99,TZA,91889,Africa
+Same,Same,-4.0696,37.72,TZA,17455,Africa
+Sikonge,Sikonge,-5.6295,32.77,TZA,27113,Africa
+Korogwe,Korogwe,-5.0896,38.54,TZA,50000,Africa
+Bagamoyo,Bagamoyo,-6.4396,38.89,TZA,82426,Africa
+Kibaha,Kibaha,-6.7667,38.9167,TZA,23651,Africa
+Mpwapwa,Mpwapwa,-6.3496,36.48,TZA,19806,Africa
+Oldeani,Oldeani,-3.3496,35.55,TZA,8000,Africa
+Karema,Karema,-6.8162,30.4333,TZA,16385,Africa
+Nyahanga,Nyahanga,-2.3829,33.55,TZA,16092,Africa
+Mbulu,Mbulu,-3.8496,35.53,TZA,13430,Africa
+Kahama,Kahama,-3.8196,32.58,TZA,36014,Africa
+Shinyanga,Shinyanga,-3.6596,33.42,TZA,107362,Africa
+Vwawa,Vwawa,-9.1081,32.9347,TZA,,Africa
+Bariadi,Bariadi,-2.8069,33.9878,TZA,,Africa
+Geita,Geita,-2.8662,32.1666,TZA,1536,Africa
+Mahonda,Mahonda,-5.9897,39.2519,TZA,,Africa
+Mkokotoni,Mkokotoni,-5.879,39.26,TZA,2572,Africa
+Mpanda,Mpanda,-6.3596,31.05,TZA,73338,Africa
+Njombe,Njombe,-9.3296,34.77,TZA,46724,Africa
+Rukungiri,Rukungiri,-0.8411,29.9419,UGA,,Africa
+Kanungu,Kanungu,-0.9575,29.7897,UGA,,Africa
+Katwe,Katwe,-0.1296,29.92,UGA,1957,Africa
+Kumi,Kumi,1.4608,33.9361,UGA,13000,Africa
+Bugiri,Bugiri,0.5714,33.7417,UGA,,Africa
+Kasese,Kasese,0.2325,29.9883,UGA,67269,Africa
+Kibale,Kibale,0.8,31.0667,UGA,5200,Africa
+Kiboga,Kiboga,0.9161,31.7742,UGA,14512,Africa
+Bushenyi,Bushenyi,-0.5853,30.2114,UGA,,Africa
+Hoima,Hoima,1.4356,31.3436,UGA,,Africa
+Kayunga,Kayunga,0.7025,32.8886,UGA,21704,Africa
+Jinja,Jinja,0.4404,33.1999,UGA,301619,Africa
+Nakapiripirit,Nakapiripirit,1.9167,34.7833,UGA,,Africa
+Kyenjojo,Kyenjojo,0.6328,30.6214,UGA,,Africa
+Kalangala,Kalangala,-0.3089,32.225,UGA,5200,Africa
+Mukono,Mukono,0.3533,32.7553,UGA,,Africa
+Sembabule,Sembabule,-0.0772,31.4567,UGA,,Africa
+Kamwenge,Kamwenge,0.2111,30.4208,UGA,,Africa
+Wakiso,Wakiso,0.4044,32.4594,UGA,,Africa
+Ntungamo,Ntungamo,-0.8794,30.2642,UGA,16400,Africa
+Nakasongola,Nakasongola,1.3089,32.4564,UGA,6921,Africa
+Kabale,Kabale,-1.2496,29.98,UGA,44600,Africa
+Masindi,Masindi,1.6744,31.715,UGA,31486,Africa
+Rakai,Rakai,-0.72,31.4839,UGA,,Africa
+Isingiro,Isingiro,-0.8686,30.8302,UGA,,Africa
+Masindi-Port,Masindi-Port,1.7004,32.0699,UGA,8319,Africa
+Zombo,Zombo,2.5135,30.9091,UGA,,Africa
+Pallisa,Pallisa,1.145,33.7094,UGA,30745,Africa
+Luwero,Luwero,0.8492,32.4731,UGA,,Africa
+Kotido,Kotido,2.9806,34.1331,UGA,,Africa
+Lira,Lira,2.2604,32.89,UGA,135445,Africa
+Mubende,Mubende,0.5904,31.37,UGA,18936,Africa
+Buikwe,Buikwe,0.3375,33.0106,UGA,,Africa
+Lamwo,Lamwo,3.5297,32.8016,UGA,,Africa
+Agago,Agago,2.8338,33.3336,UGA,,Africa
+Napak,Napak,2.2514,34.2501,UGA,,Africa
+Luuka Town,Luuka Town,0.7008,33.3002,UGA,,Africa
+Otuke,Otuke,2.5004,33.5007,UGA,,Africa
+Alebtong,Alebtong,2.2447,33.2547,UGA,,Africa
+Amuria,Amuria,2.0036,33.6511,UGA,,Africa
+Kole,Kole,2.4002,32.8003,UGA,,Africa
+Oyam,Oyam,2.235,32.385,UGA,,Africa
+Abim,Abim,2.7017,33.6761,UGA,,Africa
+Kaabong,Kaabong,3.5204,34.12,UGA,1137,Africa
+Binyin,Binyin,1.4167,34.5333,UGA,,Africa
+Bulambuli,Bulambuli,1.1667,34.3833,UGA,,Africa
+Bududa,Bududa,1.0112,34.3311,UGA,,Africa
+Amudat,Amudat,1.95,34.95,UGA,,Africa
+Bukwa,Bukwa,1.2592,34.7539,UGA,,Africa
+Kapchorwa,Kapchorwa,1.3965,34.4509,UGA,,Africa
+Masaka,Masaka,-0.3296,31.73,UGA,65373,Africa
+Mbale,Mbale,1.0904,34.17,UGA,402368,Africa
+Mbarara,Mbarara,-0.5996,30.65,UGA,83700,Africa
+Tororo,Tororo,0.7104,34.17,UGA,150000,Africa
+Sironko,Sironko,1.25,34.3,UGA,14100,Africa
+Rubirizi,Rubirizi,-0.2989,30.1336,UGA,,Africa
+Mitoma,Mitoma,-0.6842,30.07,UGA,,Africa
+Ntoroko,Ntoroko,1.0411,30.4811,UGA,,Africa
+Kanoni,Kanoni,0.1772,31.8811,UGA,,Africa
+Kibingo,Kibingo,-0.626,30.4359,UGA,,Africa
+Nakaseke,Nakaseke,0.7517,32.385,UGA,,Africa
+Ibanda,Ibanda,-0.1539,30.5319,UGA,,Africa
+Namayingo,Namayingo,0.2398,33.8849,UGA,,Africa
+Kitamilo,Kitamilo,0.2222,33.2061,UGA,,Africa
+Kyegegwa,Kyegegwa,0.5022,31.0414,UGA,,Africa
+Lwengo,Lwengo,-0.4161,31.4081,UGA,,Africa
+Bukomansimbi,Bukomansimbi,-0.1578,31.6042,UGA,,Africa
+Kalungu,Kalungu,-0.1667,31.7569,UGA,,Africa
+Kiruhura,Kiruhura,-0.2356,30.8725,UGA,,Africa
+Lyantonde,Lyantonde,-0.4031,31.1572,UGA,,Africa
+Buyende,Buyende,1.1517,33.155,UGA,,Africa
+Ngora,Ngora,1.4314,33.7772,UGA,,Africa
+Kibuku,Kibuku,1.0433,33.7975,UGA,,Africa
+Buhweju,Buhweju,-0.3503,30.3003,UGA,,Africa
+Bukedea,Bukedea,1.3169,34.0506,UGA,,Africa
+Kampala,Kampala,0.3167,32.5833,UGA,1420000,Africa
+Nebbi,Nebbi,2.4758,31.1025,UGA,30354,Africa
+Bombo,Bombo,0.5833,32.5333,UGA,75000,Africa
+Koboko,Koboko,3.4136,30.9599,UGA,,Africa
+Arua,Arua,3.0204,30.9,UGA,250000,Africa
+Maracha,Maracha,3.2704,30.9553,UGA,,Africa
+Yumbe,Yumbe,3.4651,31.2469,UGA,,Africa
+Bulisa,Bulisa,2.1178,31.4116,UGA,,Africa
+Kiryandongo,Kiryandongo,1.8763,32.0622,UGA,,Africa
+Gulu,Gulu,2.78,32.28,UGA,146858,Africa
+Adjumani,Adjumani,3.3614,31.8097,UGA,34700,Africa
+Moyo,Moyo,3.6504,31.72,UGA,22434,Africa
+Nwoya,Nwoya,2.6342,32.0011,UGA,,Africa
+Amuru,Amuru,2.8139,31.9387,UGA,,Africa
+Kisoro,Kisoro,-1.3539,29.6983,UGA,12900,Africa
+Kitgum,Kitgum,3.3004,32.87,UGA,56891,Africa
+Pader,Pader,3.05,33.2167,UGA,,Africa
+Katakwi,Katakwi,1.8911,33.9661,UGA,8400,Africa
+Entebbe,Entebbe,0.0604,32.46,UGA,175128,Africa
+Moroto,Moroto,2.5403,34.64,UGA,371,Africa
+Mayuge,Mayuge,0.4578,33.4806,UGA,,Africa
+Mityana,Mityana,0.4004,32.05,UGA,41131,Africa
+Bundibugyo,Bundibugyo,0.7085,30.0634,UGA,,Africa
+Fort Portal,Fort Portal,0.671,30.275,UGA,42670,Africa
+Manafwa,Manafwa,0.9784,34.3743,UGA,,Africa
+Namutumba,Namutumba,0.8363,33.6858,UGA,,Africa
+Butaleja,Butaleja,0.9166,33.9563,UGA,,Africa
+Kaliro,Kaliro,0.8949,33.5048,UGA,,Africa
+Gombe,Gombe,0.1818,32.1158,UGA,,Africa
+Soroti,Soroti,1.7104,33.6,UGA,1038,Africa
+Amolatar,Amolatar,1.6378,32.8448,UGA,,Africa
+Apac,Apac,1.9845,32.534,UGA,,Africa
+Mpigi,Mpigi,0.225,32.3136,UGA,11082,Africa
+Kamuli,Kamuli,0.9472,33.1197,UGA,12764,Africa
+Iganga,Iganga,0.6092,33.4686,UGA,45024,Africa
+Kyankwanzi,Kyankwanzi,1.1987,31.8062,UGA,,Africa
+Busia,Busia,0.4544,34.0758,UGA,47100,Africa
+Kagadi,Kagadi,0.9378,30.8089,UGA,,Africa
+Mparo,Mparo,-1.1647,30.0378,UGA,,Africa
+Bupoto,Bupoto,0.9061,34.3578,UGA,,Africa
+Butebo,Butebo,1.1942,33.9222,UGA,,Africa
+Kakumiro,Kakumiro,0.7806,31.3236,UGA,,Africa
+Kibiito,Kibiito,0.4772,30.1925,UGA,,Africa
+Pakwach,Pakwach,2.4704,31.48,UGA,17541,Africa
+Palenga,Palenga,2.6131,32.3369,UGA,,Africa
+Rubanda,Rubanda,-1.1883,29.8461,UGA,,Africa
+Kasaali,Kasaali,-0.6167,31.55,UGA,,Africa
+Dokolo,Dokolo,1.9167,33.172,UGA,,Africa
+Serere,Serere,1.518,33.4589,UGA,,Africa
+Kaberamaido,Kaberamaido,1.7389,33.1594,UGA,3400,Africa
+Luiana,Luiana,-17.3695,23,AGO,150,Africa
+Mavinga,Mavinga,-15.7895,20.36,AGO,30000,Africa
+Benguela,Benguela,-12.5783,13.4072,AGO,151226,Africa
+Cangamba,Cangamba,-13.6996,19.86,AGO,1307,Africa
+Cabinda,Cabinda,-5.5596,12.19,AGO,91791,Africa
+Xangongo,Xangongo,-16.74,14.97,AGO,447,Africa
+Lubango,Lubango,-14.9167,13.5,AGO,,Africa
+Huambo,Huambo,-12.75,15.76,AGO,1100000,Africa
+Chitado,Chitado,-17.3196,13.92,AGO,500,Africa
+Luena,Luena,-11.79,19.9,AGO,21115,Africa
+Mucusso,Mucusso,-18.0195,21.43,AGO,100,Africa
+Ndalatando,Ndalatando,-9.2995,14.91,AGO,8144,Africa
+Ondjiva,Ondjiva,-17.0696,15.73,AGO,10169,Africa
+Mbanza-Congo,Mbanza-Congo,-6.2696,14.24,AGO,60182,Africa
+Nzeto,Nzeto,-7.2296,12.86,AGO,21059,Africa
+Capenda-Camulemba,Capenda-Camulemba,-9.4196,18.43,AGO,80000,Africa
+Calulo,Calulo,-9.9996,14.9,AGO,795,Africa
+Calucinga,Calucinga,-11.3196,16.2,AGO,531,Africa
+Lubango,Lubango,-14.91,13.49,AGO,125632,Africa
+Songo,Songo,-7.3496,14.85,AGO,10579,Africa
+Camabatela,Camabatela,-8.1896,15.37,AGO,12837,Africa
+Cacolo,Cacolo,-10.1496,19.26,AGO,984,Africa
+Ambriz,Ambriz,-7.855,13.125,AGO,17000,Africa
+Dondo,Dondo,-9.69,14.43,AGO,2353,Africa
+Saurimo,Saurimo,-9.6596,20.39,AGO,41316,Africa
+Luanda,Luanda,-8.8383,13.2344,AGO,5172900,Africa
+Waku Kungo,Waku Kungo,-11.3595,15.12,AGO,12069,Africa
+Muconda,Muconda,-10.5996,21.32,AGO,2324,Africa
+Quipungo,Quipungo,-14.8295,14.55,AGO,186,Africa
+Uíge,Uige,-7.62,15.05,AGO,60008,Africa
+Quibala,Quibala,-10.7296,14.98,AGO,8915,Africa
+Menongue,Menongue,-14.6666,17.7,AGO,13030,Africa
+Sumbe,Sumbe,-11.21,13.85,AGO,33277,Africa
+Luau,Luau,-10.7095,22.23,AGO,18465,Africa
+Caxito,Caxito,-8.5795,13.66,AGO,28224,Africa
+Cazombo,Cazombo,-11.8896,22.9,AGO,298,Africa
+Malanje,Malanje,-9.54,16.34,AGO,125856,Africa
+Lobito,Lobito,-12.37,13.5412,AGO,207932,Africa
+Soyo,Soyo,-6.1296,12.37,AGO,67491,Africa
+Kuito,Kuito,-12.38,16.94,AGO,114286,Africa
+Cuito Caunavale,Cuito Caunavale,-15.1596,19.17,AGO,149,Africa
+Chibemba,Chibemba,-15.7496,14.08,AGO,1502,Africa
+Chibia,Chibia,-15.1896,13.69,AGO,1411,Africa
+Camacupa,Camacupa,-12.0196,17.47,AGO,19828,Africa
+Cubal,Cubal,-13.0396,14.24,AGO,4837,Africa
+Namibe,Namibe,-15.19,12.16,AGO,132900,Africa
+Tômbua,Tombua,-15.8,11.86,AGO,40000,Africa
+Lucapa,Lucapa,-8.4196,20.74,AGO,31041,Africa
+Dundo,Dundo,-7.38,20.83,AGO,11985,Africa
+Banfora,Banfora,10.6304,-4.76,BFA,60288,Africa
+Tougan,Tougan,13.069,-3.07,BFA,17590,Africa
+Pô,Po,11.169,-1.135,BFA,17924,Africa
+Bobo Dioulasso,Bobo Dioulasso,11.18,-4.29,BFA,360106,Africa
+Tenkodogo,Tenkodogo,11.7804,-0.3697,BFA,38108,Africa
+Diapaga,Diapaga,12.077,1.796,BFA,26013,Africa
+Sebba,Sebba,13.4364,0.5304,BFA,3273,Africa
+Ouahigouya,Ouahigouya,13.5704,-2.42,BFA,79504,Africa
+Kaya,Kaya,13.0904,-1.09,BFA,40017,Africa
+Gaoua,Gaoua,10.2992,-3.2508,BFA,,Africa
+Manga,Manga,11.662,-1.065,BFA,15173,Africa
+Sapouy,Sapouy,11.5544,-1.7736,BFA,3837,Africa
+Ouagadougou,Ouagadougou,12.3703,-1.5247,BFA,1149000,Africa
+Orodara,Orodara,10.974,-4.908,BFA,18632,Africa
+Bogandé,Bogande,12.969,-0.138,BFA,9854,Africa
+Ziniaré,Ziniare,12.577,-1.293,BFA,12703,Africa
+Fada Ngourma,Fada Ngourma,12.055,0.361,BFA,33910,Africa
+Leo,Leo,11.094,-2.098,BFA,26884,Africa
+Diébougou,Diebougou,10.952,-3.248,BFA,12732,Africa
+Gaoua,Gaoua,10.325,-3.174,BFA,28023,Africa
+Dédougou,Dedougou,12.455,-3.464,BFA,45341,Africa
+Nouna,Nouna,12.729,-3.86,BFA,29048,Africa
+Koudougou,Koudougou,12.2505,-2.37,BFA,87347,Africa
+Réo,Reo,12.3335,-2.4669,BFA,37535,Africa
+Kombissiri,Kombissiri,12.064,-1.334,BFA,30137,Africa
+Yako,Yako,12.954,-2.263,BFA,22904,Africa
+Solenzo,Solenzo,12.1833,-4.0833,BFA,10385,Africa
+Djibo,Djibo,14.099,-1.627,BFA,22223,Africa
+Dori,Dori,14.034,-0.028,BFA,37806,Africa
+Gorom Gorom,Gorom Gorom,14.45,-0.2333,BFA,6691,Africa
+Zorgo,Zorgo,12.243,-0.611,BFA,23892,Africa
+Boulsa,Boulsa,12.657,-0.569,BFA,17489,Africa
+Koupéla,Koupela,12.177,-0.356,BFA,32052,Africa
+Kayanza,Kayanza,-2.9,29.5667,BDI,19443,Africa
+Ruyigi,Ruyigi,-3.481,30.244,BDI,38458,Africa
+Bururi,Bururi,-3.9507,29.6166,BDI,20393,Africa
+Makamba,Makamba,-4.1333,29.8,BDI,19642,Africa
+Cibitoke,Cibitoke,-2.8869,29.1248,BDI,,Africa
+Rutana,Rutana,-3.931,29.993,BDI,20893,Africa
+Cankuzo,Cankuzo,-3.1667,30.5167,BDI,6585,Africa
+Muramvya,Muramvya,-3.261,29.612,BDI,18041,Africa
+Gitega,Gitega,-3.4264,29.9308,BDI,,Africa
+Gitega,Gitega,-3.426,29.8436,BDI,23167,Africa
+Kirundo,Kirundo,-2.5847,30.0972,BDI,6083,Africa
+Muyinga,Muyinga,-2.8523,30.3173,BDI,71076,Africa
+Rumonge,Rumonge,-3.9736,29.4386,BDI,,Africa
+Bubanza,Bubanza,-3.0833,29.3667,BDI,12728,Africa
+Karusi,Karusi,-3.1,30.163,BDI,10705,Africa
+Ngozi,Ngozi,-2.912,29.825,BDI,21506,Africa
+Mwaro,Mwaro,-3.5113,29.7051,BDI,,Africa
+Isale,Isale,-3.3489,29.4839,BDI,,Africa
+Bujumbura,Bujumbura,-3.3761,29.36,BDI,331700,Africa
+Kandi,Kandi,11.1304,2.94,BEN,109701,Africa
+Dogbo,Dogbo,6.8167,1.7833,BEN,,Africa
+Savalou,Savalou,7.9281,1.9756,BEN,,Africa
+Ouidah,Ouidah,6.3604,2.09,BEN,83503,Africa
+Lokossa,Lokossa,6.615,1.715,BEN,86971,Africa
+Sakété,Sakete,6.7362,2.6587,BEN,,Africa
+Natitingou,Natitingou,10.3204,1.39,BEN,80892,Africa
+Abomey,Abomey,7.1904,1.99,BEN,82154,Africa
+Djougou,Djougou,9.7004,1.68,BEN,202810,Africa
+Parakou,Parakou,9.34,2.62,BEN,188853,Africa
+Porto-Novo,Porto-Novo,6.4833,2.6166,BEN,300000,Africa
+Cotonou,Cotonou,6.4,2.52,BEN,762000,Africa
+Mohembo,Mohembo,-18.2996,21.8,BWA,757,Africa
+Ghanzi,Ghanzi,-21.6996,21.64,BWA,6306,Africa
+Nokaneng,Nokaneng,-19.6696,22.27,BWA,1763,Africa
+Lokhwabe,Lokhwabe,-24.1696,21.83,BWA,1473,Africa
+Lehututu,Lehututu,-23.9696,21.87,BWA,1942,Africa
+Tshabong,Tshabong,-26.0095,22.4,BWA,9679,Africa
+Tsau,Tsau,-20.1596,22.46,BWA,1409,Africa
+Mochudi,Mochudi,-24.377,26.152,BWA,39700,Africa
+Nata,Nata,-20.2095,26.19,BWA,4794,Africa
+Maun,Maun,-19.9896,23.42,BWA,49945,Africa
+Serowe,Serowe,-22.39,26.71,BWA,48573,Africa
+Kanye,Kanye,-24.9696,25.34,BWA,46831,Africa
+Mahalapye,Mahalapye,-23.1,26.82,BWA,50744,Africa
+Palapye,Palapye,-22.5596,27.13,BWA,30650,Africa
+Molepolole,Molepolole,-24.4,25.51,BWA,63248,Africa
+Mopipi,Mopipi,-21.1795,24.88,BWA,3301,Africa
+Kasane,Kasane,-17.8096,25.15,BWA,9250,Africa
+Sowa Town,Sowa Town,-20.5636,26.2244,BWA,,Africa
+Ramotswa,Ramotswa,-24.8716,25.8699,BWA,,Africa
+Masunga,Masunga,-20.6245,27.4488,BWA,,Africa
+Gaborone,Gaborone,-24.6463,25.9119,BWA,208411,Africa
+Jwaneng,Jwaneng,-24.6017,24.7281,BWA,,Africa
+Lobatse,Lobatse,-25.2196,25.68,BWA,69804,Africa
+Selibe Phikwe,Selibe Phikwe,-21.9758,27.8347,BWA,,Africa
+Francistown,Francistown,-21.17,27.5,BWA,89979,Africa
+Kimpese,Kimpese,-5.5496,14.4333,COD,10578,Africa
+Uvira,Uvira,-3.37,29.14,COD,170391,Africa
+Mbandaka,Mbandaka,0.04,18.26,COD,274996,Africa
+Boma,Boma,-5.83,13.05,COD,178638,Africa
+Basankusu,Basankusu,1.2337,19.8,COD,52216,Africa
+Moanda,Moanda,-5.9229,12.355,COD,153915,Africa
+Lubutu,Lubutu,-0.7329,26.5833,COD,1313,Africa
+Mbanza-Ngungu,Mbanza-Ngungu,-5.2496,14.86,COD,197545,Africa
+Kasongo,Kasongo,-4.45,26.66,COD,63000,Africa
+Tshela,Tshela,-4.9696,12.93,COD,38845,Africa
+Buluko,Buluko,-0.757,28.528,COD,1192,Africa
+Beni,Beni,0.4904,29.45,COD,332903,Africa
+Kampene,Kampene,-3.5995,26.67,COD,37034,Africa
+Goma,Goma,-1.6788,29.2218,COD,144124,Africa
+Mwenga,Mwenga,-3.0382,28.4325,COD,2216,Africa
+Kalima,Kalima,-2.5096,26.43,COD,194,Africa
+Kindu,Kindu,-2.9639,25.91,COD,262914,Africa
+Bukavu,Bukavu,-2.51,28.84,COD,436779,Africa
+Butembo,Butembo,0.13,29.28,COD,286403,Africa
+Mbuji-Mayi,Mbuji-Mayi,-6.15,23.6,COD,1295000,Africa
+Kinshasa,Kinshasa,-4.3297,15.315,COD,7843000,Africa
+Kasangulu,Kasangulu,-4.5796,15.18,COD,27961,Africa
+Tshikapa,Tshikapa,-6.41,20.77,COD,267462,Africa
+Aketi,Aketi,2.7405,23.78,COD,58601,Africa
+Dibaya,Dibaya,-6.5095,22.87,COD,603,Africa
+Luebo,Luebo,-5.3495,21.41,COD,35183,Africa
+Buta,Buta,2.82,24.74,COD,45677,Africa
+Ilebo,Ilebo,-4.3196,20.61,COD,107093,Africa
+Kananga,Kananga,-5.89,22.4,COD,765000,Africa
+Bondo,Bondo,3.81,23.67,COD,23517,Africa
+Mweka,Mweka,-4.8396,21.57,COD,50675,Africa
+Demba,Demba,-5.5096,22.26,COD,22263,Africa
+Isiro,Isiro,2.76,27.62,COD,157196,Africa
+Wamba,Wamba,2.1404,27.99,COD,146871,Africa
+Kamina,Kamina,-8.73,25.01,COD,128803,Africa
+Bukama,Bukama,-9.2096,25.84,COD,38770,Africa
+Watsa,Watsa,3.04,29.53,COD,24516,Africa
+Kaniama,Kaniama,-7.5696,24.17,COD,36481,Africa
+Mongbwalu,Mongbwalu,1.9504,30.0333,COD,2819,Africa
+Bunia,Bunia,1.5604,30.24,COD,96764,Africa
+Binga,Binga,2.3834,20.42,COD,64639,Africa
+Bongandanga,Bongandanga,1.5104,21.05,COD,4105,Africa
+Lubumbashi,Lubumbashi,-11.68,27.48,COD,1352000,Africa
+Lisala,Lisala,2.14,21.51,COD,70087,Africa
+Gbadolite,Gbadolite,4.2904,21.0199,COD,50493,Africa
+Kipushi,Kipushi,-11.7596,27.25,COD,113347,Africa
+Bumba,Bumba,2.19,22.46,COD,160539,Africa
+Kasongo-Lunda,Kasongo-Lunda,-6.4796,16.83,COD,20060,Africa
+Businga,Businga,3.3404,20.87,COD,34247,Africa
+Luanza,Luanza,-8.6996,28.7,COD,861,Africa
+Kahemba,Kahemba,-7.2829,19,COD,50000,Africa
+Likasi,Likasi,-10.97,26.78,COD,434408,Africa
+Kambove,Kambove,-10.8696,26.6,COD,36702,Africa
+Lusanga,Lusanga,-5.5829,16.5167,COD,177,Africa
+Bosobolo,Bosobolo,4.1904,19.88,COD,14553,Africa
+Bafwasende,Bafwasende,1.0838,27.2666,COD,149,Africa
+Kongolo,Kongolo,-5.3795,26.98,COD,105202,Africa
+Basoko,Basoko,1.2404,23.59,COD,43709,Africa
+Kisangani,Kisangani,0.52,25.22,COD,578470,Africa
+Manono,Manono,-7.3,27.45,COD,46111,Africa
+Mushie,Mushie,-3.0196,16.92,COD,33062,Africa
+Inongo,Inongo,-1.94,18.28,COD,40113,Africa
+Zongo,Zongo,4.3303,18.615,COD,17667,Africa
+Kenge,Kenge,-4.8296,16.8999,COD,241,Africa
+Boende,Boende,-0.2196,20.86,COD,32091,Africa
+Yangambi,Yangambi,0.7704,24.43,COD,35531,Africa
+Gemena,Gemena,3.26,19.77,COD,198056,Africa
+Moba,Moba,-7.0596,29.72,COD,10006,Africa
+Libenge,Libenge,3.6604,18.62,COD,27053,Africa
+Kalemie,Kalemie,-5.9333,29.2,COD,206257,Africa
+Nyunzu,Nyunzu,-5.9496,28.0167,COD,15397,Africa
+Kabalo,Kabalo,-6.0496,26.91,COD,29833,Africa
+Bolobo,Bolobo,-2.1595,16.24,COD,27862,Africa
+Ikela,Ikela,-1.1829,23.2666,COD,291,Africa
+Kikwit,Kikwit,-5.03,18.85,COD,637736,Africa
+Lubao,Lubao,-5.3896,25.75,COD,43068,Africa
+Gandajika,Gandajika,-6.7396,23.96,COD,154425,Africa
+Lusambo,Lusambo,-4.9696,23.43,COD,41416,Africa
+Kolwezi,Kolwezi,-10.7167,25.4724,COD,418000,Africa
+Kasaji,Kasaji,-10.3662,23.45,COD,11969,Africa
+Kabinda,Kabinda,-6.1296,24.48,COD,59004,Africa
+Bandundu,Bandundu,-3.31,17.38,COD,118211,Africa
+Mwene-Ditu,Mwene-Ditu,-7,23.44,COD,189177,Africa
+Lodja,Lodja,-3.4896,23.42,COD,68244,Africa
+Dilolo,Dilolo,-10.6996,22.3333,COD,7854,Africa
+Bulungu,Bulungu,-4.5496,18.6,COD,48344,Africa
+Mangai,Mangai,-4.0396,19.53,COD,37188,Africa
+Matadi,Matadi,-5.8166,13.45,COD,245862,Africa
+Bangui,Bangui,4.3666,18.5583,CAF,831925,Africa
+Nola,Nola,3.5337,16.0666,CAF,26809,Africa
+Bozoum,Bozoum,6.317,16.3833,CAF,40201,Africa
+Bambari,Bambari,5.762,20.6672,CAF,62098,Africa
+Mobaye,Mobaye,4.32,21.18,CAF,19431,Africa
+Bimbo,Bimbo,4.329,18.5284,CAF,,Africa
+Kaga Bandoro,Kaga Bandoro,6.9804,19.18,CAF,56520,Africa
+Sibut,Sibut,5.7338,19.0833,CAF,34267,Africa
+Carnot,Carnot,4.9337,15.8666,CAF,38071,Africa
+Bouar,Bouar,5.95,15.6,CAF,34372,Africa
+Berbérati,Berberati,4.25,15.78,CAF,61815,Africa
+Zemio,Zemio,5.0337,25.1333,CAF,20000,Africa
+Yakossi,Yakossi,5.617,23.3167,CAF,500,Africa
+Ouadda,Ouadda,8.0671,22.4,CAF,5434,Africa
+Obo,Obo,5.4,26.5,CAF,12887,Africa
+Bangassou,Bangassou,4.7338,22.8166,CAF,32841,Africa
+Mbaïki,Mbaiki,3.8704,18,CAF,67132,Africa
+Bossembélé,Bossembele,5.267,17.65,CAF,7287,Africa
+Bossangoa,Bossangoa,6.4837,17.45,CAF,63064,Africa
+Ndele,Ndele,8.4091,20.653,CAF,11764,Africa
+Bria,Bria,6.5333,21.9833,CAF,29027,Africa
+Birao,Birao,10.2837,22.7833,CAF,10178,Africa
+Brazzaville,Brazzaville,-4.2592,15.2847,COG,1355000,Africa
+Sembe,Sembe,1.6404,14.58,COG,9679,Africa
+Kayes,Kayes,-4.18,13.28,COG,62521,Africa
+Impfondo,Impfondo,1.6404,18.04,COG,20859,Africa
+Djambala,Djambala,-2.5396,14.75,COG,9651,Africa
+Moloundou,Moloundou,2.0337,15.2167,COG,12244,Africa
+Ouésso,Ouesso,1.61,16.05,COG,28320,Africa
+Sibiti,Sibiti,-3.6896,13.35,COG,22811,Africa
+Ewo,Ewo,-0.8796,14.82,COG,10650,Africa
+Makoua,Makoua,-0.0096,15.64,COG,11355,Africa
+Gamboma,Gamboma,-1.8795,15.85,COG,20877,Africa
+Madingou,Madingou,-4.164,13.554,COG,22760,Africa
+Kinkala,Kinkala,-4.356,14.762,COG,13882,Africa
+Mossendjo,Mossendjo,-2.9396,12.72,COG,30936,Africa
+Owando,Owando,-0.4796,15.92,COG,34070,Africa
+Loubomo,Loubomo,-4.1796,12.67,COG,103894,Africa
+Loango,Loango,-4.6519,11.8125,COG,,Africa
+Pointe-Noire,Pointe-Noire,-4.77,11.88,COG,659084,Africa
+Soubré,Soubre,5.7904,-6.61,CIV,108933,Africa
+Bouaké,Bouake,7.69,-5.03,CIV,567481,Africa
+Man,Man,7.4004,-7.55,CIV,146974,Africa
+San-Pedro,San-Pedro,4.7704,-6.64,CIV,210273,Africa
+Korhogo,Korhogo,9.46,-5.64,CIV,177711,Africa
+Odienné,Odienne,9.5104,-7.58,CIV,49857,Africa
+Bondoukou,Bondoukou,8.0304,-2.8,CIV,58297,Africa
+Agboville,Agboville,5.9403,-4.28,CIV,81770,Africa
+Dabou,Dabou,5.3204,-4.3899,CIV,72913,Africa
+Abidjan,Abidjan,5.32,-4.04,CIV,3802000,Africa
+Yamoussoukro,Yamoussoukro,6.8184,-5.2755,CIV,206499,Africa
+Gagnoa,Gagnoa,6.1504,-5.88,CIV,123184,Africa
+Abengourou,Abengourou,6.7304,-3.49,CIV,104020,Africa
+Dimbokro,Dimbokro,6.6505,-4.71,CIV,67349,Africa
+Daloa,Daloa,6.89,-6.45,CIV,255168,Africa
+Séguéla,Seguela,7.9504,-6.67,CIV,51157,Africa
+Aboisso,Aboisso,5.4667,-3.2,CIV,37654,Africa
+Guiglo,Guiglo,6.5505,-7.49,CIV,39134,Africa
+Toumodi,Toumodi,6.552,-5.019,CIV,39005,Africa
+Grand Bassam,Grand Bassam,5.2004,-3.75,CIV,73772,Africa
+Sassandra,Sassandra,4.9504,-6.0833,CIV,38411,Africa
+Divo,Divo,5.839,-5.36,CIV,127867,Africa
+Touba,Touba,8.28,-7.684,CIV,27504,Africa
+Ferkessédougou,Ferkessedougou,9.6004,-5.2,CIV,62008,Africa
+Bangolo,Bangolo,7.0123,-7.4864,CIV,,Africa
+Bouaflé,Bouafle,6.978,-5.748,CIV,60962,Africa
+Yaounde,Yaounde,3.8667,11.5167,CMR,1611000,Africa
+Bertoua,Bertoua,4.5804,13.68,CMR,218111,Africa
+Bafia,Bafia,4.7504,11.23,CMR,69270,Africa
+Mbalmayo,Mbalmayo,3.5204,11.5,CMR,80206,Africa
+Kontcha,Kontcha,7.967,12.2333,CMR,8018,Africa
+Mbe,Mbe,7.8504,13.6,CMR,3950,Africa
+Kribi,Kribi,2.9404,9.91,CMR,55224,Africa
+Edéa,Edea,3.8005,10.12,CMR,203149,Africa
+Bélabo,Belabo,4.9337,13.3,CMR,22553,Africa
+Meiganga,Meiganga,6.5205,14.29,CMR,80100,Africa
+Maroua,Maroua,10.5956,14.3247,CMR,319941,Africa
+Eséka,Eseka,3.6504,10.7666,CMR,22221,Africa
+Ebolowa,Ebolowa,2.9,11.15,CMR,87875,Africa
+Ngaoundéré,Ngaoundere,7.3204,13.58,CMR,231357,Africa
+Batouri,Batouri,4.4337,14.3666,CMR,43821,Africa
+Abong Mbang,Abong Mbang,3.9837,13.1833,CMR,14661,Africa
+Limbe,Limbe,4.0304,9.19,CMR,212474,Africa
+Kumba,Kumba,4.6404,9.44,CMR,144413,Africa
+Buea,Buea,4.155,9.231,CMR,90088,Africa
+Nkongsamba,Nkongsamba,4.9604,9.94,CMR,117063,Africa
+Douala,Douala,4.0604,9.71,CMR,1906000,Africa
+Kumbo,Kumbo,6.2204,10.68,CMR,125486,Africa
+Eyumojok,Eyumojok,5.7504,8.9833,CMR,5798,Africa
+Wum,Wum,6.4004,10.07,CMR,68836,Africa
+Bafoussam,Bafoussam,5.4904,10.4099,CMR,290768,Africa
+Bafang,Bafang,5.1704,10.18,CMR,93145,Africa
+Garoua,Garoua,9.3,13.39,CMR,436899,Africa
+Guider,Guider,9.9304,13.94,CMR,84647,Africa
+Tibati,Tibati,6.467,12.6333,CMR,35589,Africa
+Foumban,Foumban,5.7304,10.9,CMR,92673,Africa
+Bamenda,Bamenda,5.96,10.15,CMR,445299,Africa
+Vila da Ribeira Brava,Vila da Ribeira Brava,16.6167,-24.3,CPV,,Africa
+Tarrafal,Tarrafal,16.5667,-24.3667,CPV,,Africa
+Vila do Maio,Vila do Maio,15.1333,-23.2167,CPV,,Africa
+Vila Nova Sintra,Vila Nova Sintra,14.8667,-24.7167,CPV,,Africa
+Porto dos Mosteiros,Porto dos Mosteiros,15.0333,-24.3333,CPV,,Africa
+São Domingos,Sao Domingos,15.0167,-23.5667,CPV,,Africa
+Picos,Picos,15.0833,-23.65,CPV,,Africa
+Santa Maria,Santa Maria,16.6,-22.9,CPV,,Africa
+São Filipe,Sao Filipe,14.9,-24.5167,CPV,,Africa
+Tarrafal,Tarrafal,15.2833,-23.7667,CPV,,Africa
+Praia,Praia,14.9167,-23.5167,CPV,113364,Africa
+Assomada,Assomada,15.1,-23.6833,CPV,,Africa
+Cidade Velha,Cidade Velha,14.9167,-23.6167,CPV,,Africa
+Cova Figueira,Cova Figueira,14.8833,-24.3,CPV,,Africa
+Mindelo,Mindelo,16.8838,-25,CPV,70611,Africa
+Porto Novo,Porto Novo,17.0254,-25.0666,CPV,,Africa
+Ribeira Grande,Ribeira Grande,17.1856,-25.0724,CPV,,Africa
+Pombas,Pombas,17.1503,-25.0201,CPV,,Africa
+Calheta de São Miguel,Calheta de Sao Miguel,15.1833,-23.6,CPV,,Africa
+Vila de Sal Rei,Vila de Sal Rei,16.1833,-22.9167,CPV,,Africa
+Tadjoura,Tadjoura,11.7833,42.9,DJI,22193,Africa
+Arta,Arta,11.5264,42.8519,DJI,,Africa
+Ali Sabih,Ali Sabih,11.1562,42.7125,DJI,40074,Africa
+Dikhil,Dikhil,11.104,42.372,DJI,12043,Africa
+Djibouti,Djibouti,11.595,43.148,DJI,923000,Africa
+Obock,Obock,11.9734,43.2856,DJI,17776,Africa
+Béni Ounif,Beni Ounif,32.0493,-1.2514,DZA,5628,Africa
+Algiers,Algiers,36.7631,3.0506,DZA,3354000,Africa
+Hassi Messaoud,Hassi Messaoud,31.7023,6.0545,DZA,18124,Africa
+Ouargla,Ouargla,31.97,5.34,DZA,176271,Africa
+Touggourt,Touggourt,33.1,6.06,DZA,133954,Africa
+Djanet,Djanet,24.5529,9.4823,DZA,666,Africa
+Illizi,Illizi,26.4834,8.4666,DZA,7957,Africa
+I-n-Amenas,I-n-Amenas,28.0503,9.55,DZA,216,Africa
+Annaba,Annaba,36.92,7.76,DZA,503524,Africa
+El Oued,El Oued,33.3704,6.86,DZA,177497,Africa
+Laghouat,Laghouat,33.81,2.88,DZA,113872,Africa
+Tlimcen,Tlimcen,34.8904,-1.32,DZA,229777,Africa
+Oran,Oran,35.71,-0.62,DZA,798000,Africa
+Mostaganem,Mostaganem,35.9404,0.09,DZA,188354,Africa
+Relizane,Relizane,35.7373,0.556,DZA,,Africa
+Tissemsilt,Tissemsilt,35.6072,1.8108,DZA,,Africa
+Saïda,Saida,34.8404,0.14,DZA,142213,Africa
+Sidi bel Abbes,Sidi bel Abbes,35.1903,-0.64,DZA,208604,Africa
+Mascara,Mascara,35.4004,0.14,DZA,108230,Africa
+Chlef,Chlef,36.1704,1.32,DZA,449167,Africa
+Djelfa,Djelfa,34.68,3.25,DZA,170901,Africa
+Tiarat,Tiarat,35.3804,1.32,DZA,184195,Africa
+Aïn Defla,Ain Defla,36.2641,1.9679,DZA,,Africa
+Tipasa,Tipasa,36.5897,2.4475,DZA,,Africa
+Blida,Blida,36.4203,2.83,DZA,511348,Africa
+Béchar,Bechar,31.6111,-2.23,DZA,143382,Africa
+Ghardaia,Ghardaia,32.49,3.67,DZA,125480,Africa
+El Bayadh,El Bayadh,33.6904,1.01,DZA,67413,Africa
+Naama,Naama,33.2667,-0.3167,DZA,,Africa
+Adrar,Adrar,27.87,-0.29,DZA,56910,Africa
+El Goléa,El Golea,30.5666,2.8833,DZA,32049,Africa
+In Amguel,In Amguel,23.6939,5.1647,DZA,3030,Africa
+Tamanrasset,Tamanrasset,22.785,5.5228,DZA,76000,Africa
+Reggane,Reggane,26.7,0.1666,DZA,32974,Africa
+I-n-Salah,I-n-Salah,27.2166,2.4666,DZA,49223,Africa
+Tindouf,Tindouf,27.6742,-8.1478,DZA,18270,Africa
+Timimoun,Timimoun,29.2365,0.27,DZA,49237,Africa
+Médéa,Medea,36.2704,2.77,DZA,147707,Africa
+Boumerdes,Boumerdes,36.759,3.4748,DZA,,Africa
+Béjaïa,Bejaia,36.7604,5.07,DZA,384937,Africa
+Bouïra,Bouira,36.3805,3.9,DZA,110144,Africa
+Tizi-Ouzou,Tizi-Ouzou,36.8,4.0333,DZA,144000,Africa
+Bordj Bou Arréridj,Bordj Bou Arreridj,36.059,4.63,DZA,140000,Africa
+M'sila,M'sila,35.7,4.545,DZA,150000,Africa
+Biskra,Biskra,34.86,5.73,DZA,202103,Africa
+Batna,Batna,35.57,6.17,DZA,280798,Africa
+Guelma,Guelma,36.466,7.428,DZA,123590,Africa
+Skikda,Skikda,36.8804,6.9,DZA,225181,Africa
+Jijel,Jijel,36.822,5.766,DZA,148000,Africa
+Constantine,Constantine,36.36,6.5999,DZA,605179,Africa
+Sétif,Setif,36.18,5.4,DZA,274744,Africa
+Sefra,Sefra,32.7604,-0.5799,DZA,63420,Africa
+Abadla,Abadla,31.0171,-2.7333,DZA,14364,Africa
+El Tarf,El Tarf,36.7672,8.3138,DZA,,Africa
+Oum el Bouaghi,Oum el Bouaghi,35.85,7.15,DZA,100821,Africa
+Mila,Mila,36.4503,6.2644,DZA,,Africa
+Tébessa,Tebessa,35.4104,8.12,DZA,171742,Africa
+Khenchela,Khenchela,35.4358,7.1433,DZA,,Africa
+Souk Ahras,Souk Ahras,36.2904,7.95,DZA,134947,Africa
+Aïn Temouchent,Ain Temouchent,35.2975,-1.1404,DZA,,Africa
+Berenice,Berenice,23.946,35.4842,EGY,10,Africa
+Beni Mazar,Beni Mazar,28.4904,30.81,EGY,79553,Africa
+Samalut,Samalut,28.3004,30.71,EGY,152097,Africa
+El Mansura,El Mansura,31.0504,31.38,EGY,600000,Africa
+Mallawi,Mallawi,27.7304,30.84,EGY,217365,Africa
+El Minya,El Minya,28.09,30.75,EGY,500000,Africa
+Siwa,Siwa,29.2,25.5167,EGY,23080,Africa
+Matruh,Matruh,31.3504,27.23,EGY,103470,Africa
+Qena,Qena,26.1505,32.72,EGY,302027,Africa
+Salum,Salum,31.567,25.15,EGY,7330,Africa
+El Daba,El Daba,31.0338,28.4333,EGY,14212,Africa
+El Faiyum,El Faiyum,29.31,30.84,EGY,316772,Africa
+Asyut,Asyut,27.19,31.1799,EGY,420585,Africa
+Bur Safaga,Bur Safaga,26.7337,33.9333,EGY,32944,Africa
+El Alamein,El Alamein,30.8171,28.95,EGY,7400,Africa
+Kom Ombo,Kom Ombo,24.47,32.95,EGY,303962,Africa
+El Giza,El Giza,30.01,31.19,EGY,2681863,Africa
+Isna,Isna,25.2904,32.5499,EGY,100000,Africa
+El Kharga,El Kharga,25.44,30.55,EGY,49991,Africa
+Qasr Farafra,Qasr Farafra,27.0671,27.9666,EGY,5000,Africa
+Girga,Girga,26.3304,31.88,EGY,128250,Africa
+El Qasr,El Qasr,25.7004,28.8833,EGY,1716,Africa
+Hurghada,Hurghada,27.23,33.83,EGY,157204,Africa
+Sohag,Sohag,26.5504,31.7,EGY,600000,Africa
+El Tur,El Tur,28.2394,33.6148,EGY,27628,Africa
+Bur Said,Bur Said,31.26,32.29,EGY,623864,Africa
+Tanta,Tanta,30.7904,31,EGY,404901,Africa
+Ismaïlia,Ismailia,30.5903,32.26,EGY,656135,Africa
+Suez,Suez,30.005,32.5499,EGY,508335,Africa
+Beni Suef,Beni Suef,29.0804,31.09,EGY,489450,Africa
+Aswan,Aswan,24.0875,32.8989,EGY,313442,Africa
+Cairo,Cairo,30.05,31.25,EGY,11893000,Africa
+Benha,Benha,30.4667,31.1833,EGY,167029,Africa
+Dumyat,Dumyat,31.4204,31.82,EGY,299459,Africa
+Zagazig,Zagazig,30.5833,31.5167,EGY,285097,Africa
+Alexandria,Alexandria,31.2,29.95,EGY,4165000,Africa
+Shibin el Kom,Shibin el Kom,30.592,30.9,EGY,182900,Africa
+El Arish,El Arish,31.1249,33.8006,EGY,178651,Africa
+Damanhûr,Damanhur,31.0504,30.47,EGY,500000,Africa
+Luxor,Luxor,25.7,32.65,EGY,609248,Africa
+Rashid,Rashid,31.4604,30.39,EGY,199509,Africa
+Kafr el Sheikh,Kafr el Sheikh,31.109,30.936,EGY,143970,Africa
+Tessenei,Tessenei,15.1104,36.6575,ERI,15255,Africa
+Mendefera,Mendefera,14.886,38.8163,ERI,257390,Africa
+Assab,Assab,13.01,42.73,ERI,105496,Africa
+Agordat,Agordat,15.549,37.8867,ERI,28600,Africa
+Barentu,Barentu,15.1058,37.5907,ERI,,Africa
+Massawa,Massawa,15.6101,39.45,ERI,142564,Africa
+Asmara,Asmara,15.3333,38.9333,ERI,620802,Africa
+Keren,Keren,15.6804,38.45,ERI,150000,Africa
+Adigrat,Adigrat,14.2804,39.47,ETH,104021,Africa
+Aksum,Aksum,14.1304,38.72,ETH,47487,Africa
+Gondar,Gonder,12.61,37.46,ETH,156230,Africa
+Nazret,Nazret,8.55,39.27,ETH,476892,Africa
+Sodo,Sodo,6.9,37.75,ETH,65737,Africa
+Asela,Asela,7.9504,39.1399,ETH,82240,Africa
+Dila,Dila,6.4104,38.31,ETH,47021,Africa
+Nagele,Nagele,5.3166,39.5833,ETH,11772,Africa
+Dembi Dolo,Dembi Dolo,8.5337,34.8,ETH,27780,Africa
+Dese,Dese,11.13,39.63,ETH,183802,Africa
+Bahir Dar,Bahir Dar,11.6001,37.3833,ETH,206748,Africa
+Hagere Hiywet,Hagere Hiywet,8.9804,37.85,ETH,43920,Africa
+Gode,Gode,5.95,43.45,ETH,75000,Africa
+Giyon,Giyon,8.5304,37.97,ETH,114534,Africa
+Shashemene,Shashemene,7.2004,38.59,ETH,114350,Africa
+Hosaina,Hosaina,7.5504,37.85,ETH,89300,Africa
+Nekemte,Nekemte,9.0905,36.53,ETH,73018,Africa
+Yirga Alem,Yirga Alem,6.7504,38.41,ETH,36292,Africa
+Gore,Gore,8.149,35.537,ETH,9352,Africa
+Gimbi,Gimbi,9.167,35.8333,ETH,31809,Africa
+Jima,Jima,7.68,36.83,ETH,128306,Africa
+Debre Markos,Debre Markos,10.34,37.72,ETH,70758,Africa
+Dolo Bay,Dolo Bay,4.1833,42.0833,ETH,11810,Africa
+Arba Minch,Arba Minch,6.04,37.55,ETH,69622,Africa
+Awasa,Awasa,7.06,38.477,ETH,133097,Africa
+Asosa,Asosa,10.067,34.5333,ETH,30512,Africa
+Gamb_la,Gambela,8.25,34.5833,ETH,,Africa
+Jijiga,Jijiga,9.3504,42.79,ETH,56821,Africa
+Goba,Goba,7.01,39.97,ETH,34369,Africa
+Addis Ababa,Addis Ababa,9.0333,38.7,ETH,3100000,Africa
+Semera,Semera,11.501,41.201,ETH,,Africa
+Bati,Bati,11.1837,40.0166,ETH,19260,Africa
+Dire Dawa,Dire Dawa,9.59,41.86,ETH,252279,Africa
+Mekele,Mekele,13.5,39.47,ETH,95856,Africa
+Debre Birhan,Debre Birhan,9.6804,39.53,ETH,65231,Africa
+Harar,Harar,9.32,42.15,ETH,174994,Africa
+Tchibanga,Tchibanga,-2.857,11.027,GAB,19365,Africa
+Gamba,Gamba,-2.65,10,GAB,9928,Africa
+Libreville,Libreville,0.3854,9.458,GAB,578156,Africa
+Omboué,Omboue,-1.5662,9.25,GAB,1667,Africa
+Ndende,Ndende,-2.3829,11.3833,GAB,6200,Africa
+Mayumba,Mayumba,-3.4166,10.65,GAB,3996,Africa
+Moanda,Moanda,-1.5655,13.2,GAB,30151,Africa
+Mouila,Mouila,-1.8662,11.0167,GAB,28000,Africa
+Okandja,Okandja,-0.6829,13.7833,GAB,7155,Africa
+Franceville,Franceville,-1.6333,13.5833,GAB,42967,Africa
+Oyem,Oyem,1.6166,11.5833,GAB,43423,Africa
+Makokou,Makokou,0.5671,12.8666,GAB,17070,Africa
+Mitzik,Mitzik,0.7837,11.5666,GAB,4111,Africa
+Bitam,Bitam,2.0837,11.4834,GAB,17637,Africa
+Mékambo,Mekambo,1.0171,13.9333,GAB,3170,Africa
+Koulamoutou,Koulamoutou,-1.1329,12.4833,GAB,16222,Africa
+Bifoum,Bifoum,-0.3329,10.3832,GAB,134,Africa
+Port-Gentil,Port-Gentil,-0.72,8.78,GAB,116836,Africa
+Lambaréné,Lambarene,-0.6996,10.2166,GAB,25310,Africa
+Ho,Ho,6.6004,0.47,GHA,93044,Africa
+Bolgatanga,Bolgatanga,10.7904,-0.85,GHA,82177,Africa
+Yendi,Yendi,9.4337,-0.0167,GHA,42972,Africa
+Tamale,Tamale,9.4004,-0.84,GHA,360579,Africa
+Sunyani,Sunyani,7.336,-2.336,GHA,70299,Africa
+Berekum,Berekum,7.4504,-2.59,GHA,46287,Africa
+Kumasi,Kumasi,6.69,-1.63,GHA,1646000,Africa
+Wa,Wa,10.0604,-2.5,GHA,78107,Africa
+Cape Coast,Cape Coast,5.1104,-1.25,GHA,143015,Africa
+Sekondi,Sekondi,4.9433,-1.704,GHA,286248,Africa
+Bawku,Bawku,11.0604,-0.24,GHA,73594,Africa
+Nkawkaw,Nkawkaw,6.5505,-0.78,GHA,62667,Africa
+Koforidua,Koforidua,6.0904,-0.26,GHA,156653,Africa
+Winneba,Winneba,5.3504,-0.63,GHA,44254,Africa
+Accra,Accra,5.55,-0.2167,GHA,2121000,Africa
+Tema,Tema,5.6404,0.01,GHA,209000,Africa
+Obuasi,Obuasi,6.1904,-1.66,GHA,180117,Africa
+Bansang,Bansang,13.4336,-14.65,GMB,7615,Africa
+Banjul,Banjul,13.4539,-16.5917,GMB,43094,Africa
+Basse Santa Su,Basse Santa Su,13.31,-14.223,GMB,14380,Africa
+Brikama,Brikama,13.2804,-16.6599,GMB,195136,Africa
+Georgetown,Georgetown,13.551,-14.767,GMB,3584,Africa
+Kerewan,Kerewan,13.494,-16.095,GMB,2751,Africa
+Mansa Konko,Mansa Konko,13.3773,-15.6786,GMB,18672,Africa
+Kanifing,Kanifing,13.4464,-16.6744,GMB,,Africa
+Conakry,Conakry,9.5315,-13.6802,GIN,1494000,Africa
+Faranah,Faranah,10.0404,-10.75,GIN,19469,Africa
+Kankan,Kankan,10.39,-9.31,GIN,114009,Africa
+Labé,Labe,11.32,-12.3,GIN,140575,Africa
+Boké,Boke,10.94,-14.3,GIN,116270,Africa
+Mamou,Mamou,10.3804,-12.1,GIN,71153,Africa
+Kindia,Kindia,10.06,-12.87,GIN,117062,Africa
+Kamsar,Kamsar,10.6854,-14.605,GIN,34973,Africa
+Nzérékoré,Nzerekore,7.76,-8.83,GIN,168121,Africa
+Fria,Fria,10.3804,-13.55,GIN,23729,Africa
+Forecariah,Forecariah,9.43,-13.098,GIN,12358,Africa
+Yomou,Yomou,7.5704,-9.27,GIN,3614,Africa
+Tongue,Tongue,11.44,-11.67,GIN,25531,Africa
+Télimélé,Telimele,10.905,-13.043,GIN,30311,Africa
+Siguiri,Siguiri,11.4171,-9.1666,GIN,50159,Africa
+Pita,Pita,11.08,-12.401,GIN,20052,Africa
+Mali,Mali,12.084,-12.301,GIN,5479,Africa
+Macenta,Macenta,8.5504,-9.48,GIN,43102,Africa
+Kouroussa,Kouroussa,10.653,-9.892,GIN,14223,Africa
+Koundara,Koundara,12.48,-13.296,GIN,13990,Africa
+Kissidougou,Kissidougou,9.1905,-10.12,GIN,66815,Africa
+Kérouané,Kerouane,9.2704,-9.02,GIN,15406,Africa
+Gueckedou,Gueckedou,8.554,-10.151,GIN,221715,Africa
+Gaoual,Gaoual,11.754,-13.213,GIN,7461,Africa
+Dinguiraye,Dinguiraye,11.299,-10.726,GIN,6062,Africa
+Dabola,Dabola,10.748,-11.109,GIN,13057,Africa
+Boffa,Boffa,10.185,-14.043,GIN,2332,Africa
+Beyla,Beyla,8.687,-8.657,GIN,13204,Africa
+Dalaba,Dalaba,10.656,-12.272,GIN,6349,Africa
+Malabo,Malabo,3.75,8.7833,GNQ,155963,Africa
+Palé,Pale,-1.4014,5.6325,GNQ,,Africa
+Evinayong,Evinayong,1.45,10.5667,GNQ,8462,Africa
+Mongomo,Mongomo,1.6337,11.3166,GNQ,6560,Africa
+Bata,Bata,1.87,9.77,GNQ,173046,Africa
+Ebebiyín,Ebebiyin,2.1511,11.3353,GNQ,,Africa
+Calatrava,Calatrava,1.1164,9.4186,GNQ,628,Africa
+Luba,Luba,3.45,8.55,GNQ,8655,Africa
+Fulacunda,Fulacunda,11.773,-15.195,GNB,1311,Africa
+Farim,Farim,12.493,-15.227,GNB,6792,Africa
+Bafatá,Bafata,12.167,-14.666,GNB,29704,Africa
+Bissau,Bissau,11.865,-15.5984,GNB,403339,Africa
+Bolama,Bolama,11.583,-15.4828,GNB,10769,Africa
+Buba,Buba,11.5889,-14.9958,GNB,,Africa
+Cacheu,Cacheu,12.269,-16.165,GNB,10490,Africa
+Catió,Catio,11.2167,-15.1667,GNB,9898,Africa
+Gabú,Gabu,12.28,-14.234,GNB,14430,Africa
+Quinhámel,Quinhamel,11.8869,-15.8556,GNB,,Africa
+Namanga,Namanga,-2.5396,36.8,KEN,13193,Africa
+Nairobi,Nairobi,-1.2833,36.8167,KEN,3010000,Africa
+Moyale,Moyale,3.52,39.05,KEN,24837,Africa
+Malindi,Malindi,-3.21,40.1,KEN,94016,Africa
+Kisumu,Kisumu,-0.09,34.75,KEN,395615,Africa
+Mwingi,Mwingi,-0.9296,38.07,KEN,11219,Africa
+Eldama Ravine,Eldama Ravine,0.0504,35.72,KEN,17581,Africa
+Nanyuki,Nanyuki,0.0204,37.06,KEN,36142,Africa
+Mombasa,Mombasa,-4.04,39.6899,KEN,882000,Africa
+Tsavo,Tsavo,-2.9828,38.4666,KEN,414,Africa
+Nyeri,Nyeri,-0.417,36.951,KEN,51084,Africa
+Voi,Voi,-3.3696,38.57,KEN,36487,Africa
+Garissa,Garissa,-0.4396,39.67,KEN,67861,Africa
+Kendu Bay,Kendu Bay,-0.3596,34.64,KEN,91248,Africa
+Kakamega,Kakamega,0.2904,34.73,KEN,63426,Africa
+Sotik,Sotik,-0.6796,35.12,KEN,71285,Africa
+Nakuru,Nakuru,-0.28,36.07,KEN,364727,Africa
+Witu,Witu,-2.3796,40.43,KEN,5380,Africa
+Embu,Embu,-0.5196,37.45,KEN,58620,Africa
+Homa Bay,Homa Bay,-0.5273,34.4571,KEN,,Africa
+Isiolo,Isiolo,0.3546,37.5822,KEN,,Africa
+Iten,Iten,0.6703,35.5081,KEN,,Africa
+Kabarnet,Kabarnet,0.4919,35.743,KEN,,Africa
+Kajiado,Kajiado,-1.8524,36.7768,KEN,,Africa
+Kapenguria,Kapenguria,1.2389,35.1119,KEN,,Africa
+Kapsabet,Kapsabet,0.2039,35.105,KEN,,Africa
+Kericho,Kericho,-0.3596,35.28,KEN,98852,Africa
+Kerugoya,Kerugoya,-0.4989,37.2803,KEN,,Africa
+Kiambu,Kiambu,-1.1714,36.8356,KEN,,Africa
+Kilifi,Kilifi,-3.6096,39.85,KEN,80339,Africa
+Kisii,Kisii,-0.6696,34.76,KEN,28547,Africa
+Kitale,Kitale,1.0305,34.9899,KEN,150495,Africa
+Kitui,Kitui,-1.367,38.0106,KEN,,Africa
+Kwale,Kwale,-4.1737,39.4521,KEN,,Africa
+Lamu,Lamu,-2.262,40.9197,KEN,24525,Africa
+Lodwar,Lodwar,3.1304,35.57,KEN,20219,Africa
+Machakos,Machakos,-1.5095,37.26,KEN,144925,Africa
+Mandera,Mandera,3.9414,41.8625,KEN,,Africa
+Maralal,Maralal,1.1105,36.68,KEN,20841,Africa
+Marsabit,Marsabit,2.33,37.98,KEN,16460,Africa
+Mbale,Mbale,0.0821,34.7214,KEN,,Africa
+Meru,Meru,0.06,37.64,KEN,47226,Africa
+Migori,Migori,-1.0634,34.4731,KEN,,Africa
+Murang’a,Murang'a,-0.721,37.1526,KEN,,Africa
+Mwatate,Mwatate,-3.505,38.3772,KEN,,Africa
+Narok,Narok,-1.0808,35.8711,KEN,,Africa
+Nyamira,Nyamira,-0.5633,34.9358,KEN,,Africa
+Ol Kalou,Ol Kalou,-0.2643,36.3788,KEN,,Africa
+Rumuruti,Rumuruti,0.2725,36.5381,KEN,,Africa
+Siaya,Siaya,0.0612,34.2882,KEN,,Africa
+Wajir,Wajir,1.7504,40.05,KEN,45771,Africa
+Wote,Wote,-1.7808,37.6288,KEN,,Africa
+Busia,Busia,0.4586,34.116,KEN,,Africa
+Kathwana,Kathwana,-0.3314,37.8686,KEN,,Africa
+Bomet,Bomet,-0.7813,35.3416,KEN,,Africa
+Bungoma,Bungoma,0.5704,34.56,KEN,55962,Africa
+Eldoret,Eldoret,0.52,35.27,KEN,353381,Africa
+Hola,Hola,-1.4993,40.0301,KEN,,Africa
+Karungu,Karungu,-0.8496,34.15,KEN,2376,Africa
+Naivasha,Naivasha,-0.7096,36.43,KEN,43983,Africa
+Thika,Thika,-1.0396,37.09,KEN,99322,Africa
+Konza,Konza,-1.7496,37.12,KEN,2004,Africa
+Moroni,Moroni,-11.7042,43.2402,COM,128698,Africa

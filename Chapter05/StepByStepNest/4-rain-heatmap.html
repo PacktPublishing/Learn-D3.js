@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        * {
+            font-family: "Yanone Kaffeesatz", "Arial Narrow", sans-serif;
+            font-size: 10pt;
+        }
+        h1 {
+            font-size: 16pt;
+        }
+        p {
+            text-align: right;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td, th {
+            border: solid 1px darkslategray;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Rainfall in São Paulo, Brazil (in mm) from 1984 to 2017</h1>
+<table></table>
+<p>source: inmet.gov.br</p>
+<script>
+    const color = d3.scalePow().exponent(.75);
+
+    d3.csv("../Data/rain_sao_paulo.csv")
+            .then(function(data) {
+                process(data)
+            });
+
+    function process(data) {
+        // nest by year, and month
+        const entries = d3.nest()
+                .key(function (d) {
+                    return +d.Month;
+                })
+                .key(function (d) {
+                    return +d.Year;
+                })
+                .rollup(function (d) {
+                    return +d[0].Rain_mm;
+                })
+                .entries(data);
+
+        const numbers = d3.merge(entries.map((v,k)=> v.values.map(d=>d.value)));
+        color.domain(d3.extent(numbers));
+        draw(entries);
+    }
+
+    function draw(entries) {
+
+        const table = d3.select("table");
+        const tr = table.selectAll("tr.month")  // binds entries to <tr> rows
+                .data(entries)  // list of 12 month objects
+                .enter()
+                .append("tr").attr("class", "month")
+                .attr("title", function(d) {
+                    return d.key;  // the month number
+                });
+
+        tr.selectAll("td.year") // binds entry.values to <td>
+                .data(function(d) {
+                    return d.values; // list of 34 year objects per month
+                })
+                .enter()
+                .append("td").attr("class", "year")
+                .attr("title", function(d) {
+                    return d.key;  // the year in each month
+                })
+                .text(function(d) {
+                    return d.value; // the data-value (amount of rain in mm)
+                });
+
+        // Column and row headers
+        // insert a column before first column for month labels
+        tr.insert("th", "td:first-of-type").attr("class", "month-label")
+                .text(function(d) {
+                    // this converts the number into a month
+                    const format = d3.timeFormat("%b");
+                    return format(new Date(2000, d.key-1, 1));
+                });
+
+        // insert a row above first row for year labels
+        const header = table.insert("tr", "tr:first-of-type")
+                .attr("class", "header-row");
+
+        header.selectAll("th.year-label")
+                .data(entries[0].values) // the year objects of any month
+                .enter()
+                .append("th").attr("class", "year-label")
+                .text(function(d) {
+                    return d.key; // the year
+                });
+
+        // insert empty cell at table position 0,0
+        header.insert("td", "th:first-of-type");
+
+        // creates a heatmap
+        d3.selectAll("td.year")
+            .style("background-color", function(d) {
+                return d3.interpolateYlGnBu(color(d.value));
+            })
+            .style("color", function(d) {
+                return color(d.value) > .5 ? 'white' : 'black';
+            });
+
+
+
+    }
+</script>
+</body>
+</html>

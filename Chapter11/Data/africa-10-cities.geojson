@@ -1,0 +1,115 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city1",
+        "name": "Lagos"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3,7]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city2",
+        "name": "Cairo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [31,30]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city3",
+        "name": "Kinshasa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15,-4]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city4",
+        "name": "Luanda"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13,-9]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city5",
+        "name": "Nairobi"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37,-1]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city6",
+        "name": "Mogadishu"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [45,2]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city7",
+        "name": "Abidjan"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-4,5]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city8",
+        "name": "Alexandria"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [30,31]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city9",
+        "name": "Addis Ababa"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [39,9]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "city10",
+        "name": "Johannesburg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [28,-26]
+      }
+    }
+  ]
+}

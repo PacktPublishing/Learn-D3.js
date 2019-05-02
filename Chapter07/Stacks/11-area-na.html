@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Area</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text, h1 {
+             font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        h1 {
+            font-weight: normal;
+            font-size: 16pt
+        }
+    </style>
+</head>
+<body>
+<h1>Population growth (1950 to 2000)</h1>
+<script>
+    const width  = 800;
+    const height = 400;
+    const margin = 50;
+
+    const populations = [
+        {"year":1950,"Mexico":28013,"Canada":13733,"United States":158804},
+        {"year":1960,"Mexico":38174,"Canada":17917,"United States":186808},
+        {"year":1970,"Mexico":52030,"Canada":21453,"United States":209588},
+        {"year":1980,"Mexico":69361,"Canada":24537,"United States":229763},
+        {"year":1990,"Mexico":85358,"Canada":27693,"United States":252530},
+        {"year":2000,"Mexico":101720,"Canada":30736,"United States":281983}
+    ];
+
+    // Selecting and sorting the keys
+    const keys = Object.entries(populations[0])
+                    .sort((a,b) => d3.descending(a[1],b[1]))
+                    .filter(d => d[0] != 'year')
+                    .map(d => d[0]);
+
+    // Selecting data for the horizontal axis
+    const years = populations.map(d => new Date(d.year,1,1));
+
+    // Configuring the stack
+    const stack = d3.stack()
+            .keys(keys)
+            .order(d3.stackOrderDescending);
+    const stackedData = stack(populations);
+
+    // Scales configuration
+    const scaleTime = d3.scaleTime()
+            .domain([new Date(1949,12,1),new Date(2000,1,1)])
+            .range([margin, width - margin])
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain([0,stack.keys().length]);
+
+    const scaleY = d3.scaleLinear()
+            .domain([0, d3.max(d3.merge(d3.merge(stackedData)))])
+            .range([height - margin, 10])
+            .nice();
+
+    // Area chart configuration
+    const area = d3.area()
+                   .x((d,i) => scaleTime(years[i]))
+                   .y(d  => scaleY(d[0]))
+                   .y1(d => scaleY(d[1]));
+
+    // Axis configuration
+    const timeAxis = d3.axisBottom(scaleTime).ticks(6);
+    const yAxis = d3.axisLeft(scaleY);
+
+    // View setup
+    const svg = d3.select("body")
+                .append("svg")
+                .attr("height",height)
+                .attr("width",width);
+    const axes = svg.append('g')
+                    .attr("class", "axes");
+
+    // Data binding
+    svg.selectAll("path")
+        .data(stackedData)
+        .enter()
+        .append("path")
+        .attr("d", area)
+        .style("fill", (d,i) => colorScale(stack.keys().length - i - 1))
+        .style("fill-opacity", .5);
+
+    // Axes rendering
+    axes.append('g').call(timeAxis)
+            .attr("transform", "translate("+[0, height - margin]+")");
+    axes.append('g').call(yAxis)
+            .attr("transform", "translate("+[margin, 0]+")");
+
+    // Legends
+    const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate("+[width/3, height - margin/4]+")");
+
+    legend.selectAll("rect")
+            .data(stack.keys())
+            .enter()
+            .append("rect")
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("x", (d,i) => i * 100)
+            .style("fill", (d,i) => colorScale(stack.keys().length - i - 1));
+
+    legend.selectAll("text")
+            .data(stack.keys())
+            .enter().append("text")
+            .attr("y", 10)
+            .attr("x", (d,i) => i * 100 + 15)
+            .text(d => d);
+
+
+</script>
+</body>
+</html>

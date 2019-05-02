@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            background-color: rgba(0,255,0,0.1);
+            border: solid 3px green;
+        }
+        rect.red {
+            stroke: red;
+            fill: rgba(255,0,0,0.1);
+            stroke-width: 3;
+        }
+        rect.blue {
+            stroke: blue;
+            fill: rgba(0,0,255,0.5);
+            stroke-width: 1;
+        }
+    </style>
+</head>
+<body>
+<h3>Open JavaScript console for results</h3>
+<svg style="position:absolute; left:100px; top:100px"
+     height="500" width="800">
+    <g transform="translate(100,400)">
+        <rect class="red"  width="600" height="300" y="-300"/>
+        <rect class="blue" width="400" height="100" x="100" y="-200"/>
+    </g>
+</svg>
+<script>
+    const svg = d3.select("svg").on("click", clicked);
+    const g = svg.select("g").on("click", clicked);
+    const rect1 = g.select(".red"); // same space as <g>
+    const rect2 = g.select(".blue").on("click", clicked);
+
+    window.addEventListener('click', function() {
+        console.log("Root");
+        console.log("MouseEvent", [event.clientX, event.clientY])
+    });
+
+    function clicked() {
+        event.stopPropagation();
+        console.log("Handler", this);           // which element handled event
+        console.log("Target", d3.event.target)  // which element caught event
+        console.log("MouseEvent", [event.clientX, event.clientY])
+        console.log("d3.event", [d3.event.x, d3.event.y])
+
+        console.log("d3.mouse of this", d3.mouse(this))
+        console.log("d3.mouse of blue rect", d3.mouse(rect2.node()))
+        console.log("d3.mouse of red rect", d3.mouse(rect1.node()))
+        console.log("d3.mouse of svg", d3.mouse(svg.node()))
+        console.log("d3.mouse of root", d3.mouse(document.documentElement))
+
+        const rx = d3.event.x, ry = d3.event.y;
+        const sx = d3.mouse(svg.node())[0], sy = d3.mouse(svg.node())[1];
+        const gx = d3.mouse(rect1.node())[0], gy = d3.mouse(rect1.node())[1];
+        const tx = d3.mouse(this)[0], ty = d3.mouse(this)[1];
+
+        // SVG coordinates in CSS
+        const svgx = 100, svgy = 100;
+
+        // Any one of these will place the circle under the click
+        svg.append("circle").attr("r", 5).attr("cx", rx-svgx).attr("cy", ry-svgy)
+        //svg.append("circle").attr("r", 5).attr("cx", sx).attr("cy", sy)
+        //g.append("circle").attr("r", 5).attr("cx", gx).attr("cy", gy)
+        //g.append("circle").attr("r", 5).attr("cx", tx).attr("cy", ty)
+    }
+
+</script>
+
+</body>
+</html>

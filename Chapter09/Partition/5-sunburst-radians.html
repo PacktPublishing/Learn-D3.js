@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+            fill: white;
+        }
+        path {
+            stroke: white;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 1000, height = 800;
+
+    const svg = d3.select("body").append("svg")
+                  .attr("height", height)
+                  .attr("width", width);
+    const chart = svg.append("g")
+                     .attr("transform", d => `translate(${[width/2, height/2]})`);
+
+    const root = d3.hierarchy(simpleHierarchy)
+                   .sort((a,b) => b.height - a.height)
+                   .sum(d => d.values ? d.values[0] : 0);
+
+    const partition = d3.partition()
+                        .size([Math.PI * 2, height/2-50])
+    const partitionData = partition(root);
+    const nodes = partitionData.descendants();
+
+    const arc = d3.arc()
+                  .startAngle(d => d.x0)
+                  .endAngle(d => d.x1)
+                  .innerRadius(d => d.y0)
+                  .outerRadius(d => d.y1);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.depth));
+
+    drawPartition();
+
+    function drawPartition() {
+        chart.selectAll("path")
+            .data(nodes)
+            .join("path")
+                .attr("d", arc)
+                .attr("fill", d => colorScale(d.depth));
+    }
+
+</script>
+</body>
+</html>

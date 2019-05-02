@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+        }
+        circle {
+            stroke: black;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000, height = 550;
+    const svg = d3.select("body").append("svg")
+                                 .attr("height", height).attr("width", width);
+    const chart = svg.append("g")
+                     .attr("transform", d => `translate(${[50,50]})`);
+
+    const root = d3.hierarchy(simpleHierarchy)
+                   .sum(d => d.values ? (d.values[0] * d.values[0]) : 0)
+                   .sort((a,b) => b.height - a.height || a.value - b.value);
+
+    root.eachBefore(function(d) {
+        d.number = d.parent ? `${d.parent.number}.${d.parent.children.indexOf(d) + 1}` : 1;
+    });
+
+    const pack = d3.pack()
+                   .size([width-100,height-100])
+                   .radius(d => d.value * 1.2);
+
+    const nodes = pack(root).descendants();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeGnBu[5])
+                         .domain(d3.extent(nodes, n => n.height));
+
+    draw();
+
+    function draw() {
+        chart.selectAll("g")
+                .data(nodes).join("g")
+                .attr("transform", d => `translate(${[d.x, d.y]})`)
+                .each(function(d) {
+                    const cell = d3.select(this);
+                    cell.append("circle")
+                        .attr("r", d => d.r)
+                        .style("fill", d => colorScale(d.height));
+
+                    cell.append("text")
+                        .text(d => d.number)
+                        .attr("font-size", 14)
+                        .attr("y", d => d.height == 0 ? 3 : -d.r + 14) // places in center if leaf
+                        .style("fill", d => d.height ==0 ? 'black' : 'white')
+                        .style("opacity", d => d.r > 10 ? 1 : 0);
+                });
+    }
+</script>
+</body>
+</html>

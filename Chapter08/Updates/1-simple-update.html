@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISS World temperatures</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+            font-size: 8pt;
+        }
+        .zero-axis line {
+            stroke-opacity: .3;
+        }
+        .zero-axis text {
+            opacity: 0;
+        }
+        #panel {
+            text-align: center;
+            width: 800px;
+        }
+    </style>
+</head>
+<body>
+<div id="panel"></div>
+<script>
+    const width  = 800, height = 600, margin = 100;
+    const labelPaddingX = 5, labelPaddingY = 5, tickBleed = 5;
+
+    const data = {};
+
+    // Viewport configuration
+    const svg = d3.select("body").append("svg")
+                  .attr("height",height)
+                  .attr("width",width);
+
+    // Control buttons
+    const prev = d3.select("#panel").append("button").text("Previous");
+    const next = d3.select("#panel").append("button").text("Next");
+
+    // Scales and axes
+    const scaleX = d3.scaleBand().range([margin/2, width - margin/2]);
+    const scaleY = d3.scaleLinear().range([height - margin/2, margin/2]);
+
+    const axisX = d3.axisBottom(scaleX) // this scale doesn't implement ticks!
+            .tickPadding(5)
+            .tickFormat(d3.timeFormat("%b"));
+
+    const axisY = d3.axisLeft(scaleY)
+            .tickPadding(tickBleed)
+            .tickSizeOuter(0);
+
+    const axisZero = d3.axisRight(scaleY)
+            .tickValues([0])
+            .tickSizeOuter(0)
+            .tickSizeInner(width - margin);
+
+    const xG = svg.append("g").attr("class", "x-axis")
+                 .attr("transform", `translate(${[0, height - margin/2]})`);
+    const yG = svg.append("g").attr("class", "y-axis")
+                 .attr("transform", `translate(${[margin/2,0]})`);
+
+    // The year that will be shown first
+    let year = 1890;
+
+    // Load file, filter data
+    d3.json('../Data/monthly_json.json')
+        .then(function(result) {
+            data.values = result.filter(d => d.Source == 'GISTEMP');
+            data.filteredValues = data.values
+                            .filter(d => d3.isoParse(d.Date).getFullYear() == year);
+
+            // Setup view, scales and axes
+            init();
+            // Draw the bar chart;
+            draw();
+        });
+
+    // scales and axes configuration
+    function init() {
+        // Event handlers for buttons
+        prev.on("click", prevYear);
+        next.on("click", nextYear);
+
+        // Scales configuratoon
+        scaleY.domain(d3.extent(data.values, d => d.Mean));
+        scaleX.domain(data.filteredValues.map(d => d3.isoParse(d.Date)))
+              .paddingInner(.1)  // 10% of bar is padding
+              .paddingOuter(.2); // before and after chart
+
+        // Axis configuration
+        const tickValues = data.filteredValues.map(d => d3.isoParse(d.Date));
+        axisX.tickValues(tickValues)
+
+        // Axis rendering
+        xG.call(axisX);
+        yG.call(axisY);
+
+        svg.append("g").attr("class", "zero-axis")
+            .attr("transform", `translate(${[margin/2,0]})`)
+            .call(axisZero);
+
+        xG.append("text")
+            .attr("class","x label")
+            .text(year)
+            .attr("transform", `translate(${[(width/2),(margin/2 - labelPaddingY)]})`)
+        yG.append("text")
+            .attr("class","y label")
+            .text("Average global temperature anomaly (°C)")
+            .attr("transform", `translate(${[-(margin/2 - labelPaddingX),(height/2)]}) rotate(90)`)
+
+    }
+
+    function prevYear() {
+        if(year <= 1880) {
+            year = 2016;
+        } else {
+            --year;
+        }
+        redraw();
+    }
+    function nextYear() {
+        if(year >= 2016) {
+            year = 1880;
+        } else {
+            ++year;
+        }
+        redraw();
+    }
+
+    function redraw() {
+        // get data for selected year
+        data.filteredValues =
+                data.values.filter(d => d3.isoParse(d.Date).getFullYear() == year);
+
+        // update scale domain
+        scaleX.domain(data.filteredValues.map(d => d3.isoParse(d.Date)));
+
+        // update x-axis
+        const tickValues = data.filteredValues.map(d => d3.isoParse(d.Date));
+        axisX.tickValues(tickValues);
+        xG.call(axisX);
+
+        // update selection
+        svg.selectAll("rect.bar")
+           .data(data.filteredValues)
+           .attr("height", d => Math.abs(scaleY(d.Mean) - scaleY(0)))
+           .attr("x", d => scaleX(d3.isoParse(d.Date)))
+           .attr("y", d => d.Mean < 0 ? scaleY(0) : scaleY(d.Mean))
+           .style("fill", d => d.Mean < 0 ? "blue" : "red");
+
+        // update x-scale label
+        d3.select(".label.x").text(year)
+    }
+
+    function draw() {
+        svg.selectAll("rect.bar")
+                .data(data.filteredValues)
+                .enter()
+                .append("rect").attr("class", "bar")
+                .attr("width", scaleX.bandwidth())
+                .attr("height", d => Math.abs(scaleY(d.Mean) - scaleY(0)))
+                .attr("x", d => scaleX(d3.isoParse(d.Date)))
+                .attr("y", d => d.Mean < 0 ? scaleY(0) : scaleY(d.Mean))
+                .style("fill", d => d.Mean < 0 ? "blue" : "red");
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<div>
+    <p>Zero</p>
+    <p>One</p>
+    <p>Two</p>
+    <p>Three</p>
+    <p>Four</p>
+    <p>Five</p>
+    <p>Six</p>
+    <p>Seven</p>
+    <p>Eight</p>
+    <p>Nine</p>
+</div>
+
+<script>
+    const selection = d3.select("div").selectAll("p:nth-child(2n)").lower();
+    //const selection = d3.select("div").selectAll("p:nth-child(2n)").raise()
+    console.log(selection.nodes())
+</script>
+</body>
+</html>

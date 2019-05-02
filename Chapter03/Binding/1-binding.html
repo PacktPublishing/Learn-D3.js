@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+<h3>Inspect the generated HTML using your browser's development tools</h3>
+
+<div id="section">
+    <p>Paragraph 1</p>
+    <p>Paragraph 2</p>
+</div>
+
+<script>
+
+    const numbers = [6, 2, 5, 7, 9];
+
+    const selection = d3.select("#section")
+                        .selectAll("p")
+                        .data(numbers);
+
+
+    selection.text(d => d); // binds to existing paragraphs (update)
+
+    const newSelection = selection.enter(); // binds data to a selection of placeholders
+    newSelection.append("p")
+                .text(d => d); // binds to new paragraphs (enter)
+
+
+    console.log("Selection", selection);
+    console.log("New Selection", newSelection);
+
+</script>
+</body>
+</html>

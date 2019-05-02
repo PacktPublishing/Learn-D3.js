@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arc</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+
+    const arc = d3.arc()
+                  .innerRadius(4)
+                  .outerRadius(100)
+                  .cornerRadius(10)
+                  .padAngle(4)
+                  .padRadius(4);
+    const arcData = [
+        {startAngle: 0,                 endAngle: Math.PI * 90/180},
+        {startAngle: Math.PI * 90/180,  endAngle: Math.PI * 240/180},
+        {startAngle: Math.PI * 240/180, endAngle: Math.PI * 2}
+    ];
+    const slices = arcData.map(d => arc(d));
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const svg = d3.select("body").append("svg").attr("height",400).attr("width",width);
+
+    const g = svg.selectAll("g")
+            .data(slices)
+            .enter()
+            .append("g")
+            .attr("transform", "translate(120,120)");
+
+    g.append("path")
+            .attr("d", d => d)
+            .attr("stroke", 'gray')
+            .attr("fill", (d,i) => colorScale(i))
+            .attr("fill-opacity", .5);
+
+    g.append('circle')
+            .attr("cx",(d,i) => arc.centroid(arcData[i])[0] )
+            .attr("cy",(d,i) => arc.centroid(arcData[i])[1] )
+            .attr("r",5)
+            .attr("fill", "black");
+
+</script>
+</body>
+</html>

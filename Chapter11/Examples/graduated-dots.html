@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .country {
+            fill: #fff;
+            stroke: black;
+            stroke-width: .25;
+        }
+        .city {
+            fill: red;
+            fill-opacity: .5;
+            stroke: black
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "estados_br.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    const colorScale = d3.scaleLinear(["hsla(240,100%,50%,.5)", "red"]);
+    const areaScale = d3.scaleLinear().range([0,15]);
+
+    Promise.all([
+        d3.json('../Data/' + FILE),
+        d3.csv('../Data/mortes_acidentes_transito_2016.csv', function(row) {
+            return {
+                cod_ibge: +row.cod_ibge,
+                deaths: +row.obitos
+            }
+        }),
+        d3.csv('../Data/municipios.csv', function(row) {
+            return {
+                cod_ibge: +row.codigo_ibge.substring(0,6),
+                coords: [+row.longitude, +row.latitude]
+            }
+        }),
+        d3.csv('../Data/populacao_2016_municipios.csv', function(row) {
+            return {
+                cod_ibge: +row.cod_ibge.substring(0,6),
+                population: +row.populacao
+            }
+        })
+    ]).then(function([shapes, deaths, places, population]) {
+        console.log(shapes);   // shape data
+        console.log(deaths); // thematic data
+        console.log(places); // location data
+        console.log(population); // population
+
+        // save in a global context
+        map.features   = shapes.features;
+        map.places     = places;
+
+        // add data to properties
+        places.forEach(function(p) {
+            const entry1 = deaths.filter(t => t.cod_ibge == p.cod_ibge)[0];
+            const entry2 = population.filter(t => t.cod_ibge == p.cod_ibge)[0];
+            if(entry1 && entry2) {
+                p.deaths = entry1.deaths;
+                p.population = entry2.population;
+                p.deathsPerHab = entry1.deaths / entry2.population;
+            } else {
+                p.deaths = 0;
+                p.population = 0;
+                p.deathsPerHab = 0;
+            }
+        })
+
+        projection.fitSize([width, height], shapes);
+
+        // configure the scale
+        colorScale.domain([0, d3.max(map.places, d => d.deathsPerHab)]);
+        areaScale.domain([0, d3.max(map.places, d => d.deathsPerHab)])
+        draw();
+    });
+
+    function draw() {
+        svg.selectAll("path.country")
+            .data(map.features)
+            .enter()
+            .append("path")
+            .attr("class","country")
+            .attr('d', geoPath);
+
+        svg.selectAll("circle.city")
+                .data(map.places)
+                .enter()
+                .append("circle")
+                .attr("class", "city")
+                .attr("r", d => areaScale(d.deathsPerHab))
+                .attr("transform", d => `translate(${projection(d.coords)})`)
+                .style("fill-opacity", d => areaScale(d.deathsPerHab) <= 1 ? 1 : .5)
+                .style("stroke-width", d => areaScale(d.deathsPerHab) > 1 ? .25 : 0)
+                .style("fill", d => colorScale(d.deathsPerHab));
+
+    }
+</script>
+
+</body>
+</html>

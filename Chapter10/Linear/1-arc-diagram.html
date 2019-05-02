@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        path {
+            stroke-opacity: .3;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const nodes = [{node: 'A'},{node: 'B'},{node: 'C'},{node: 'D'},{node: 'E'}];
+
+    const edges = [
+        {source: 'A', target: 'B', value: 16},
+        {source: 'A', target: 'C', value: 2},
+        {source: 'B', target: 'A', value: 8},
+        {source: 'B', target: 'C', value: 4},
+        {source: 'C', target: 'B', value: 1},
+        {source: 'D', target: 'B', value: 1},
+        {source: 'D', target: 'E', value: 1}
+    ];
+
+    const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+
+    const data = arcDiagLayout(nodes, edges);
+
+    color.domain([0, nodes.length]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[margin/2,margin/2 + height/2]})`);
+
+    const widthScale = d3.scaleLinear()
+            .range([2,10])
+            .domain([0, d3.max(edges, d => d.value)]);
+
+    chart.selectAll("path")
+            .data(data.links())
+            .join("path")
+            .attr("d", dvj.curve()) // generates a curve for each link
+            .style("stroke-width", d => widthScale(d.value))
+            .style("stroke", d => color(d.source.i));
+
+    chart.selectAll("circle")
+            .data(data.nodes())
+            .join("circle")
+            .attr("cx", d => d.x)
+            .attr("r", 15)
+            .style("fill", (d,i) => color(i));
+
+    chart.selectAll("text")
+            .data(data.nodes())
+            .join("text")
+            .attr("x", d => d.x)
+            .text(d => d.node);
+
+
+
+</script>
+</body>
+</html>

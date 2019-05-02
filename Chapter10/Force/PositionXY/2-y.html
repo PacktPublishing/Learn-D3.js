@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../../JavaScript/force-examples.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        svg {
+            border: solid 1px #eaeaea;
+        }
+        .margin {
+            stroke: blue;
+            opacity: .1;
+        }
+        .center {
+            stroke-dasharray: 5 5;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 500;
+    const height = 500;
+    const margin = 100;
+
+    const cols = 3;
+
+    const nodes = [
+        {node: 'A', value: 79},
+        {node: 'B', value: 15},
+        {node: 'C', value: 24},
+        {node: 'D', value: 44},
+        {node: 'E', value: 125},
+        {node: 'F', value: 22},
+        {node: 'G', value: 20},
+        {node: 'H', value: 64},
+        {node: 'I', value: 69},
+    ];
+
+    // Diverging colors (blue is negative, red is positive)
+    const colors = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'];
+
+    // Reference setup
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2,height/2]})`);
+    drawReferenceBackgroundGrid(nodes);
+    drawGuidelinesY(100);
+
+
+    // SIMULATION
+    const sim = d3.forceSimulation(nodes);
+    sim.force("x", d3.forceY(100).strength(.05)); // will overlap at default strength > .1
+
+
+    // Update on ticks
+    sim.on("tick", updateChart);
+
+    // Results
+    drawChart();
+
+
+    // functions
+    function drawChart() {
+        chart.selectAll('g.simulation')
+                .data(nodes).enter()
+                .append("g").attr("class", "simulation")
+                .attr("transform", d => `translate(${[d.x, d.y]})`)
+                .each(function(d,i) {
+                        d3.select(this)
+                                .append("circle")
+                                .attr("r", 15)
+                                .style("fill", colors[i])
+                                .style("stroke", 'black')
+                        d3.select(this)
+                                .append("text")
+                                .text(d.node)
+                                .style("fill", contrast(colors[i]))
+                    })
+    }
+
+</script>
+</body>
+</html>

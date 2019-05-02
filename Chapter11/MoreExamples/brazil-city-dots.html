@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .country {
+            fill: #eef;
+            stroke: black;
+            stroke-width: .5;
+        }
+        .city {
+            fill: brown;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "estados_br.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    Promise.all([
+        d3.json('../Data/' + FILE),
+        d3.csv('../Data/municipios.csv', function(row) {
+            return {
+                cod_ibge: +row.codigo_ibge.substring(0,6),
+                coords: [+row.longitude, +row.latitude]
+            }
+        }),
+    ]).then(function([shapes, places]) {
+        console.log(shapes);   // shape data
+        console.log(places); // location data
+
+        // save in a global context
+        map.features   = shapes.features;
+        map.places     = places;
+
+        projection.fitSize([width, height], shapes);
+
+        draw();
+    });
+
+    function draw() {
+        svg.selectAll("path.country")
+            .data(map.features)
+            .enter()
+            .append("path")
+            .attr("class","country")
+            .attr('d', geoPath);
+
+        svg.selectAll("circle.city")
+                .data(map.places)
+                .enter()
+                .append("circle")
+                .attr("class", "city")
+                .attr("r", .5)
+                .attr("transform", d => `translate(${projection(d.coords)})`);
+
+    }
+</script>
+
+</body>
+</html>

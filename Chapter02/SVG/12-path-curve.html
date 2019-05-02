@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG cubic Bezier curve</h2>
+<svg width="600" height="300">
+    <path d="M100,150 C100,50 250,50 250,150
+             S400,250 400,150"
+          fill="white"
+          stroke="red"
+          stroke-width="4"/>
+
+    <circle cx="100" cy="150" r="4" stroke-width="2" stroke="gray" fill="black" />
+    <circle cx="100" cy="50"  r="4" stroke-width="2" stroke="gray" fill="green" />
+    <circle cx="250" cy="50"  r="4" stroke-width="2" stroke="gray" fill="green" />
+    <circle cx="250" cy="150" r="4" stroke-width="2" stroke="gray" fill="blue" />
+    <circle cx="400" cy="250" r="4" stroke-width="2" stroke="gray" fill="green" />
+    <circle cx="400" cy="150" r="4" stroke-width="2" stroke="gray" fill="orange" />
+
+    <line x1="100" y1="150" x2="100" y2="50"
+          stroke-dasharray="5 5" stroke-width="1" stroke="gray" />
+    <line x1="250" y1="150" x2="250" y2="50"
+          stroke-dasharray="5 5" stroke-width="1" stroke="gray" />
+    <line x1="400" y1="150" x2="400" y2="250"
+          stroke-dasharray="5 5" stroke-width="1" stroke="gray" />
+</svg>
+</body>
+</html>

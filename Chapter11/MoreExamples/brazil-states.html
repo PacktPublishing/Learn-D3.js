@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .country {
+            fill: gray;
+            stroke: white;
+            stroke-width: .5;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "estados_br.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + FILE)
+            .then(function(shapes) {
+                console.log(shapes); // GeoJSON data
+                map.features = shapes.features;
+
+                projection.fitSize([width, height], shapes);
+
+                draw();
+            });
+
+    function draw() {
+        svg.selectAll("path.country")
+            .data(map.features)
+            .enter()
+            .append("path")
+            .attr("class","country")
+            .attr('d', geoPath)
+    }
+</script>
+
+</body>
+</html>

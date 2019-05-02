@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+<svg id="chart" width="600" height="200"></svg>
+<script>
+    const array = [100, 200, 300, 350, 375, 400, 500];
+
+    d3.select("#chart")
+            .selectAll("circle")
+            .data(array)
+            .enter()
+            .append("circle")
+            .attr("r", "10")
+            .attr("cy", 100)
+            .attr("cx", d => d)
+
+    setTimeout(function() {
+        d3.select("#chart").selectAll("circle")
+          .data([50, 75, 125, 225, 325, 425, 450])
+          .transition().duration(1000)
+            .attr("r", 5)
+            .attr("cx", d => d)
+            .style("fill", "red")
+    }, 2000)
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            border: solid 1px black;
+            padding: 2px;
+        }
+        thead {
+            font-weight: bold
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead><tr><td>Format</td><td>Number</td><td>Result</td></tr></thead>
+    <tbody></tbody>
+</table>
+<script>
+    const height=500, width=700;
+    const formats = [
+        ".2%",
+        ".0%",
+        "$,.2f",
+        "$,.3r",
+        "$,.2d",
+        ".4e",
+        ",.3s",
+        ",.3s",
+            "#x",
+            "#>12",
+            "$<12",
+            "*^12",
+            "#016b",
+            "d",
+            "("
+    ];
+    const number = [
+        0.23478,
+        0.23478,
+        123456789.9876,
+        123456789.9876,
+        123456789.9876,
+        123456789.9876,
+        123456789.9876,
+        0.0000045367,
+        65432,
+        123456,
+        123456,
+        123456,
+        56,
+        123.000100,
+        -123456
+    ];
+
+    formats.forEach(function(d, i) {
+        const format = d3.format(d);
+        const tr = d3.select("tbody").append("tr")
+        tr.append("td").text(d)
+        tr.append("td").text(number[i])
+        tr.append("td").text(format(number[i]))
+    });
+
+</script>
+</body>
+</html>

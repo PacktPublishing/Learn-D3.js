@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: monospace;
+            font-size: 10pt;
+        }
+        svg {
+            background-color: rgba(0,255,0,0.1);
+            border: solid 3px green;
+        }
+        rect.red {
+            stroke: red;
+            fill: rgba(255,0,0,0.1);
+            stroke-width: 3;
+        }
+        rect.blue {
+            stroke: blue;
+            fill: rgba(0,0,255,0.2);
+            stroke-width: 1;
+        }
+        .svg {fill: green}
+        .g {fill: red}
+    </style>
+</head>
+<body>
+<h3>Open JavaScript console for results</h3>
+<svg style="position:absolute; left:100px; top:100px"
+     height="500" width="800">
+    <g transform="translate(100,100)">
+        <rect class="red"  width="600" height="300"/>
+        <rect class="blue" width="400" height="100" x="100" y="100"/>
+    </g>
+</svg>
+<script>
+    const win = d3.select(window).on("click", clicked);
+    const svg = d3.select("svg").on("click", clicked);
+    const g = svg.select("g").on("click", clicked);
+    const rect1 = g.select(".red"); // same space as <g>
+    const rect2 = g.select(".blue").on("click", clicked);
+
+
+    const fmt = d3.format(",d");
+
+    function clicked() {
+        d3.event.stopPropagation();
+
+        let source = this;
+        if(this == window) {
+            source = document.documentElement;
+        }
+
+        console.log("Handler", source);
+        console.log("Target", d3.event.target)
+        console.log("d3.event", [d3.event.x, d3.event.y])
+
+        console.log("d3.mouse of this", d3.mouse(source))
+        console.log("d3.mouse of blue rect", d3.mouse(rect2.node()))
+        console.log("d3.mouse of red rect", d3.mouse(rect1.node()))
+        console.log("d3.mouse of svg", d3.mouse(svg.node()))
+        console.log("d3.mouse of root", d3.mouse(document.documentElement))
+
+        const rx = d3.event.x, ry = d3.event.y;
+        const sx = d3.mouse(svg.node())[0], sy = d3.mouse(svg.node())[1];
+        const gx = d3.mouse(rect1.node())[0], gy = d3.mouse(rect1.node())[1];
+        const tx = d3.mouse(source)[0], ty = d3.mouse(source)[1];
+
+        // local coordinates in group context
+        const local = g.append("g").attr("class","this")
+                .attr("transform", `translate(${[gx,gy]})`);
+
+        local.append("circle").attr("r", 5);
+        local.append("text").attr("x", 12).attr("y", 4)
+                .text("CORRECT: d3.mouse(this) in local context:")
+        local.append("text").attr("x", 12).attr("y", 19)
+                .text(`- d3.event: (${[rx, ry]})`)
+        local.append("text").attr("x", 12).attr("y", 34)
+                .text(`- d3.mouse(svg): (${[fmt(sx), fmt(sy)]})`)
+        local.append("text").attr("x", 12).attr("y", 49)
+                .text(`- d3.mouse(g): (${[fmt(gx), fmt(gy)]})`)
+        local.append("text").attr("x", 12).attr("y", 64)
+                .text(`- d3.mouse(this): (${[fmt(tx), fmt(ty)]})`)
+
+        // root coordinates in svg context
+        const root = svg.append("g").attr("class","svg")
+                .attr("transform", `translate(${[rx,ry]})`);
+        root.append("circle").attr("r", 5);
+        root.append("text").attr("x", 12).attr("y",4)
+                .text("WRONG: d3.event coords in <svg> context")
+
+        // root coordinates in group context
+        const svgp = g.append("g").attr("class","g")
+                .attr("transform", `translate(${[rx,ry]})`);
+        svgp.append("circle").attr("r", 5);
+        svgp.append("text").attr("x", 12).attr("y",4)
+                .text("WRONG: d3.event coords in <g> context")
+    }
+
+</script>
+
+</body>
+</html>

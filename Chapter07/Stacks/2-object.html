@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<p>See results in JavaScript console</p>
+<script>
+    const data = [
+        {name: "Dataset 1", a: 190, b: 90,  c: 150},
+        {name: "Dataset 2", a: 330, b: 160, c: 275},
+        {name: "Dataset 3", a: 390, b: 207, c: 310}
+    ];
+
+    const stack = d3.stack().keys(['a', 'b', 'c']);
+    const stackedData = stack(data);
+    console.log(JSON.stringify(stackedData));
+
+    /* Result
+     [
+     [ [0,190],  [0,330],  [0,390]   ],
+     [ [190,280],[330,490],[390,597] ],
+     [ [280,430],[490,765],[597,907] ]
+     ]
+     */
+
+</script>
+</body>
+</html>

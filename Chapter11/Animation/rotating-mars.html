@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {background-color:black;}
+        svg, canvas {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<svg width="960" height="600"></svg>
+<canvas width="960" height="600"></canvas>
+
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "mars.topojson";
+    const key  = "mars";
+
+    const svg = d3.select("svg")
+            .attr("width", width).attr("height", height);
+    const defs = svg.append("defs");
+    defs.append("filter")
+            .attr("id","blur")
+            .append("feGaussianBlur")
+            .attr("in", "SourceGraphic")
+            .attr("stdDeviation", 5);
+
+    const context = d3.select("canvas").node().getContext("2d");
+    const geoPath = d3.geoPath().context(context);
+    context.lineWidth = .25;
+
+
+    // choose a projection
+    const projection = d3.geoOrthographic()
+            .rotate([0,-30,0]);
+
+    // create a path generator function for the projection
+    geoPath.projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+                map.merged = topojson.merge(topology, map.geometries)
+                map.mesh = topojson.mesh(topology, map.topology)
+
+
+                let i = 0;
+                const animate = () => {
+                    requestAnimationFrame(animate);
+
+                    if(i == 180) i = -180;
+                    geoPath.projection().rotate([++i,-30,0])
+
+                    context.clearRect(0, 0, width, height);
+                    context.beginPath();
+                    context.globalAlpha = .5
+                    context.fillStyle = '#975414';
+                    geoPath(map.merged);
+                    context.fill();
+                    context.globalAlpha = 1
+                    context.strokeStyle = 'orange';
+                    geoPath(map.mesh);
+                    context.stroke()
+
+                }
+                requestAnimationFrame(animate);
+
+    });
+
+</script>
+
+</body>
+</html>

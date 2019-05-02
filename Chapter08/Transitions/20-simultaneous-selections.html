@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill: red;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    // 6) Simultaneous transitions
+    // Transitions are called on different selections,
+    // they run simultaneously even if they have the same names
+
+    const svg = d3.select("body").append("svg").attr("width", 800).attr("height", 600);
+    const g1 = svg.append("g").attr("class", "g1")
+    const g2 = g1.append("g").attr("class", "g2")
+    g2.append("circle")
+            .attr("r", 30) // initial value
+            .attr("transform", `translate(${[400,300]})`);
+    d3.select(".g1 circle").transition("a").delay(500).duration(2000)
+            .attr("r", 100);
+    d3.select(".g2 circle").transition("b").delay(500).duration(2000)
+            .attr("transform", `translate(${[600,500]})`);
+    d3.select("circle").transition("c").delay(500).duration(2000)
+            .style("fill", "yellow");
+
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pie</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+        .slice {
+            fill-opacity: .5;
+        }
+        svg, canvas {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+    const canvas = d3.select("body").append("canvas").attr("height",height).attr("width",width);
+    const ctx = canvas.node().getContext("2d");
+
+    const data = [
+        {"country": "Mexico", "population": 101720},
+        {"country": "Canada", "population": 30736},
+        {"country": "United States", "population": 281983},
+
+    ];
+
+    const pie = d3.pie()
+            .value(d => d.population)
+            .sort((a,b) => d3.ascending(a.population, b.population))
+            .startAngle(Math.PI/2)
+            .endAngle(2.5 * Math.PI);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const arc = d3.arc()
+                  .innerRadius(25)
+                  .outerRadius(100)
+                  .padAngle(4)
+                  .padRadius(4);
+
+    const styles = {
+        translate: [120,120],
+        opacity: 0.5,
+        font: "12pt 'Yanone Kaffeesatz', sans-serif"
+    }
+
+    const useCanvas = true;
+
+    if(useCanvas) {
+        arc.context(ctx);
+        ctx.translate(styles.translate[0], styles.translate[1]);
+        pie(data).forEach(function(d,i) {
+            ctx.fillStyle = colorScale(i);
+            ctx.globalAlpha = styles.opacity;
+            ctx.beginPath();
+            arc(d);
+            ctx.fill();
+
+            ctx.font = styles.font;
+            ctx.fillStyle = "black";
+            ctx.textAlign = "center";
+            ctx.globalAlpha = 1;
+            ctx.fillText(d.data.country, arc.centroid(d)[0] + 5, arc.centroid(d)[1] + 5);
+        });
+    } else {
+        const g = svg.selectAll("g")
+            .data( pie(data) ).join("g")
+            .attr("transform", `translate(${styles.translate})`);
+
+        g.append("path").attr("class", "slice")
+            .attr("d", arc)
+            .style("fill", (d,i) => colorScale(i));
+
+        g.append('text')
+            .attr("x",(d,i) => arc.centroid(d)[0] + 5)
+            .attr("y",(d,i) => arc.centroid(d)[1] + 5)
+            .style("text-anchor", "middle")
+            .text(d => d.data.country);
+    }
+
+</script>
+</body>
+</html>

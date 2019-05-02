@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 18px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .2;
+        }
+        .tooltip {
+            pointer-events: none;
+        }
+        .tooltip text {
+            text-anchor: start;
+            alignment-baseline: baseline;
+            fill: black;
+        }
+        text tspan {
+            font-size: 80%
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const width = 800;
+    const height = 800;
+    const margin = 120;
+
+    const edges = [
+        {source: 0, target: 4, value: 3},
+        {source: 4, target: 8, value: 3},
+        {source: 8, target: 14, value: 3},
+        {source: 14, target: 20, value: 3},
+        {source: 0, target: 1, value: 1},
+        {source: 1, target: 2, value: 1},
+        {source: 2, target: 3, value: 1},
+        {source: 3, target: 4, value: 1},
+        {source: 4, target: 5, value: 1},
+        {source: 5, target: 6, value: 1},
+        {source: 6, target: 7, value: 1},
+        {source: 7, target: 8, value: 1},
+        {source: 8, target: 9, value: 1},
+        {source: 9, target: 10, value: 1},
+        {source: 10, target: 11, value: 1},
+        {source: 11, target: 12, value: 1},
+        {source: 12, target: 13, value: 1},
+        {source: 13, target: 14, value: 1},
+        {source: 14, target: 15, value: 1},
+        {source: 15, target: 16, value: 1},
+        {source: 16, target: 17, value: 1},
+        {source: 17, target: 18, value: 1},
+        {source: 18, target: 19, value: 1},
+        {source: 19, target: 20, value: 1},
+        {source: 20, target: 21, value: 1},
+        {source: 21, target: 22, value: 1},
+        {source: 22, target: 23, value: 1},
+        {source: 23, target: 24, value: 1},
+        {source: 24, target: 25, value: 1},
+        {source: 16, target: 15, value: 2},
+        {source: 17, target: 16, value: 2},
+        {source: 18, target: 17, value: 2},
+        {source: 19, target: 18, value: 2}
+    ];
+
+    const nodes = [
+        {node: 'A', value: 79},
+        {node: 'B', value: 15},
+        {node: 'C', value: 24},
+        {node: 'D', value: 44},
+        {node: 'E', value: 125},
+        {node: 'F', value: 22},
+        {node: 'G', value: 20},
+        {node: 'H', value: 64},
+        {node: 'I', value: 69},
+        {node: 'J', value: 2},
+        {node: 'K', value: 8},
+        {node: 'L', value: 40},
+        {node: 'M', value: 26},
+        {node: 'N', value: 69},
+        {node: 'O', value: 77},
+        {node: 'P', value: 17},
+        {node: 'Q', value: 1},
+        {node: 'R', value: 58},
+        {node: 'S', value: 63},
+        {node: 'T', value: 91},
+        {node: 'U', value: 29},
+        {node: 'V', value: 10},
+        {node: 'W', value: 23},
+        {node: 'X', value: 2},
+        {node: 'Y', value: 20},
+        {node: 'Z', value: 1},
+    ];
+
+    const matrix = dvj.linksToMatrix(nodes.map(n => n.node), edges);
+
+    console.log(matrix);
+
+    const chord = d3.chord()
+            .padAngle(.05)
+            .sortGroups((a,b) => d3.descending(a,b))
+            .sortSubgroups((a,b) => d3.descending(a,b));
+    const chords = chord(matrix);
+
+    const radius = height/2 - margin/2;
+
+    const ribbon = d3.ribbon().radius(radius);
+
+
+    const color = d3.scaleSequential(d3.interpolateRainbow).domain([0,matrix.length]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2+margin/4, height/2+margin/4]})`);
+
+    chart.selectAll('path.ribbon')
+            .data(chords)
+            .enter().append("path").attr("class",'ribbon')
+            .attr("d", ribbon)
+            .style("opacity", .5)
+            .style("fill", d => color(d.target.index))
+            .on("mouseover", highlightRibbon)
+            .on("mouseout", d => {
+                d3.selectAll("path").classed('faded', false);
+                d3.select('.tooltip').transition().style("opacity", 0);
+            });
+
+    const arc = d3.arc().innerRadius(radius+2).outerRadius(radius+30);
+
+    chart.selectAll('path.arc')
+            .data(chords.groups)
+            .enter().append("path").attr("class",'arc')
+            .attr("d", arc)
+            .style("fill", d => color(d.index))
+            .on("mouseover", highlightNode)
+            .on("mouseout", d => d3.selectAll("path").classed('faded', false));
+
+
+    chart.selectAll("text")
+            .data(chords.groups)
+            .enter().append("text")
+            .attr("x", d => arc.centroid(d)[0])
+            .attr("y", d => arc.centroid(d)[1])
+            .text(d => nodes[d.index].node)
+            .style("fill", d => d.value == 0 ? 'black' : contrast(color(d.index)))
+            .attr("transform",d => `rotate(${(arc.endAngle()(d) + arc.startAngle()(d))*90/Math.PI},${arc.centroid(d)})`);
+
+    const tooltip = chart.append("g")
+                         .attr("class", 'tooltip hidden')
+                         .attr("transform", `translate(${[-75, -50]})`)
+                         .style("opacity", 0)
+    tooltip.append("rect")
+            .attr("width",150)
+            .attr("height",100)
+            .attr("rx", 10)
+            .attr("ry", 10)
+            .style("fill", 'white')
+            .style("opacity", .8)
+            .style("stroke",'lightgray');
+
+    const textFrom = tooltip.append("text").attr('id', 'from')
+           .attr("x", 20)
+           .attr("y", 25)
+           .text('From: ').each(function(d) {
+                d3.select(this).append('tspan').text('')
+                d3.select(this).append('tspan').attr("x",30).attr('dy', 15).text('');
+            });
+
+    const textTo = tooltip.append("text").attr('id', 'to')
+            .attr("x", 20)
+            .attr("y", 75)
+            .text('To: ').each(function(d) {
+                d3.select(this).append('tspan').text('')
+                d3.select(this).append('tspan').attr("x",30).attr('dy', 15).text('');
+            });
+
+    function highlightNode(node) {
+        d3.selectAll("path.arc").classed('faded', d => !(d.index === node.index));
+        d3.selectAll("path.ribbon").classed('faded', edge => !(edge.source.index === node.index));
+    }
+    function highlightRibbon(edge) {
+        d3.selectAll("path.arc").classed('faded', node => !(node.index === edge.source.index || node.index === edge.target.index))
+        d3.selectAll("path.ribbon").classed('faded', d => !(d === edge))
+        d3.select('.tooltip').transition().style("opacity", 1);
+        d3.select('#from tspan:nth-child(1)').text(headers[edge.source.index]);
+        d3.select('#to tspan:nth-child(1)').text(headers[edge.target.index]);
+        d3.select('#from tspan:nth-child(2)').text(edge.source.value);
+        d3.select('#to tspan:nth-child(2)').text(edge.target.value);
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 130 ? 'black' : 'white';
+    }
+</script>
+
+</body>
+</html>

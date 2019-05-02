@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 7pt;
+        }
+        .legend text {
+            alignment-baseline: hanging;
+        }
+        .domain {
+            opacity: 0;
+        }
+        .y-axis line, .x-axis line {
+            stroke-width: .25;
+            stroke: rgba(114, 138, 74, 0.5);
+        }
+        .label {
+            font-size: 9pt;
+            text-anchor: middle;
+        }
+        .tooltip {
+            pointer-events: none;
+        }
+        .tooltip rect {
+            fill: #eee;
+            fill-opacity: 0.7;
+            stroke: gray;
+            stroke-opacity: .5;
+        }
+        .show {
+            stroke: black;
+            stroke-width: 4;
+        }
+        .fade {
+            opacity: .5;
+        }
+    </style>
+</head>
+<body>
+<svg width="100%" height="100%" viewBox="0 0 500 300"/>
+<script>
+    const w = 500, h = 300, marginH = 40, marginW = 50;
+
+    const scaleX = d3.scaleLinear().range([marginW, w-marginW]);
+    const scaleY = d3.scaleLog().range([h-marginH, marginH]);
+    const color  = d3.scaleOrdinal(d3.schemeDark2);
+
+    const axisX = d3.axisBottom(scaleX)
+            .tickSize(h - marginH*2 + 10)
+            .tickPadding(2);
+    const axisY = d3.axisLeft(scaleY)
+            .tickSize(w - marginW*2 + 10)
+            .tickPadding(2)
+            .ticks(8, ',');
+
+    const format = d3.format("$,.0f");
+
+    const data = {
+        continents: new Set()
+    }
+
+    d3.csv("../Data/un_regions_gdp.csv", function(row) {
+        if(row.HDI_2017 >0 && row.GDP_2017 >0) {
+            data.continents.add(row.Continent);
+            return {
+                name: row.Country,
+                code: row.Code,
+                continent: row.Continent,
+                population: +row.Pop_2016,
+                hdi: +row.HDI_2017,
+                gdp: +row.GDP_2017
+            }
+        }
+    })
+    .then(function(dataset) {
+        data.continents = [...data.continents].sort((a,b,) => d3.ascending(a,b));
+        data.countries = dataset;
+        scaleY.domain(d3.extent(dataset, d => d.gdp));
+        scaleX.domain(d3.extent(dataset, d => d.hdi));
+
+        drawAxes();
+        draw();
+        drawTooltips();
+    });
+
+    function drawTooltips() {
+        const tooltip = d3.select("svg")
+                .append("g")
+                .attr("class", "tooltip")
+                .attr("opacity", 0);
+
+        tooltip.append("rect")
+                .attr("width", 80)
+                .attr("height", 45)
+                .attr("rx", 3).attr("ry", 3)
+                .attr("x", -3).attr("y", -10);
+        tooltip.append("text").attr("class", "name");
+        tooltip.append("text").attr("class", "hdi").attr("y", 15);
+        tooltip.append("text").attr("class", "gdp").attr("y", 30);
+    }
+
+    function drawAxes() {
+        const xG = d3.select("svg").append("g").attr("class", "x-axis")
+                .attr("transform", `translate(${[0,marginH]})`)
+                .call(axisX);
+
+        const yG = d3.select("svg").append("g").attr("class", "y-axis")
+                .attr("transform", `translate(${[w-marginW,0]})`)
+                .call(axisY);
+
+        d3.select("svg").append("text").attr("class","label")
+                .text("Human Development Index (HDI)")
+                .attr("transform", `translate(${[w/2,h-3]})`)
+        d3.select("svg").append("text").attr("class","label")
+                .text("Annual GDP per capita (USD)")
+                .attr("transform", `translate(${[3,h/2]}) rotate(90)`)
+
+    }
+
+    function draw() {
+        d3.select("svg").selectAll("circle.dot")
+                .data(data.countries)
+                .join("circle").attr("class", "dot")
+                .attr("r", 1.5)
+                .attr("cx", d => scaleX(d.hdi))
+                .attr("cy", d => scaleY(d.gdp))
+                .style("fill", d => color(d.continent))
+                .on("mouseenter", showDetails)
+                .on("mouseleave", clearDetails);
+
+        const legend = d3.select("svg")
+                .append("g").attr("class", "legend")
+                .attr("transform", `translate(${[85, 50]})`);
+
+        legend.selectAll("g.item")
+                .data(data.continents)
+                .join("g").attr("class", "item")
+                .on("mouseenter", showContinents)
+                .on("mouseleave", clearContinents)
+                .each(function(d, i) {
+                    d3.select(this)
+                            .append("rect")
+                            .attr("y", i * 10)
+                            .attr("height", 8)
+                            .attr("width", 20)
+                            .style("fill", color(d));
+
+                    d3.select(this)
+                            .append("text")
+                            .attr("y", i * 10)
+                            .attr("x", 24)
+                            .text(d);
+                });
+
+     }
+
+    function showContinents(d) {
+        d3.selectAll(".item").classed("fade", k => k != d)
+        d3.selectAll(".dot").classed("show", k => k.continent == d);
+    }
+
+    function clearContinents() {
+        d3.selectAll(".item").classed("fade", false)
+        d3.selectAll(".dot").classed("show", false);
+    }
+
+    function showDetails(d) {
+        d3.select(this).attr("r", 4);
+        d3.select(".tooltip").attr("opacity", 1)
+                .attr("transform", `translate(${[10 + scaleX(d.hdi), scaleY(d.gdp) - 12]})`)
+
+        const text1 = d3.select(".tooltip .name").text(d.name);
+        const text2 = d3.select(".tooltip .gdp").text("GDP: " + format(d.gdp));
+        const text3 = d3.select(".tooltip .hdi").text("HDI: " + d.hdi);
+
+        const boxWidth = 6 + d3.max([text1.node().getComputedTextLength(),
+                                     text2.node().getComputedTextLength(),
+                                     text3.node().getComputedTextLength()]);
+
+        d3.select(".tooltip rect").attr("width", boxWidth);
+    }
+
+    function clearDetails(d) {
+        d3.select(this).attr("r", 1.5);
+        d3.select(".tooltip").attr("opacity", 0)
+    }
+</script>
+</body>
+</html>

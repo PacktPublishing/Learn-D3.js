@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG cubic Bezier curve using D3</h2>
+<script>
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 300);
+
+    svg.append("path")
+            .attr("d", "M100,150 C100,50 250,50 250,150 S400,250 400,150")
+            .attr("fill", "white")
+            .attr("stroke", "red")
+            .attr("stroke-width", 4)
+
+    const data = [
+        [100,150,"black"],
+        [100,50,"green"],
+        [250,50,"green"],
+        [250,150,"blue"],
+        [400,250,"green"],
+        [400,150,"orange"]  ];
+
+    data.forEach(function(d) {
+        svg.append("circle")
+                .attr("cx", d[0])
+                .attr("cy", d[1])
+                .attr("r", 4)
+                .attr("stroke-width", 2)
+                .attr("stroke", "gray")
+                .attr("fill", d[2])
+    });
+
+    const data2 = [[100,150,100,50],[250,150,250,50],[400,150,400,250]];
+    data2.forEach(function(d) {
+        svg.append("line")
+            .attr("x1", d[0])
+            .attr("y1", d[1])
+            .attr("x2", d[2])
+            .attr("y2", d[3])
+            .attr("stroke", "gray")
+            .attr("stroke-dasharray", "5 5")
+            .attr("stroke-width", 1)
+    })
+
+</script>
+</body>
+</html>

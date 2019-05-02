@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+    text {
+        font-size: 18pt
+    }
+</style>
+<body>
+<h2>SVG arcs</h2>
+<svg width="600" height="300" viewBox="0 0 562 150">
+    <g transform="translate(300,180)">
+        <path d="M-100,-100 L0,-100 A100,100 0 0,1 -100,0 L-100,-100 z"
+              stroke="red" stroke-opacity=".5" stroke-width="4" fill-opacity=".2"/>
+    </g>
+
+    <g transform="translate(290,170)">
+        <path d="M-100,-100 L0,-100 A100,100 0 1,0 -100,0 L-100,-100 z"
+              stroke="red" stroke-opacity=".5" stroke-width="4" fill-opacity=".2"/>
+    </g>
+</svg>
+</body>
+</html>

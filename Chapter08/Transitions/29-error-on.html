@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        rect {
+            fill: orange;
+        }
+        circle {
+            fill: green;
+        }
+    </style>
+</head>
+<body>
+<svg height="500" width="800">
+    <rect width="200" height="200" x="100" y="100"/>
+    <circle r="100" cy="200" cx="500"/>
+</svg>
+<script>
+
+// OK: selection
+ d3.select("rect")              // Selection
+         .style("fill","blue")  //   applied to selection
+         .on("click", () => console.log(d3.event)); // MouseEvent OK
+
+// WRONG: no d3.event in transition
+ d3.select("rect")              // Selection
+         .style("fill","blue")  //   applied to selection
+         .transition()          // Transition
+         .style("fill","red")   //   applied to transition
+         .on("start", () => console.log(d3.event)); // d3.event is nulld3.select("rect")               // Selection
+.attr("fill","blue")    //   applied to selection
+        .transition()           // Transition
+        .attr("fill","red")     //   applied to transition
+        .selection()            // Selection
+        .on("click", () => console.log(d3.event)); // MouseEvent
+
+// WRONG: no 'click' event in transition
+ d3.select("rect")               // Selection
+         .style("fill","blue")   //   applied to selection
+         .transition()           // Transition
+         .style("fill","red")    //   applied to transition
+         .on("click", () => {}); // Error: no 'click' event in transition
+
+// OK: selection
+
+
+
+</script>
+</body>
+</html>

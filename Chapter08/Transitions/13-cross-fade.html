@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        h1 {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            font-size: 200px;
+        }
+    </style>
+</head>
+<body>
+<h1>T</h1>
+<script>
+
+    d3.select("h1")
+        .text("Before")               // previous text
+        .style("color","navy")        // color = navy, opacity = 1
+        .transition().duration(3000)  // transition 1,5s
+            .style("color", "brown")  // color = brown, opacity = 0
+            .style("opacity", 0)
+            .remove()                 // remove
+    d3.select("body")
+        .append("h1")                 // append
+        .style("color","navy")        // color = navy, opacity = 1
+        .style("opacity", 0)
+        .text("After")                // final text
+        .transition().duration(3000)
+            .style("opacity", 1)      // color = brown, opacity = 1
+            .style("color","brown")
+
+
+</script>
+</body>
+</html>

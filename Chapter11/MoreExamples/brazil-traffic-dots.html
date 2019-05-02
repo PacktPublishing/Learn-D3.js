@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .country {
+            fill: #ddd;
+            stroke: black;
+            stroke-width: .05;
+        }
+        .city {
+            fill: red;
+            fill-opacity: .5;
+            stroke: black
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "estados_br.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    const colorScale = d3.scaleSqrt().range(["green", "red"]);
+    const areaScale = d3.scaleSqrt().range([0,15]);
+
+    Promise.all([
+        d3.json('../Data/' + FILE),
+        d3.csv('../Data/mortes_acidentes_transito_2016.csv', function(row) {
+            return {
+                cod_ibge: +row.cod_ibge,
+                deaths: +row.obitos
+            }
+        }),
+        d3.csv('../Data/municipios.csv', function(row) {
+            return {
+                cod_ibge: +row.codigo_ibge.substring(0,6),
+                coords: [+row.longitude, +row.latitude]
+            }
+        }),
+    ]).then(function([shapes, thematic, places]) {
+        console.log(shapes);   // shape data
+        console.log(thematic); // thematic data
+        console.log(places); // location data
+
+        // save in a global context
+        map.features   = shapes.features;
+        map.places     = places;
+
+        // add data to properties
+        places.forEach(function(p) {
+            const entry = thematic.filter(t => t.cod_ibge == p.cod_ibge)[0];
+            if(entry) {
+                p.deaths = entry.deaths;
+            } else {
+                p.deaths = 0;
+            }
+        })
+
+        projection.fitSize([width, height], shapes);
+
+        // configure the scale
+        colorScale.domain([0, d3.max(map.places, d => d.deaths)]);
+        areaScale.domain([0, d3.max(map.places, d => d.deaths)])
+        draw();
+    });
+
+    function draw() {
+        svg.selectAll("path.country")
+            .data(map.features)
+            .enter()
+            .append("path")
+            .attr("class","country")
+            .attr('d', geoPath);
+
+        svg.selectAll("circle.city")
+                .data(map.places)
+                .enter()
+                .append("circle")
+                .attr("class", "city")
+                .attr("r", d => areaScale(d.deaths))
+                .attr("transform", d => `translate(${projection(d.coords)})`)
+                .style("fill-opacity", d => areaScale(d.deaths) <= 1 ? 1 : .25)
+                .style("stroke-width", d => areaScale(d.deaths) > 1 ? .25 : 0)
+                .style("fill", d => colorScale(d.deaths));
+
+    }
+</script>
+
+</body>
+</html>

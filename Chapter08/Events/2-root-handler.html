@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            background-color: rgba(0,255,0,0.1);
+            border: solid 3px green;
+        }
+        rect.red {
+            stroke: red;
+            fill: rgba(255,0,0,0.1);
+            stroke-width: 3;
+        }
+        rect.blue {
+            stroke: blue;
+            fill: rgba(0,0,255,0.1);
+            stroke-width: 3;
+        }
+    </style>
+</head>
+<body>
+<h3>Open JavaScript console for results</h3>
+<svg style="position:absolute; left:100px; top:100px"
+     height="500" width="800">
+    <g transform="translate(100,400)">
+        <rect class="red"  width="600" height="300" y="-300"/>
+        <rect class="blue" width="400" height="100" x="100" y="-200"/>
+    </g>
+</svg>
+<script>
+    window.addEventListener('click', function() {
+        event.stopPropagation();
+        console.log("Handler", this);        // which element handled event
+        console.log("Target", event.target)  // which element caught event
+        console.log("Coords", [event.clientX, event.clientY])
+    });
+
+</script>
+
+</body>
+</html>

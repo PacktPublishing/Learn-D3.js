@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/un_regions.js"></script>
+    <style>
+        circle {
+            fill: red;
+        }
+
+        path {
+            fill: none;
+            stroke: gray;
+            stroke-width: .5px;
+        }
+        rect {
+            stroke: blue;
+            fill: none;
+        }
+        text {
+            font-family: sans-serif;
+        }
+        .continent {
+            font-size: 9px;
+            font-weight: bold;
+            fill: blue;
+            transform: rotate(180deg) translate(3px,3px);
+        }
+        .world {
+            font-size: 12px;
+            font-weight: bold;
+            fill: red;
+            transform: rotate(180deg) translate(3px,3px);
+        }
+        .country {
+            font-size: 8px;
+        }
+
+    </style>
+</head>
+<body>
+<script>
+    // this can be tree or cluster
+
+    const height = 1000;
+    const width = 1000;
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        const nested = d3.nest()
+                        .key(d => d.Supercontinent)
+                        .key(d => d.Continent)
+                        .key(d => d.UN_Region)
+                        .key(d => d.Country)
+                        .rollup(d => d.map(c => ({area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+                        .entries(result);
+
+        const hierData = d3.hierarchy(makeRoot(nested.filter(d => d.key == 'Eurasia')));
+
+        hierData.sort((a,b) => b.parent.id - a.parent.id);
+
+        console.log("Sorted", hierData)
+
+        // can be tree or cluster if depth is same
+        const tree = d3.tree()
+                .size([360,(height/2)-150])
+                .separation((a,b) => (a.parent == b.parent ? 1 : 2) * a.depth);
+        const treeData = tree(hierData.sort((a,b) => b.height - a.height));
+
+        console.log("Tree", treeData);
+
+        draw(treeData);
+
+    });
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", d => `translate(${[width/2,height/2]})`);
+
+        drawLinks(chart.append("g").attr("class", "links"), data.links());
+        drawNodes(chart.append("g").attr("class", "nodes"), data.descendants());
+
+    }
+
+    function drawNodes(g, data) {
+        const node = g.selectAll("g.node")
+            .data(data)
+            .enter()
+            .append('g')
+            .attr("class", "node")
+            .attr("transform", d => "rotate("+d.x+") translate("+d.y+")");
+
+
+        node.append("circle")
+                .attr("r", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return 2;
+                    } else if (d.depth == 0){
+                        return 4;
+                    } else {
+                        return 1;
+                    }
+                })
+
+        node.append("text")
+                .attr('x', 5)
+                .attr('y', 0)
+                .attr("class", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return "continent";
+                    } else if (d.depth == 0){
+                        return "world";
+                    } else {
+                        return "country";
+                    }
+                })
+                .text(d => d.data.id);
+    }
+
+    const link = d3.linkRadial()
+            .angle(function(d) { return (d.x * Math.PI / 180) + Math.PI/2; })
+            .radius(function(d) { return d.y; });
+
+    function drawLinks(g, data) {
+        g.selectAll("path")
+                .data(data)
+                .enter()
+                .append('path')
+                .attr("d", link);
+    }
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg, canvas {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+    const margin = 50;
+
+    const data = [
+      [[0,0],[1,.2],[2,.4],[3,.15],[4,.05],[5,.35],[6,.5],[7,.1],[8,.25]],
+      [[0,0],[1,.077],[2,.13],[3,.27],[4,.33],[5,.29],[6,.09],[7,.03],[8,.11]],
+      [[0,0],[1,.3],[2,.5],[3,.56],[4,.43],[5,.33],[6,.21],[7,.11],[8,.02]],
+    ];
+
+    const scaleX = d3.scaleLinear()
+            .domain(d3.extent(d3.merge(data), d => d[0]))
+            .range([margin,width - margin]);
+
+    const scaleY = d3.scaleLinear()
+            .domain(d3.extent(d3.merge(data), d => d[1]))
+            .range([height - margin,margin])
+            .nice();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain([0,data.length]);
+
+    const xAxis = d3.axisBottom(scaleX);
+    const yAxis = d3.axisLeft(scaleY);
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+    const canvas = d3.select("body").append("canvas").attr("height",height).attr("width",width);
+    const ctx = canvas.node().getContext("2d");
+
+    const line = d3.line()
+                    .x(d => scaleX(d[0]))
+                    .y(d => scaleY(d[1]))
+                    .context(ctx);
+
+    const axes = svg.append('g').attr("class", "axes");
+
+    axes.append('g').call(xAxis)
+            .attr("transform", "translate("+[0, height - margin]+")");
+    axes.append('g').call(yAxis)
+            .attr("transform", "translate("+[margin, 0]+")");
+
+    data.forEach(dataset => {
+        ctx.fillStyle = "transparent";
+        ctx.strokeStyle = colorScale(dataset);
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        line(dataset);
+        ctx.fill();
+        ctx.stroke();
+    });
+
+
+</script>
+</body>
+</html>

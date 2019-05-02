@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        text.label {
+            fill: black;
+            text-anchor: start;
+            font-size: 150%;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<svg height="500" width="700"></svg>
+<script>
+    const height=500, width=700;
+    const scaleH = d3.scaleLinear().range([50,500]).domain([0,360]);
+    const scaleS = d3.scaleLinear().range([50,500]).domain([0,1])
+    const scaleL = d3.scaleLinear().range([50,500]).domain([0,1])
+
+    const axis1 = d3.axisBottom(scaleH)
+            .tickValues([0,30,60,90,120,150,180,210,240,270,300,330,360]);
+    const axis2 = d3.axisBottom(scaleS)
+            .tickValues([0,.25,.50,.75,1]);
+    const axis3 = d3.axisBottom(scaleL)
+            .tickValues([0,.25,.50,.75,1]);
+
+    const h = d3.range(0,360), s = d3.range(0,1,.002), l = d3.range(0,1,.002);
+
+    drawScale(1, scaleH, axis1, h, d => d3.hsl(d,1,.5), "H (hue), S = 1, L = 0.5");
+    drawScale(2, scaleS, axis2, s, d => d3.hsl(0,d,.5), "S (saturation), H = 0, L = 0.5");
+    drawScale(3, scaleL, axis3, l, d => d3.hsl(0,1,d), "L (lightness), H = 0, S = 1");
+
+    function drawScale(order, scale, axis, data, func, label) {
+        const g = d3.select("svg").append("g").call(axis)
+                .attr("transform",`translate(0,${50 * order})`);
+        g.selectAll("rect").data(data).enter().append("rect")
+                .attr("width",2).attr("height",20)
+                .attr("x", scale).attr("y",-20)
+                .style("fill", func) ;
+        g.append("text").attr("class", "label")
+                .attr("x", 510).attr("y",-5)
+                .text(label)
+    }
+
+</script>
+</body>
+</html>

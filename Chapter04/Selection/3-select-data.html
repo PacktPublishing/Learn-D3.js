@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<div id="words">
+    <p>One</p>
+    <p>Two</p>
+    <p>Three</p>
+</div>
+<p>Four</p>
+<p>Five</p>
+
+<script>
+    const selection = d3.select("#words")
+            .selectAll("p")
+            .filter(function(d,i,nodes) {
+                // not filtering anything, just logging
+                console.log(d, i, nodes, nodes[i], this);
+                return true;
+    });
+
+    selection.data([7,4,8])
+            .filter(function(d,i,nodes) {
+                // not filtering anything, just logging
+                console.log(d,i,nodes, nodes[i], this);
+                return true;
+    })
+    .text(function(d) {
+        return d3.select(this).text() + " " + d
+    });
+
+    d3.selectAll(":not(div) > p")
+            .filter(function(d,i,nodes) {
+                // not filtering anything, just logging
+                console.log(d,i,nodes, nodes[i], this);
+                return true;
+    });
+</script>
+</body>
+</html>

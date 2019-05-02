@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        path {
+            stroke: black;
+            fill: none;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const width = 1000, height = 800, rotateChart = -45;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[width/2 + 100,height/2 + 50]}) rotate(${rotateChart})`);
+
+    const root = d3.hierarchy(simpleHierarchy).sort((a,b) => b.height - a.height );
+
+    root.eachBefore(function(d) {
+        d.number = d.parent ? `${d.parent.number}.${d.parent.children.indexOf(d) + 1}` : 1;
+    });
+
+    const radialLink = d3.linkRadial()
+                         .angle(function(d) { return (d.x * Math.PI / 180) + Math.PI/2; })
+                         .radius(function(d) { return d.y; });
+
+    const tree = d3.tree()
+                    .nodeSize([30, 120]) // radial
+                    .separation((a,b) => (a.parent == b.parent ? 1 : 4) / (a.depth));
+    const treeData = tree(root);
+
+    console.log(treeData);
+
+    const nodes = treeData.descendants();
+    const links = treeData.links();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.height));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(links, k => k.target.height));
+
+    drawLinks();
+    drawNodes();
+    drawLabels();
+
+    function drawNodes() {
+        chart.selectAll("g")
+            .data(nodes)
+            .join("g").attr("class", "node")
+            .attr("transform", d => `rotate(${d.x}) translate(${d.y})`) // rotate and translate
+            .append("circle")
+            .attr("r", d => (d.height + 3) * 5)
+            .style("fill", d => colorScale(d.height));
+    }
+
+    // convert degrees to radians
+    function cartesian([degrees, radius]) {
+        const radians = (Math.PI/180) * degrees;
+        return [radius * Math.cos(radians), radius * Math.sin(radians)];
+    }
+
+    function drawLinks() {
+        chart.selectAll("path")
+            .data(links)
+            .join("path")
+            .attr("d", radialLink)
+            .style("stroke-width", d => (d.target.height + 1) * (d.target.height + 1))
+            .style("opacity", d => d.target.depth *.25 * .6 + .4);
+    }
+
+    function drawLabels() {
+        chart.selectAll("g.node")
+            .append("text")
+            .text(d => d.number) // number was generated using eachBefore()
+            .attr("fill", d => d.height != 0 ? 'white' : 'black') // rotate only leaves
+            .attr("transform", d => d.height == 0 ? "rotate(0) translate(20,5)" : `rotate(${-d.x - rotateChart}) translate(0,5)`)
+            .style("text-anchor", d => d.height != 0 ? "middle" : "start")
+            .style("font-size", d => 14 + (d.height*d.height));
+    }
+
+
+</script>
+</body>
+</html>

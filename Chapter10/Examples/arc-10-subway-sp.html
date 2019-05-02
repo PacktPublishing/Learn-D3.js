@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12px;
+            alignment-baseline: middle;
+            text-anchor: end;
+            fill: 'black';
+        }
+        .faded {
+            opacity: .3;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1400;
+    const height = 600;
+    const margin = 100;
+
+    const colors = ['blue', 'green', 'red', 'gold', 'purple', 'silver'];
+    const lines  = [1,2,3,4,5,15];
+    const colorScale = d3.scaleOrdinal().domain(lines).range(colors);
+
+    d3.json('../Data/metrosp.json').then(function(data) {
+
+        data.nodes = data.nodes.map(n => ({node: n.station+':'+n.line}));
+        data.links = data.links.map(n => ({source: n.source+':'+n.lines[0], target: n.target+':'+n.lines[1], lines: n.lines, value: 1}));
+
+        const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+        const arcData = arcDiagLayout(data.nodes, data.links);
+
+        console.log(arcData.nodes(), arcData.links())
+
+        draw(arcData);
+
+    });
+
+    function stationConnection(d) {
+        return 'M' + d.source.x + ',0L' + d.target.x + ',0z';
+    }
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,height - margin]})`);
+
+        const lineConnection = dvj.curve().size([width-margin, height*2]);
+
+        chart.selectAll("path")
+                .data(data.links().filter(d => d.source.x < d.target.x))
+                .enter()
+                .append("path")
+                .attr("d", d => d.lines[0] == d.lines[1] ? stationConnection(d) : lineConnection(d))
+                .style("stroke-width", d => d.lines[0] == d.lines[1] ? 2 : 5)
+                .style("stroke", 'black')
+                .style("stroke-opacity", d => d.lines[0] == d.lines[1] ? 1 : .3)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("id", d => d.node)
+                .attr("cx", d => d.x)
+                .attr("r", 5)
+                .style("fill", d => colorScale(d.node.split(':')[1]))
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle, text").classed('faded', false));;
+
+        chart.selectAll('text.location')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'location')
+                .attr("x", d => d.x - 10)
+                .attr("transform",d => `rotate(-90,${[d.x,0]})`)
+                .text(d => d.node.split(':')[0])
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle, text").classed('faded', false));
+    }
+
+    function highlight(d) {
+        d3.selectAll("path")
+                .classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle, text")
+                .classed('faded', n => !(n === d  || n.sources.filter(s => s.target === d).length > 0
+        || n.targets.filter(s => s.source === d).length > 0));
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // reference
+    const projection = d3.geoRobinson().fitExtent([[0,5],[width, height-10]], {type: "Sphere"});
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    Promise.all([
+                d3.json('../Data/' + file),
+                d3.json('../Data/airports-selected.json')
+            ])
+            .then( function([topology, airports]) {
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features
+
+                drawGraticules();
+                draw(airports);
+
+            });
+
+    function draw(airports) {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+
+        globe.append("path")
+                .style("fill", d => airports.filter(a => d3.geoContains(d, a.coordinates)).length > 0 ? 'red' : '#333')
+                .style("fill-opacity", .6)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+        svg.selectAll("g.airport")
+                .data(airports)
+                .enter()
+                .append("g")
+                .attr("class","airport")
+                .attr("transform", d => `translate(${projection(d.coordinates)})`)
+                .append("circle")
+                            .style("fill", 'yellow')
+                            .style("stroke", "black")
+                            .attr('r', 2);
+    }
+
+    const format = d3.format(',.0f')
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+        svg.append("path").attr("class","background")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath) // clip the path!
+                .style("stroke", "black")
+                .style("fill", "blue")
+                .style("fill-opacity", .5)
+                .style('stroke-width', 2);
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', .25);
+
+        svg.append("path").attr("class","outline")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath)
+                .style("stroke", "black")
+                .style("fill", "none")
+                .style('stroke-width', 3);
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/un_regions.js"></script>
+    <style>
+        text {font-family: sans-serif; font-size: 10px}
+        path {stroke: white; stroke-width: 1}
+    </style>
+</head>
+<body>
+<script>
+    const width = 1600, height = 1600;
+
+    const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+    const chart = svg.append("g").attr("transform", d => `translate(${[width/2,height/2]})`);
+
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        //console.log("tabular data", result);
+
+        const nested = d3.nest()
+                        .key(d => d.Supercontinent)
+                        .key(d => d.Continent)
+                        .key(d => d.UN_Region)
+                        .key(d => d.Country)
+                        .rollup(d => d.map(c => ({area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+                        .entries(result.filter(d => d.Country != 'Antarctica'));
+
+        const root = d3.hierarchy(makeRoot(nested, true));
+        root.sum(d => 1);
+        root.sort((a,b) => b.height - a.height || a.value - b.value);
+
+        const partition = d3.partition()
+                .size([2 * Math.PI, height * .3])
+        const data = partition(root)
+
+        drawPartition(chart.append("g").attr("class", "partition"), data.descendants());
+
+    });
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const arc = d3.arc().startAngle(d => d.x0)
+                        .endAngle(d => d.x1)
+                        .innerRadius(d => d.y0)
+                        .outerRadius(d => d.y1);
+    const start = arc.startAngle();
+    const end   = arc.endAngle();
+
+    function drawPartition(g, data) {
+        const cell = g.selectAll("g.slice")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class", "slice");
+
+        cell.append('path')
+                .attr('d', arc)
+                .attr("fill", d => colorScale(d.height));
+
+        cell.append("text")
+                .text(d => d.data.id)
+                .attr("x", d => (d.height != 0) ? -40 : 50)
+                .attr("transform", function(d) {
+                    return "translate(" + arc.centroid(d) + ")"
+                        + " rotate(" + (180/Math.PI * (start(d) + end(d))/2 - 90) + ")"; })
+    }
+
+    // Very simple draggable rotation
+    const state = {r: 0, k: 1, x: width/2, y: height/2}
+    const dragBehavior = d3.drag(); // drag to rotate
+    chart.call(dragBehavior);
+
+    dragBehavior.on("drag", function() {
+        const a = Math.atan2(d3.event.y - height/2, d3.event.x - width/2) * 180/Math.PI;
+        state.r = a+90;
+        chart.attr("transform", `translate(${[state.x,state.y]}) rotate(${state.r}) scale(${state.k}) `)
+    });
+    //
+
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+
+    const range = d3.range(10);
+    console.log("Range 75", range);
+
+    const rangeBegEnd = d3.range(-5, 5);
+    console.log("Range (-25, 75)", rangeBegEnd);
+
+    const rangeStep = d3.range(-25, 75, 10);
+    console.log("Range (-25, 75) Step 10", rangeStep);
+
+    const ticks2 = d3.ticks(-25, 75, 10);
+    console.log("Ticks (-25, 75)", ticks2);
+
+    const ticks3 = d3.ticks(5, 7.5, 5);
+    console.log("Ticks", ticks3);
+
+    const tickStep = d3.tickStep(5, 7.5, 5);
+    console.log("Tick Step", tickStep);
+
+    const tickInc = d3.tickIncrement(5, 7.5, 5);
+    console.log("Tick Increment", tickInc);
+
+
+
+</script>
+</body>
+</html>

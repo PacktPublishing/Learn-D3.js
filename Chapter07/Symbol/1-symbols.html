@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 900;
+    const height = 400;
+
+    const symbols = [
+        'symbolCircle',
+        'symbolCross',
+        'symbolDiamond',
+        'symbolSquare',
+        'symbolStar',
+        'symbolTriangle',
+        'symbolWye'];
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain([0,symbols.length]);
+
+    function draw(symbol, index) {
+        const pathData = d3.symbol().type(d3[symbol]).size(200);
+        const g = svg.append("g")
+                     .attr("transform", "translate("+(index * 120 + 50)+",50)");
+        g.append("path")
+            .attr("d", pathData)
+            .attr("fill", colorScale(symbol));
+        g.append("text")
+            .text("d3."+symbol)
+            .attr("text-anchor", "middle")
+            .attr("x", 0)
+            .attr("y", 30);
+    }
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",400)
+            .attr("width",width);
+
+    symbols.forEach((s,i) => draw(s, i));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+    <script src="https://d3js.org/d3-random.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <style>
+        svg {
+            background-color: #cceaff;
+        }
+        polygon {
+            stroke: white;
+            stroke-width: .2px;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <svg id="world-map"
+         width="800"
+         viewBox="-200 -100 400 200"
+         transform="scale(1,-1)"></svg>
+</div>
+<script>
+    d3.json("../Data/world-lowres.geojson")
+      .then(function(data) {
+          drawMap(data.features);
+      });
+
+    const rand = d3.randomUniform(256);
+
+    function drawMap(countries) {
+        d3.select("#world-map")
+            .selectAll(".country")
+            .data(countries)
+            .join("g").attr("class", "country")
+            .each(function(d,i) {
+                let points = [];
+
+                if(d.geometry.type == 'MultiPolygon') {
+                    points = d3.merge(d.geometry.coordinates);
+                } else if(d.geometry.type == 'Polygon') {
+                    points = d.geometry.coordinates;
+                }
+
+                d3.select(this).selectAll("polygon")
+                     .data(points)
+                     .join("polygon")
+                     .attr("points", d => d)
+                     .style("fill", d => 'rgb('+rand()+','+rand()+','+rand()+')');
+            });
+    }
+</script>
+
+</body>
+</html>

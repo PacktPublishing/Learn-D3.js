@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<p>See results in JavaScript console</p>
+<script>
+    const data = [
+        {name: "Dataset 1",
+         series: [{key: 'a', value: 190},
+                  {key: 'b', value: 90},
+                  {key: 'c', value: 150}]},
+        {name: "Dataset 2",
+         series: [{key: 'a', value: 330},
+                  {key: 'b', value: 160},
+                  {key: 'c', value: 275}]},
+        {name: "Dataset 3",
+         series: [{key: 'a', value: 390},
+                  {key: 'b', value: 207},
+                  {key: 'c', value: 310}]}
+    ];
+
+    const keys = data[0].series.map(k => k.key);
+
+    const flatData = data.map(function(d) {
+        const obj = {};
+        obj.dataset = d.name;
+        keys.forEach(function(k) {
+            obj[k] = d.series.filter(f => f.key == k)
+                             .map(m => m.value)[0]
+        });
+        return obj;
+    });
+
+    const stack = d3.stack().keys(keys);
+    const stackedData = stack(flatData);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain([0,keys.length]);
+
+    const svg = d3.select("body").append("svg").attr("width", 1200)
+
+    svg.selectAll("g")
+        .data(stackedData).join("g")
+        .style("fill", colorScale)
+        .each(function(d) {
+            d3.select(this)
+            .selectAll("rect")
+            .data(d).join("rect")
+            .attr('width', t => t[1] - t[0])
+            .attr('height', 18)
+            .attr('x', t => t[0] + 65)
+            .attr('y', (t,j) => j * 20)
+        }).append("text")
+            .text((d,i) => flatData[i].dataset)
+            .style("fill", "black")
+            .attr("y", (d,i) => i * 20 + 14)
+            .attr("x", 10);
+
+
+</script>
+</body>
+</html>

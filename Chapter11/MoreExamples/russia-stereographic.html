@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const color = d3.scaleOrdinal(d3.schemePurples[9]);
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const popScale = d3.scaleSqrt().range([0.1, 10]);
+
+    const projection = d3.geoStereographic()
+                         .rotate([-90,-90,-9]) // alternative to center()
+                         .scale(5 * d3.geoStereographic().scale())
+                         .translate([width/2 + 40,height/2 - 230]);
+    const geoPath = d3.geoPath().projection(projection);
+
+    const map = {};
+
+    Promise.all([
+        d3.json('../Data/russia.topojson'),
+        d3.csv('../Data/worldcities.csv', function(row) {
+            if(row.iso3 == 'RUS') {
+                return {
+                    city: row.city,
+                    coordinates: [+row.lng, +row.lat],
+                    population: +row.population
+                };
+            }
+        })
+    ])
+    .then(([shapeData, cities]) =>  {
+        const filteredCities = cities.filter(d => d.population > 10000);
+        popScale.domain([0, d3.max(filteredCities, d => d.population)]);
+
+        map.topology   = shapeData.objects['russia'];
+        map.geometries = map.topology.geometries;
+        map.features   = topojson.feature(shapeData, map.topology).features;
+        map.merged     = topojson.merge(shapeData, map.topology.geometries);
+        map.mesh       = topojson.mesh(shapeData, map.topology);
+
+    console.log(map.features)
+
+    drawGraticules();
+    //drawShape(); // use this for single merged shape (faster)
+    //drawMesh();  // use this for borders in single merged shape
+    drawShapes();  // use this for individual shapes
+    drawCities(filteredCities);
+
+    });
+
+    function drawMesh() {
+        svg.append("g").attr("class","borders")
+                .datum(map.mesh)
+                .style("fill", "none")
+                .style("fill-opacity", .4)
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .attr("strike-width", .25)
+    }
+
+    function drawShape() {
+        svg.append("g").attr("class","country")
+                .datum(map.merged)
+                .style("fill", (d,i) => d3.rgb(color(i)).darker())
+                .style("fill-opacity", .8)
+                .append("path")
+                .attr('d', geoPath);
+    }
+
+    function drawShapes() {
+        svg.selectAll("g.region")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","region")
+                .style("fill", (d,i) => color(i))
+                .style("fill-opacity", .5)
+                .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "black")
+                    .style("stroke-width", .25)
+    }
+
+    function drawCities(data) {
+        svg.selectAll("g.city")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","city")
+                .attr('transform', d => `translate(${geoPath.projection()(d.coordinates)})`)
+                .on('mouseover', showName)
+                .on('mouseout', hideName)
+                .append("circle")
+                .style("fill", 'green')
+                .style("fill-opacity", d => popScale(d.population) <= 1 ? 1 : .35)
+                .attr('r', d => popScale(d.population))
+                .style("stroke-width", d => popScale(d.population) > 1 ? .25 : 0)
+                .style("stroke", "black");
+    }
+
+    function drawGraticules() {
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style('stroke-width', d => '.25');
+    }
+
+    function showName(d) {
+        console.log(d.city)
+        d3.select(this)
+                .append('text')
+                .style('font-size', 20)
+                .text(d.city)
+    }
+    function hideName(d) {
+        d3.select(this).select('text').remove();
+    }
+</script>
+
+</body>
+</html>

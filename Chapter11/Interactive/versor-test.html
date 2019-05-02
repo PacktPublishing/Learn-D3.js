@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="../JavaScript/quaternion.js"></script>
+    <script src="https://unpkg.com/versor"></script>
+    <style>
+        .graticule {
+            fill: none;
+            stroke: green;
+            stroke-width: .25;
+        }
+        .ocean {
+            fill: lightblue;
+        }
+        .country {
+            stroke: white;
+            stroke-width: .25;
+            fill: gray;
+        }
+    </style>
+</head>
+<body>
+<h1>Open JavaScript console for results</h1>
+<script>
+
+    const q0 = versor([0,0,0]); // result:
+    console.log("q0", q0);
+
+    const euler = versor.rotation(q0); // result:
+    console.log("euler", euler)
+
+    const q1 = versor([0,45,0]); // result
+    console.log("q1", q1)
+    const delta = versor.delta(q0, q1); // result
+    console.log("delta", delta)
+
+    const v = versor([-20,45,0]); // result
+    console.log("v", v)
+    const product = versor.multiply(v, delta); // result
+    console.log("product", product)
+
+
+</script>
+</body>
+</html>

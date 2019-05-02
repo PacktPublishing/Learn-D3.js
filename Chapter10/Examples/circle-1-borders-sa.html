@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 18px;
+            alignment-baseline: middle;
+            text-anchor: start;
+            fill: 'black';
+        }
+        .faded {
+            opacity: .1;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1400;
+    const height = 600;
+    const margin = 100;
+
+    const weightScale = d3.scaleLinear().range([0,15]);
+
+    d3.csv("../Data/sa_borders.csv", function(row) {
+        const line = [];
+        for(key in row) {
+            if(isNaN(row[key])) continue;
+            line.push({value: +row[key], target: row.Country, source: key}); // adds only top diagonal
+        }
+        return line.filter(d => d.value != 0);
+    }).then(function(data) {
+        const nodes = data.columns.filter(d => d != 'Country' && !isCoastline(d)).map(n => ({node: n}));
+        const edges = d3.merge(data);
+
+        weightScale.domain([0,d3.max(edges, d => d.value)]);
+
+        const circleLayout = dvj.circleDiagram().size([width-margin*2, height-margin*2]);
+        const circleData = circleLayout(nodes, edges);
+
+        console.log(circleData.nodes(), circleData.links())
+
+        draw(circleData);
+    });
+
+    function isCoastline(node) {
+        return node == 'Atlantic' || node == 'Pacific';
+    }
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[width/2 + margin/4,height/2 + margin/4]})`);
+
+        chart.selectAll('line')
+                .data(data.links())
+                .enter()
+                .append('line')
+                .attr("x1", d => d3.pointRadial(d.source.angle, d.source.radius)[0])
+                .attr("y1", d => d3.pointRadial(d.source.angle, d.source.radius)[1])
+                .attr("x2", d => d3.pointRadial(d.target.angle, d.target.radius)[0])
+                .attr("y2", d => d3.pointRadial(d.target.angle, d.target.radius)[1])
+                .style("stroke-width", d => weightScale(d.value))
+                .style("stroke", d => 'blue')
+                .style("stroke-opacity", .5)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("id", d => d.node)
+                .attr("cx", d => d3.pointRadial(d.angle, d.radius)[0])
+                .attr("cy", d => d3.pointRadial(d.angle, d.radius)[1])
+                .attr("r", 15)
+                .style("fill", d => isCoastline(d.node) ? 'blue' : 'green')
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("line, circle").classed('faded', false));
+
+        chart.selectAll('text.location')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'location')
+                .attr("x", d => d3.pointRadial(d.angle, d.radius + 25)[0])
+                .attr("y", d => d3.pointRadial(d.angle, d.radius + 25)[1])
+                .attr("transform",d => `rotate(${-90 + d.angle * 180 / Math.PI},${[d3.pointRadial(d.angle, d.radius + 25)]})`)
+                .text(d => d.node)
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("line, circle").classed('faded', false));
+    }
+
+    function highlight(d) {
+        d3.selectAll("line").classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle").classed('faded', n => !(n === d
+                                                    || n.sources.filter(s => s.target === d).length > 0
+                                                    || n.targets.filter(s => s.source === d).length > 0))
+    }
+
+</script>
+</body>
+</html>

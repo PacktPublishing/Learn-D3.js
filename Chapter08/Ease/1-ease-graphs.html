@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const width  = 800;
+    const height = 700;
+    const cols = 4;
+    const rows = 7;
+    const margin = 30;
+
+    const easeFunctions = [
+        "easeLinear",
+        "easeQuadIn",
+        "easeQuadOut",
+        "easeQuadInOut",
+        "easeCubicIn",
+        "easeCubicOut",
+        "easeCubicInOut",
+        "easePolyIn",
+        "easePolyOut",
+        "easePolyInOut",
+        "easeSinIn",
+        "easeSinOut",
+        "easeSinInOut",
+        "easeExpIn",
+        "easeExpOut",
+        "easeExpInOut",
+        "easeCircleIn",
+        "easeCircleOut",
+        "easeCircleInOut",
+        "easeBounceIn",
+        "easeBounceOut",
+        "easeBounceInOut",
+        "easeBackIn",
+        "easeBackOut",
+        "easeBackInOut",
+        "easeElasticIn",
+        "easeElasticOut",
+        "easeElasticInOut"
+    ];
+
+    const datum = d3.range(0, 1, 0.002);
+
+    const scaleX = d3.scaleLinear()
+                     .domain([0,1])
+                     .range([margin,width/cols - margin]);
+
+    const scaleY = d3.scaleLinear()
+                     .domain([0,1])
+                     .range([height/rows - margin, margin/2]);
+
+    const svg = d3.select("body")
+                  .append("svg").attr("height",height).attr("width",width);
+
+    easeFunctions.forEach((d,i) => draw(d,i));
+
+    function draw(easeType, index) {
+
+        const i = index % rows;
+        const j = Math.floor(index / rows);
+
+        const g = svg.append("g")
+                .attr("transform", "translate("+[j * width/cols,i * height/rows]+")");
+
+        const line = d3.line()
+                       .x(d => scaleX(d))
+                       .y(d => scaleY(d3[easeType](d)));
+
+        g.append("path").datum(datum)
+                .attr("d", line)
+                .attr("stroke", "red")
+                .attr("fill", "none");
+
+        g.append("text")
+                .text("d3."+easeType)
+                .attr("text-anchor", "middle")
+                .attr("x", width/(cols * 2))
+                .attr("y", height/rows - margin/2 + 10);
+    }
+
+</script>
+
+</body>
+</html>

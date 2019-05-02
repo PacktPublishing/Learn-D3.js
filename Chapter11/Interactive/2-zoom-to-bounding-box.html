@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        .graticule {
+            fill: none;
+            stroke: green;
+            stroke-width: .25;
+        }
+        .ocean {
+            fill: lightblue;
+        }
+        .country {
+            stroke: white;
+            stroke-width: .25;
+            fill: gray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const globe = svg.append("g").attr("class","globe");
+
+    const projection = d3.geoMercator(),
+          scale = projection.scale(),
+          translate = projection.translate(),
+          geoPath = d3.geoPath().projection(projection);
+
+    const brush = d3.brush()
+            .extent([[0,0], [width,height]])
+            .on("end", zoom);
+
+    svg.call(brush);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(data) {
+                map.topology   = data.objects[key];
+                map.features   = topojson.feature(data, map.topology).features;
+
+                drawGraticules();
+                draw();
+            });
+
+    function drawGraticules() {
+        globe.append("path").attr("class","ocean")
+            .datum({type: 'Sphere'})
+            .attr("d", geoPath);
+        globe.append("path").attr("class","graticule")
+            .datum(d3.geoGraticule10())
+            .attr("d", geoPath);
+    }
+
+    function draw() {
+        globe.selectAll("path.country")
+            .data(map.features).enter()
+            .append("path")
+            .attr("class","country")
+            .attr("d", geoPath)
+    }
+
+    function render() {
+        globe.selectAll("path.country").attr('d', geoPath);
+        globe.selectAll("path.graticule").attr('d', geoPath);
+        globe.selectAll("path.background").attr('d', geoPath);
+    }
+
+    function zoom() {
+        const selection = d3.event.selection;
+        if(selection){
+            const boundingObject = {
+                type: 'MultiPoint',
+                coordinates: [projection.invert(selection[0]),
+                              projection.invert(selection[1])]
+            };
+            projection.fitSize([width, height], boundingObject);
+            render();
+            svg.call(brush.move, null);
+        }
+    }
+
+    svg.on("click", function() {
+        d3.event.stopPropagation();
+        projection.scale(scale).translate(translate)
+        render();
+    });
+
+
+</script>
+
+</body>
+</html>

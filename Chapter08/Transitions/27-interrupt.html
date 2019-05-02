@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        h1 {
+            display: inline;
+            font-size: 100pt;
+        }
+    </style>
+</head>
+<body>
+<h3>See console for results</h3>
+<div><h1>A</h1>
+<h1>B</h1>
+<h1>C</h1>
+<h1>D</h1></div>
+<script>
+
+    d3.selectAll("div").transition()
+            .delay((d,i) => i*100)
+            .on("start", function repeat() {
+                d3.active(this)
+                        .style("color", "red")
+                        .transition("b")
+                        .style("color", "green")
+                        .transition("c")
+                        .style("color", "blue")
+                        .transition("d")
+                        .on("start", repeat);
+                if(Math.floor(Math.random() * 10) == 0) {
+                    console.log("Will interrupt! ")
+                    d3.interrupt(this);
+                }
+
+            })
+            .selection() // obtains a selection to append one more letter
+            .append("h1").text("E");
+
+</script>
+</body>
+</html>

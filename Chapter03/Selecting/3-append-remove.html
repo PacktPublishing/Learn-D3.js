@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <style>
+        .big {font-size: 24pt}
+        .red {color: hsl(0,100%,70%)}
+    </style>
+</head>
+
+<body>
+<p>See results in console log.</p>
+<div id="section">
+    <p class="first">Paragraph 1</p>
+    <p>Paragraph 2</p>
+</div>
+<p>Paragraph 3</p>
+
+<script>
+    // Selections (same code as in 1-select.html)
+    const div = d3.select("#section");       // selects the element with the "section" ID
+    const domDiv = div.node();               // converts the object into a DOM node
+    const firstP = d3.select("p");           // selects the first <p> in the page
+    const allParagraphs = d3.selectAll("p"); // selects all four <p> nodes in the page
+    const allPDom = allParagraphs.nodes();   // converts the selection into a DOM nodelist
+
+    const sectionParagraphs =
+            d3.select("div")
+                    .selectAll("p");       // selects the two <p> nodes inside <div>
+
+    // Changing attributes (same code as in 2-attributes-styles.html)
+    div.style('border', 'solid blue 2px'); // draws a blue border around the <div>
+    firstP.classed('big', true); // includes first paragraph in class .big
+    firstP.text('This is paragraph zero'); // replaces contents of first paragraph
+    allParagraphs.style('font-weight', 'bold'); // applies style to set of paragraphs
+
+    d3.select('.first') // selects the first element of class ‘.first’
+            .attr('title', 'Tooltip') // adds an attribute
+            .style('font-variant', 'small-caps') // applies a style
+            .html('This is a <b>bold</b> paragraph.'); // replaces contents with HTML
+
+    sectionParagraphs.each(function(d, i) {     // i is the index, d is the data (null)
+        d3.select(this).classed('red', true);
+        console.log(`Paragraph ${i}: ` , this); // this refers to the current element
+    });
+
+
+    // Inserting and appending elements
+
+    d3.select("#section)     // context is element with id #section
+      .insert("p", '.first') // add a <p> before the child of class ‘.first’
+      .append('a')           // context is <p>: insert an <a> as child
+      .attr('href', 'https://d3js.org').text("D3 website"); // context is <a>
+
+    const div = d3.select('div')  // context is first <div> in page
+                  .select('p:last-of-type') // context is last <p> in <div>
+                  .remove(); // context is detached <p> (parentNode is null)
+
+    div.append("p") // adds a new <p> as last child of selected <div>
+       .text("New paragraph");  // sets the text contents of <p>
+
+    d3.select("body") // selects the <body> element of the page
+      .insert("h1", "*") // adds a new <h1> as the first child (before *)
+      .text("New title"); // sets the text contents of <h1>
+
+    d3.select("body")
+      .append("h2") // adds a new <h2> as the last child
+      .text("Footer");
+
+
+</script>
+
+</body>
+
+
+
+</html>

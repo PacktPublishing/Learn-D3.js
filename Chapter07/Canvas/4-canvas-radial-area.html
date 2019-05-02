@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radial Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .blank text,
+        .tick:first-of-type > text {
+            display: none;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 10pt;
+        }
+        svg, canvas {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 600;
+    const margin = 100;
+    let data;
+
+    d3.json('../Data/monthly_json.json')
+      .then(function(result) {
+            data = result.filter(d => d.Source == 'GISTEMP')
+                          .map(d => {d.year = +d.Date.split("-")[0]; return d})
+                          .filter(d => d.year % 2 == 0);
+
+            const nested = d3.nest()
+                             .key(d => d.year)
+                             .rollup(d => d.map(k => k.Mean))
+                             .entries(data);
+
+            for(let i = 0; i < nested.length; i++) {
+                if(i != nested.length -1) {
+                    nested[i].value.push(nested[i+1].value[0]);
+                }
+            }
+
+            const colorScale = d3.scaleSequential(d3.interpolateSpectral)
+                  .domain([0,nested.length]);
+
+            const scaleRadius = d3.scaleLinear()
+                    .domain([-2, d3.max(data, d => d.Mean)])
+                    .range([0, width/2 - margin]);
+
+            const axis = d3.axisBottom(scaleRadius)
+                  .ticks(6)
+                  .tickSize(0);
+
+            const canvas = d3.select("body")
+                  .append("canvas")
+                  .attr("height",height)
+                  .attr("width",width);
+            const ctx = canvas.node().getContext("2d");
+
+            const svg = d3.select("body")
+                    .append("svg")
+                    .attr("height",height)
+                    .attr("width",width);
+
+            const g = svg.append("g")
+                         .attr("transform","translate("+[width/2,height/2]+")");
+
+            const spiral = d3.areaRadial()
+                          .angle((d,i) => i/12 * Math.PI * 2)
+                          .outerRadius(d => scaleRadius(d))
+                          .innerRadius(0)
+                          .curve(d3.curveNatural)
+                          .context(ctx);
+
+            ctx.translate(width/2,height/2);
+            nested.forEach((d, i) => {
+
+                  ctx.globalAlpha = 0.1;
+                  ctx.fillStyle = colorScale(i);
+
+                  ctx.beginPath();
+                  spiral(d.value);
+                  ctx.fill();
+            });
+
+            nested.forEach(function(d,i) {
+                g.append('g')
+                    .classed("blank",() => i != 0)
+                    .call(axis)
+                    .attr("transform", "rotate("+(i * 360/12)+")");
+            });
+
+            g.selectAll('.domain, .tick line')
+                  .attr("stroke", "white")
+                  .attr("opacity", .1)
+            g.selectAll('.tick text')
+                  .attr("fill", "lightgray")
+
+    });
+</script>
+</body>
+</html>

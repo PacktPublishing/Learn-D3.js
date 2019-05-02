@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<p>See results in JavaScript console</p>
+<script>
+    const data = [
+        [190, 90,  150],
+        [330, 160, 275],
+        [390, 207, 310]
+    ];
+
+    const stack = d3.stack().keys([0, 1, 2]);
+    const stackedData = stack(data);
+    console.log(stackedData);
+    console.log(stackedData[0][1].data)
+
+    /* Result
+     [
+        [ [0,190],  [0,330],  [0,390]   ],
+        [ [190,280],[330,490],[390,597] ],
+        [ [280,430],[490,765],[597,907] ]
+     ]
+     */
+
+</script>
+</body>
+</html>

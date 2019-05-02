@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 600;
+
+    const data = [
+        [0,0],
+        [100,200],
+        [200,400],
+        [300,150],
+        [400,50],
+        [500,350],
+        [600,500],
+        [700,100],
+        [800,250],
+    ]
+    const line = d3.line();
+    const pathData = line(data);
+    console.log(pathData);
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+    const g = svg.append("g").datum(data);     // binds entire array to <g>
+    g.append("path")
+        .attr("d", line)           // calls line(data)
+        .style("stroke", "red")
+        .style("fill", "none");
+
+    g.selectAll("text")
+        .data(d => d).join("text")  // binds each [x,y] to a <text> element
+        .text(d => d)
+        .attr("x", d => d[0] + 10)  // positions the text near (x,y)
+        .attr("y", d => d[1] + 10)
+
+
+</script>
+</body>
+</html>

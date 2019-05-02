@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoWinkel3();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                //console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                drawGraticules();
+                draw();
+
+            });
+
+    function draw() {
+        svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .style("fill", 'gray')
+                    .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+                    .style('stroke-width', '.25');
+    }
+
+    // Trying to add a rectangle along the tropics
+    const tropicalRect = {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [-180,23.5],
+                [180,23.5],
+                [180,-23.5],
+                [-180,-23.5],
+                [-180,23.5]
+            ]
+        ]
+    }
+
+    // GeoJSON WGS84 Resampling fix - see below
+    const tropicalZone = resample(tropicalRect)
+
+    function drawGraticules() {
+
+        svg.append("path").attr("class","background")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath)
+                .style("stroke", "black")
+                .style("fill", "white")
+                .style('stroke-width', 2);
+
+        // Using fix - see below
+        svg.append("g").attr("class","tropics")
+                .datum(tropicalZone)
+                .append("path")
+                .attr('d', geoPath)
+                .style("fill", "orange")
+                .style('fill-opacity', .2);
+
+        svg.append("path").attr("class","tropic-cancer")
+                .datum(d3.geoCircle().center([0,90]).radius(66.5))
+                .attr('d', geoPath)
+                .style("stroke", "purple")
+                .style("stroke-dasharray", "5 5")
+                .style("fill", "none")
+                .style('stroke-width', 1)
+
+        svg.append("path").attr("class","tropic-capricorn")
+                .datum(d3.geoCircle().center([0,-90]).radius(66.5))
+                .attr('d', geoPath)
+                .style("stroke", "purple")
+                .style("stroke-dasharray", "5 5")
+                .style("fill", "none")
+                .style('stroke-width', 1)
+
+        svg.append("path").attr("class","antarctic-circle")
+                .datum(d3.geoCircle().center([0,-90]).radius(23.5))
+                .attr('d', geoPath)
+                .style("stroke", "purple")
+                .style("stroke-dasharray", "5 5")
+                .style("fill", "hsl(240,100%,95%")
+                .style('stroke-width', 1);
+
+        svg.append("path").attr("class","arctic-circle")
+                .datum(d3.geoCircle().center([0,90]).radius(23.5))
+                .attr('d', geoPath)
+                .style("stroke", "purple")
+                .style("stroke-dasharray", "5 5")
+                .style("fill", "hsl(240,100%,95%")
+                .style('stroke-width', 1);
+
+        svg.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', '.25');
+
+        svg.append("path").attr("class","equator")
+                .datum(d3.geoCircle().center([0,90]))
+                .attr('d', geoPath)
+                .style("stroke", "blue")
+                .style("fill", "none")
+                .style('stroke-width', 3)
+                .style('stroke-opacity', .2);
+
+        svg.append("path").attr("class","prime")
+                .datum(d3.geoCircle().center([90,0]))
+                .attr('d', geoPath)
+                .style("stroke", "red")
+                .style("fill", "none")
+                .style('stroke-width', 3)
+                .style('stroke-opacity', .2);
+
+        svg.append("path").attr("class","outline")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath)
+                .style("stroke", "black")
+                .style("fill", "none")
+                .style('stroke-width', 3);
+
+    }
+
+    // GeoJSON WGS84 Resampling fix for some projections
+    //https://github.com/d3/d3-geo-projection/issues/75
+    //https://beta.observablehq.com/@fil/wgs84-resampling
+    function resamplecoordinates(coordinates) {
+        var i = 0,
+                j = -1,
+                n = coordinates.length,
+                source = coordinates.slice(),
+                p0, x0, y0,
+                p1 = coordinates[0], x1 = p1[0], y1 = p1[1],
+                dx, dy, d2,
+                m2 = 10; // squared minimum angular distance
+        while (++i < n) {
+            p0 = p1, x0 = x1, y0 = y1;
+            p1 = source[i], x1 = p1[0], y1 = p1[1];
+            dx = x1 - x0, dy = y1 - y0, d2 = dx * dx + dy * dy;
+            coordinates[++j] = p0;
+            if (d2 > m2) for (var k = 1, m = Math.ceil(Math.sqrt(d2 / m2)); k < m; ++k) {
+                coordinates[++j] = [x0 + dx * k / m, y0 + dy * k / m];
+            }
+        }
+        coordinates[++j] = p1;
+        coordinates.length = j + 1;
+        return coordinates;
+    }
+
+    function resample(obj) {
+        obj = JSON.parse(JSON.stringify(obj)); // deep clone urk
+        switch (obj.type) {
+            case "FeatureCollection":
+                obj.features = obj.features.map(resample);
+                break;
+            case "Feature":
+                obj.geometry = resample(obj.geometry);
+                break;
+            case "MultiPolygon":
+                obj.coordinates = obj.coordinates.map(d => d.map(resamplecoordinates));
+                break;
+            case "Polygon":
+                obj.coordinates = obj.coordinates.map(resamplecoordinates);
+                break;
+            case "MultiLineString":
+                obj.coordinates = obj.coordinates.map(resamplecoordinates);
+                break;
+            case "LineString":
+                obj.coordinates = resamplecoordinates(obj.coordinates);
+                break;
+        }
+        return obj;
+    }
+</script>
+
+</body>
+</html>

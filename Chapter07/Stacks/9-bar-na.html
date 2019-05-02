@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text, h1 {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        h1 {
+            font-weight: normal;
+            font-size: 16pt
+        }
+    </style>
+</head>
+<body>
+<h1>Population</h1>
+<script>
+    const width  = 600;
+    const height = 400;
+    const margin = 50;
+
+    const populations = [
+        {year: 1960, "Mexico": 38174, "Canada": 17917, "USA": 186808},
+        {year: 1980, "Mexico": 69361, "Canada": 24537, "USA": 229763},
+        {year: 2000, "Mexico": 101720, "Canada": 30736, "USA": 281983}
+    ];
+    const keys = ['USA', 'Mexico', 'Canada'];
+
+    const stack = d3.stack()
+            .keys(keys)
+            .order(d3.stackOrderReverse);
+    const stackedData = stack(populations);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain([0,populations.length]);
+
+    const scale = d3.scaleLinear()
+            .domain([0, d3.max(d3.merge(d3.merge(stackedData)))])
+            .range([margin,width - margin]);
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",400)
+            .attr("width",width);
+
+    svg.selectAll(".year")
+        .data(stackedData)
+        .enter()
+        .append("g").attr("class", "year")
+        .style("fill", (d,i) => colorScale(i))
+        .each(function(d) {
+            d3.select(this)
+                .selectAll(".country")
+                .data(d)
+                .enter()
+                .append("rect").attr("class", "country")
+                    .attr('width', d => scale(d[1] - d[0]))
+                    .attr('height', 20)
+                    .attr('x', d => scale(d[0]))
+                    .attr('y', (d,i) => i * 22);
+
+        }).append("text")
+            .text((d,i) => populations[i].year)
+            .style("fill", "black")
+            .attr("y", (d,i) => i * 20 + 19)
+            .attr("x", 10)
+
+    const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate("+[50, 80]+")");
+
+    legend.selectAll("rect")
+            .data(keys)
+            .enter()
+            .append("rect")
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", (d,i) => i * 100)
+            .style("fill", (d,i) => colorScale(i));
+
+    legend.selectAll("text")
+            .data(keys)
+            .enter().append("text")
+            .attr("y", 16)
+            .attr("x", (d,i) => i * 100 + 25)
+            .text(d => d);
+
+</script>
+</body>
+</html>

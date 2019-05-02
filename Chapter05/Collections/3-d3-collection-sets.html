@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+
+    const array = [3,7,5,3,2,3,4,3,2,3,6];
+
+    // ES6 Sets
+    const esSet = new Set(array);
+
+    console.log("ES set", esSet);
+    console.log("ES set string array", esSet.values());
+
+    const arrayESSet = [...esSet];
+    console.log("set number array", arrayESSet);
+    const arrayESSet2 = Array.from(esSet);
+    console.log("set number array", arrayESSet2);
+
+    // D3 sets
+    const d3Set = d3.set(array);
+
+    console.log("D3 set", d3Set);
+    console.log("D3 set string array", d3Set.values());
+
+    // Fails for D3 set (not iterable: error)
+    //const arrayD3Set = [...d3Set);
+    //console.log("set string array", arrayD3Set);
+    // Fails for D3 set (empty result)
+    const arrayD3Set2 = Array.from(d3Set);
+    console.log("set string array", arrayD3Set2);
+
+    // Converting
+    const esSet3 = new Set(d3Set.values().map(d => +d));
+    console.log("ES converted D3 Set 2", esSet3);
+
+    // Convert to array
+    const arrayESSet3 = [...esSet3];
+    const arrayESSet4 = Array.from(esSet3);
+
+    console.log("Array from ES version of D3Set: spread", arrayESSet3);
+    console.log("Array from ES version of D3Set: Array.from", arrayESSet4);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        line {
+            stroke: black;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000, height = 600;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[60,60]})`);
+
+    const root = d3.hierarchy(simpleHierarchy);
+
+    // generate labels
+    root.eachBefore(function(d) {
+        if(!d.parent) {
+            d.number = 1;
+        } else {
+            d.number = `${d.parent.number}.${d.parent.children.indexOf(d) + 1}`;
+        }
+    });
+
+    const tree = d3.cluster()
+            .size([width-120,height-120]); // top-down
+    const treeData = tree(root);
+
+    console.log(treeData);
+
+    const nodes = treeData.descendants();
+    const links = treeData.links();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.depth));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(links, k => k.target.height));
+
+
+    drawLinks();
+    drawNodes();
+    drawLabels();
+
+
+    function drawNodes() {
+        chart.selectAll("circle")
+            .data(nodes)
+            .join("circle")
+            .attr("r", d => (d.height + 1) * 10)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .style("fill", d => colorScale(d.depth));
+    }
+
+    function drawLinks() {
+        chart.selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y)
+            .style("stroke-width", d => (d.target.height + 1) * (d.target.height + 1))
+            .style("opacity", d => d.target.depth *.25 * .6 + .4);
+    }
+
+    function drawLabels() {
+        chart.selectAll("text")
+            .data(nodes)
+            .join("text")
+            .attr("x", d => d.x)
+            .attr("y", d => d.y)
+            .text(d => d.number)
+            .attr("transform", d =>`rotate(-90,${[d.x, d.y]}) translate(-15,5)`)
+            .style("text-anchor", d => d.height != 0 ? "start" : "end")
+            .style("font-size", d => 12 + widthScale(d.height));
+    }
+</script>
+</body>
+</html>

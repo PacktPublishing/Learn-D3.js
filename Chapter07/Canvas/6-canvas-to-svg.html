@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Path and d3.path()</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <style>
+        svg, canvas {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+
+    const svg    = d3.select("body").append("svg")
+                     .attr("height",height).attr("width",width);
+    const canvas = d3.select("body").append("canvas")
+                     .attr("height",height).attr("width",width);
+
+    // draws a shape in svg or canvas
+    function drawShape(func, context) {
+        const f = func();
+
+        if(context.canvas) {
+            // context styles and transforms
+            context.fillStyle = f.styles.fill;
+            context.strokeStyle = f.styles.stroke;
+            context.lineWidth = f.styles["stroke-width"];
+            if(f.transforms && f.transforms.translate) {
+                context.translate(f.transforms.translate[0],
+                                  f.transforms.translate[1]);
+            }
+            // draw canvas
+            context.beginPath();
+            f(context); // calls path rendering commands
+            context.fill();
+            context.stroke();
+        } else {
+            f(context); // generates path string in context
+            console.log("styles", f.styles);
+            console.log("Path string", context.toString());
+
+            // draw path and append to svg
+            const path = svg.append("path")
+                            .styles(f.styles)
+                            .attr("d", context);
+            if(f.transforms && f.transforms.translate) {
+                path.attr("transform", `translate(${f.transforms.translate})`);
+            }
+        }
+    }
+
+    function shape2() {
+        function draw(ctx) {
+            ctx.moveTo(100, 200);
+            ctx.bezierCurveTo(100, 100, 250, 100, 250, 200);
+            ctx.bezierCurveTo(250, 300, 400, 300, 400, 200);
+        }
+        draw.styles = {
+            fill: "white",
+            stroke: "blue",
+            "stroke-width": 4
+        };
+
+        draw.transforms = {
+            translate: [200, -80]
+        };
+
+        return draw;
+    }
+
+    function shape1() {
+        function draw(ctx) {
+            ctx.moveTo(50,20);
+            ctx.lineTo(200,200);
+            ctx.lineTo(200,140);
+            ctx.lineTo(270,140);
+            ctx.closePath(200,210);
+        }
+
+        draw.styles = {
+            fill: "yellow",
+            stroke: "red",
+            "stroke-width": 3
+        };
+
+        return draw;
+    }
+
+    const useCanvas = true;
+
+    if(useCanvas) {
+        // Using Canvas
+        drawShape(shape1, canvas.node().getContext("2d"));
+        drawShape(shape2, canvas.node().getContext("2d"));
+    } else {
+        // Using SVG
+        drawShape(shape1, d3.path());
+        drawShape(shape2, d3.path());
+    }
+
+</script>
+
+</body>
+</html>

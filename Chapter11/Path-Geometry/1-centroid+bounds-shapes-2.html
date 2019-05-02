@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "border-example.topojson";
+    const key  = "border-example";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const rotate = [2,-10,0];
+    const extent = [[0,5],[width, height-10]];
+
+    // reference
+    const projection = d3.geoOrthographic()
+            .rotate(rotate)
+            .fitExtent(extent, {type: "Sphere"})
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features
+
+                map.features.map(d => d.id = isNaN(d.id) ? d.properties.ISO_A3 : d.properties.ADMIN);
+
+                drawGraticules();
+                draw();
+
+            });
+
+    function draw() {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .on('mouseenter', showBoundsAndCentroid)
+                .on('mouseleave', hideBoundsAndCentroid)
+
+        globe.append("path")
+                .style("fill", '#333')
+                .style("fill-opacity", .8)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+    }
+
+    function showBoundsAndCentroid(d) {
+        showBounds(this, d);
+        showCentroid(this, d);
+    }
+
+    function showCentroid(node, d) {
+        console.log('centroid', geoPath.centroid(d))
+        d3.select(node)
+                .append("circle").attr("id", "centroid_" + d.id)
+                .attr("r", 3)
+                .style("fill", "white")
+                .style("fill-opacity", .7)
+                .style("stroke", "red")
+                .style("stroke-width", 2)
+                .attr("transform", `translate(${geoPath.centroid(d)})`);
+    }
+
+    function showBounds(node, d) {
+      //  d3.event.stopPropagation();
+        console.log('bounds', geoPath.bounds(d))
+
+        const minXY = geoPath.bounds(d)[0];
+        const maxXY = geoPath.bounds(d)[1];
+
+        const minX = minXY[0];
+        const minY = minXY[1];
+        const maxX = maxXY[0];
+        const maxY = maxXY[1];
+
+        d3.select(node).raise()
+                .append("rect").attr("id", "bounds_" + d.id)
+                .attr("width", maxX - minX)
+                .attr("height", maxY - minY)
+                .style("stroke", "red")
+                .style("fill", "orange")
+                .style("fill-opacity", .5)
+                .attr("transform", `translate(${[minX, minY]})`)
+    }
+
+    function hideCentroid(d) {
+        svg.select("#centroid_"+d.id).remove();
+    }
+
+    function hideBounds(d) {
+        svg.select("#bounds_"+d.id).remove();
+    }
+
+    function hideBoundsAndCentroid(d) {
+        hideCentroid(d);
+        hideBounds(d);
+    }
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', .25);
+    }
+
+</script>
+
+</body>
+</html>

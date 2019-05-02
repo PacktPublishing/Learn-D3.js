@@ -1,0 +1,146 @@
+{
+    "name": "Amazon",
+    "length_km": "6992",
+    "tributaries": [
+        {
+            "name": "Trombetas",
+            "length_km": "760"
+        },
+        {
+            "name": "Negro",
+            "length_km": "2250",
+            "tributaries": [
+                {
+                    "name": "Branco",
+                    "length_km": "560"
+                },
+                {
+                    "name": "Vaupés",
+                    "length_km": "1050"
+                }
+            ]
+        },
+        {
+            "name": "Japurá",
+            "length_km": "2820",
+            "tributaries": [{
+                "name": "Apaporis",
+                "length_km": "1370"
+            }]
+        },
+        {
+            "name": "Putumayo",
+            "length_km": "1575"
+        },
+        {
+            "name": "Napo",
+            "length_km": "1130"
+        },
+        {
+            "name": "Marañon",
+            "length_km": "1415",
+            "tributaries": [
+                {
+                    "name": "Morona",
+                    "length_km": "550"
+                },
+                {
+                    "name": "Huallaga",
+                    "length_km": "1100"
+                },
+                {
+                    "name": "Pastaza",
+                    "length_km": "710"
+                },
+                {
+                    "name": "Tigre",
+                    "length_km": "760"
+                }
+            ]
+        },
+        {
+            "name": "Ucayali",
+            "length_km": "1900",
+            "tributaries": [{
+                "name": "Apurimac",
+                "length_km": "1070",
+                "tributaries": [{
+                    "name": "Mantaro",
+                    "length_km": "470"
+                }]
+            }]
+        },
+        {
+            "name": "Juruá",
+            "length_km": "2400"
+        },
+        {
+            "name": "Purus",
+            "length_km": "3211",
+            "tributaries": [{
+                "name": "Acre",
+                "length_km": "680"
+            }]
+        },
+        {
+            "name": "Madeira",
+            "length_km": "3250",
+            "tributaries": [
+                {
+                    "name": "Guaporé",
+                    "length_km": "1749"
+                },
+                {
+                    "name": "Mamoré",
+                    "length_km": "1930"
+                },
+                {
+                    "name": "Machado",
+                    "length_km": "820"
+                },
+                {
+                    "name": "Beni",
+                    "length_km": "1599",
+                    "tributaries": [{
+                        "name": "Madre de Dios",
+                        "length_km": "1130"
+                    }]
+                }
+            ]
+        },
+        {
+            "name": "Tapajós",
+            "length_km": "1992",
+            "tributaries": [
+                {
+                    "name": "Teles Pires",
+                    "length_km": "1370"
+                },
+                {
+                    "name": "Juruena",
+                    "length_km": "1240",
+                    "tributaries": [{
+                        "name": "Arinos",
+                        "length_km": "680"
+                    }]
+                }
+            ]
+        },
+        {
+            "name": "Xingu",
+            "length_km": "1979",
+            "tributaries": [{
+               "name": "Iriri",
+               "length_km": "1300"
+            }]
+        },
+        {
+            "name": "Tocantins",
+            "length_km": "2639",
+            "tributaries": [{
+                "name": "Araguaia",
+                "length_km": "2627"
+            }]
+        }
+    ]
+}

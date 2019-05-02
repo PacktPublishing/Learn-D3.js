@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        .graticule {
+            fill: none;
+            stroke-width: 1;
+            stroke: gray;
+        }
+        .background {
+            fill: blue;
+            fill-opacity: .1;
+            stroke: gray;
+            stroke-width: .5;
+        }
+        .standard-parallels {
+            stroke: navy;
+            stroke-width: 2;
+            stroke-dasharray: 5 5;
+        }
+        .equator-meridians {
+            stroke-width: 3;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-lowres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoStereographic()
+            .rotate([0,0,0])
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    // background
+    svg.append("path").attr("class","background")
+            .datum({type: "Sphere"})
+            .attr("d", geoPath);
+
+    // graticule
+    svg.append("path").attr("class","graticule")
+            .datum(d3.geoGraticule())
+            .attr("d", geoPath);
+
+    svg.append("path").attr("class","graticule standard-parallels")
+            .datum(d3.geoGraticule()
+                    .extentMinor([[-180,23.6],[180,-23.6]]) // tropics
+                    .extentMajor([[-180,66.6],[180,-66.6]]) // polar circles
+                    .stepMinor([0,23.5])
+                    .stepMajor([0,66.5]))
+            .attr("d", geoPath);
+
+    svg.append("path").attr("class","graticule equator-meridians")
+            .datum(d3.geoGraticule()
+                    .stepMinor([0,0])
+                    .stepMajor([180,90]))
+            .attr("d", geoPath);
+
+</script>
+
+</body>
+</html>

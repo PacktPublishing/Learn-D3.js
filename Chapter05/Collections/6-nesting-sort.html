@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+</head>
+<body>
+<h1>Open console to see results</h1>
+<script>
+
+    const movies = [
+        {title: 'Arrival', director: 'Denis Villeneuve', year: 2016},
+        {title: 'Interstellar', director: 'Christopher Nolan', year: 2014},
+        {title: 'Rogue One', director: 'Gareth Edwards', year: 2016},
+        {title: 'The Shining', director: 'Stanley Kubrick', year: 1980},
+        {title: 'A Clockwork Orange', director: 'Stanley Kubrick', year: 1972},
+        {title: 'Dunkirk', director: 'Christopher Nolan', year: 2017},
+        {title: 'Solyaris', director: 'Andrei Tarkovsky', year: 1972},
+        {title: 'The Shape of Water', director: 'Guillermo del Toro', year: 2017},
+        {title: 'El Laberinto del Fauno', director: 'Guillermo del Toro', year: 2006},
+        {title: 'La Flor de mi Secreto', director: 'Pedro Almodovar', year: 1995},
+        {title: 'Stalker', director: 'Andrei Tarkovsky', year: 1979},
+        {title: 'La Piel que Habito', director: 'Pedro Almodovar', year: 2011},
+        {title: '2001: A Space Odyssey', director: 'Stanley Kubrick', year: 1968},
+        {title: 'Blade Runner', director: 'Ridley Scott', year: 1982},
+        {title: 'Wonder Woman', director: 'Patty Jenkins', year: 2017},
+    ];
+
+    const groupByDirector =
+        d3.nest()
+          .key(d => d.director)
+          .entries(movies);
+
+    console.log(groupByDirector);
+
+    const groupByYear =
+            d3.nest()
+              .key(d => d.year)
+              .sortKeys((a,b) => d3.ascending(a, b))
+              .entries(movies);
+
+    console.log(groupByYear);
+
+</script>
+
+</body>
+</html>

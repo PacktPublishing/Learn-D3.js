@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        div {
+            margin: 2px 50px;
+            padding: 5px;
+            width: 500px;
+            border: solid 1px blue;
+            overflow: visible
+        }
+
+        div > div {
+            border: solid 1px red;
+            width: 200px;
+        }
+
+        div > div > div {
+            border: solid 1px green;
+            width: 100px;
+        }
+
+        div > div > div > div {
+            border: solid 1px magenta;
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<div></div>
+
+<script>
+    function addNode(sel) {
+        sel.append("div").text("extra node");
+    }
+
+    const selection = d3.select("div")
+        .selectAll("div")
+        .data([1,2,3]).enter()
+        .append("div");
+
+    addNode(selection);
+    selection.each(function(d) {
+        const parent = d3.select(this);
+        parent.append("div").text("header");
+        parent.append("div").style("width", d=>(d*25) + "px");
+        parent.append("div").text("footer");
+    });
+    addNode(selection);
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill: #def;
+            stroke: #237;
+            stroke-width: 1px;
+        }
+
+        path {
+            fill: none;
+            stroke: #698;
+            stroke-width: .5px;
+        }
+        rect {
+            stroke: blue;
+            fill: none;
+        }
+        text {
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+        .leaf {
+            transform: rotate(90deg) translate(3px,-2px);
+        }
+        .node {
+            transform: rotate(-20deg) translate(3px,-2px);
+        }
+        .root {
+            transform: rotate(0deg) translate(3px,-2px);
+        }
+
+    </style>
+</head>
+<body>
+<script>
+    const height = 600;
+    const width = 1800;
+
+    const planetScale = d3.scaleLinear().range([1,40]);
+
+    d3.json("../Data/planets.json").then(function(result) {
+        console.log("Loaded hierarachy", result);
+
+        // convert existing hierarchy to standard format
+        const hierarchy = d3.hierarchy(result, function(d) {
+            if(d.category == 'rocky' || d.category == 'gaseous' || d.category == 'dwarf') {
+                if (d.satellites) {
+                    return d.satellites.filter(s => s.diameterKm > d3.max(d.satellites, t => t.diameterKm) /20 );
+                }
+                return undefined;
+            }
+            return d.planets;
+        });
+
+        // tree
+        const tree = d3.tree().size([width-100,height-150]);
+        const treeData = tree(hierarchy.sort((a,b) => a.data.semiMajorAxisAU - b.data.semiMajorAxisAU));
+
+        planetScale.domain([0,d3.max(hierarchy.data.planets, d => d.diameterKm)]);
+
+        draw(hierarchy);
+
+    });
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", "translate(20,50)");
+
+        drawLinks(chart.append("g").attr("class", "links"), data.links());
+        drawNodes(chart.append("g").attr("class", "nodes"), data.descendants());
+
+    }
+
+    function drawNodes(g, data) {
+        const node = g.selectAll("g")
+            .data(data)
+            .enter()
+            .append('g')
+            .attr('transform', function(d) {
+                return 'translate(' + [d.x, d.y] + ')';
+            });
+
+        node.append("circle")
+                .attr("r", function(d) {
+                    if(d.data.diameterKm) {
+                        return planetScale(d.data.diameterKm);
+                    } else {
+                        return planetScale(d.data.star.diameterKm)
+                    }
+                })
+                .attr("cy", function(d) {
+                    if(d.data.star) {
+                        return planetScale(-d.data.star.diameterKm * .8)
+                    }
+                })
+
+        node.append("text")
+                .attr('x', d => d.data.diameterKm ? planetScale(d.data.diameterKm)+5 : -15)
+                .attr('y', 5)
+                .attr("class", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return "node";
+                    } else if (d.depth == 0){
+                        return "root";
+                    } else {
+                        return "leaf";
+                    }
+                })
+                .text(d => d.data.name ? d.data.name : d.data.star.name);
+    }
+
+    const link = d3.linkVertical()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; });
+
+    function drawLinks(g, data) {
+        g.selectAll("path")
+                .data(data)
+                .enter()
+                .append('path')
+                .attr("d", link);
+    }
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+        }
+        svg {
+            border: solid 1px lightgray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const height  = 75;
+    const width   = 800;
+    const margin = 50;
+
+    const scaleX = d3.scaleLinear().range([margin, width - margin]);
+
+    const axisX = d3.axisBottom(scaleX)
+                    .tickPadding(5)
+                    .ticks(5, ',%');
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height",height);
+
+    svg.append("g").attr("class", "x-axis")
+            .attr("transform", "translate(0,"+margin/2+")")
+            .call(axisX);
+
+</script>
+</body>
+</html>

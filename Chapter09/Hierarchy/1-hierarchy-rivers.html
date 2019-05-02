@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+
+    d3.json("../Data/amazon-river.json").then(function(result) {
+        console.log("Loaded hierarachy", result);
+
+        // convert existing hierarchy to standard format
+        const h = d3.hierarchy(result, d => d.tributaries);
+
+        console.log("Converted hierarchy", h);
+        console.log("Children size", h.children.length);
+
+        drawTable(h);
+    });
+
+    function drawTable(h) {
+        // Mantaro river node
+        const target = h.children[6].children[0].children[0];
+
+        const table = d3.select("body").append("table").attr("border",1);
+        const header = table.append("tr");
+        header.append("th").text("Tributary");
+        header.append("th").text("Count");
+        header.append("th").text("Ancestors");
+        header.append("th").text("Descendants");
+        header.append("th").text("Leaves");
+        header.append("th").text("Links");
+        header.append("th").text("Path to " + target.data.name);
+
+        table.selectAll("tr")
+                .data(h.children).enter()
+                .append("tr")
+                .each(function(d) {
+                    const tr = d3.select(this);
+                    tr.append("td").text(d.data.name);
+                    if(d.children) {
+                        tr.append("td").text(d.count().value);
+                        const table2 = tr.append("td").append("table");
+                        table2.selectAll("tr")
+                                .data(d.children).enter()
+                                .append("tr")
+                                .each(function(c) {
+                                    const trc = d3.select(this);
+                                    trc.append("td").text(c => c.ancestors().map(a=>a.data.name))
+                                });
+                        const table3 = tr.append("td").append("table");
+                        table3.selectAll("tr")
+                                .data(d.children).enter()
+                                .append("tr")
+                                .each(function(c) {
+                                    const trc = d3.select(this);
+                                    trc.append("td").text(c => c.descendants().map(a=>a.data.name))
+                                });
+                        const table4 = tr.append("td").append("table");
+                        table4.selectAll("tr")
+                                .data(d.children).enter()
+                                .append("tr")
+                                .each(function(c) {
+                                    const trc = d3.select(this);
+                                    trc.append("td").text(c => c.leaves().map(a=>a.data.name))
+                                });
+
+                        const table6 = tr.append("td").append("table");
+                        table6.selectAll("tr")
+                                .data(d.children).enter()
+                                .append("tr")
+                                .each(function(c) {
+                                    const trc = d3.select(this);
+                                    const links = c.links();
+                                    if(links.length > 0) {
+                                        trc.append("td").text(links.map(n => n.source.data.name + ' -> ' + n.target.data.name));
+                                    }
+
+                                });
+
+                        const table7 = tr.append("td").append("table");
+                        table7.selectAll("tr")
+                                .data(d.children).enter()
+                                .append("tr")
+                                .each(function(c) {
+                                        const trc = d3.select(this);
+                                        trc.append("td").text(c => c.path(target).map(a=>a.data.name))
+                                    });
+                                }
+                });
+
+    }
+
+</script>
+<h1>See console for more results</h1>
+</body>
+</html>

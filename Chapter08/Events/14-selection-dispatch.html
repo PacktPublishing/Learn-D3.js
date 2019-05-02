@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .source {
+            fill: blue;
+        }
+        .target rect {
+            fill: hsla(0,100%,50%,.2);
+            stroke: red;
+        }
+        .dot {
+            stroke: black;
+            stroke-width: .5;
+            fill: rgba(0,0,0,.1);
+        }
+        svg {
+            background-color: rgba(0,255,0,0.1);
+            border: solid 1px green;
+            position: absolute;
+            left: 50px;
+            top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const width = 800, height = 300;
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",height)
+            .attr("width",width);
+
+    let timer;
+    let dots = 0;
+
+
+    svg.append("circle").attr("class", "source")
+            .attr("r", 100).attr("cx", 200) .attr("cy", 150)
+            .on("click", () => timer = d3.timer(placeDots,500));
+
+    const target = svg.append("g").attr("class", "target")
+                      .attr("transform", `translate(500,50)`)
+                      .on("dots", function() {
+                          d3.select(this)
+                             .append("circle").attr("class","dot")
+                             .attr("r", d3.event.detail.r)
+                             .attr("cx", d3.event.detail.x)
+                             .attr("cy", d3.event.detail.y);
+                      });
+    target.append("rect").attr("height", 200).attr("width", 200);
+
+
+    function placeDots() {
+        ++dots;
+        const randW = d3.randomUniform(0,200);
+        const randH = d3.randomUniform(0,200);
+        const randR = d3.randomUniform(0.5,10);
+        if(dots < 250) {
+            d3.select(".target")
+              .dispatch("dots", {detail:{x: randW(), y: randH(), r: randR()}})
+        } else {
+            timer.stop();
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

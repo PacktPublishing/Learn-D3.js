@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    // This example uses a data file provided by openflights.org/data.html
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // reference
+    const projection = d3.geoRobinson().fitExtent([[0,5],[width, height-10]], {type: "Sphere"});
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    Promise.all([
+                d3.json('../Data/' + file),
+                d3.csv('../Data/airports.csv', function(row) { // Source: http://ourairports.com/data/
+                    if(!row.IATA || row.IATA.length != 3)
+                        return undefined;
+
+                    return {
+                        id: row.IATA,
+                        name: row.Name,
+                        city: row.City,
+                        coordinates: [+row.Longitude, +row.Latitude],
+                    };
+                })
+            ])
+            .then( function([topology, airports]) {
+
+                console.log(airports)
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                drawGraticules();
+                draw(airports);
+
+            });
+
+    function draw(airports) {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+
+        globe.append("path")
+                .style("fill", '#333')
+                .style("fill-opacity", .8)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+        svg.selectAll("g.airport")
+                .data(airports)
+                .enter()
+                .append("g")
+                .attr("class","airport")
+                .attr("transform", (d,i) => `translate(${projection(d.coordinates)})`)
+                .append("circle")
+                    .style("fill", 'yellow')
+                    .style("stroke", "black")
+                    .style("stroke-width", .25)
+                    .attr('r', 1.25);
+    }
+
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', .25);
+    }
+
+</script>
+
+</body>
+</html>

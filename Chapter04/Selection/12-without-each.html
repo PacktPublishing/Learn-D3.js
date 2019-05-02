@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        div {
+            margin: 2px 50px;
+            padding: 5px;
+            width: 500px;
+            border: solid 1px blue;
+            overflow: visible
+        }
+
+        div > div {
+            border: solid 1px red;
+            width: 200px;
+        }
+
+        div > div > div {
+            border: solid 1px green;
+            width: 100px;
+        }
+
+        div > div > div > div {
+            border: solid 1px magenta;
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container"></div>
+
+<script>
+    // selection with three divs
+    const parents = d3.select("div.container")
+            .selectAll("div.item")
+            .data([1,2,3]).enter()
+            .append("div").attr("class","item");
+
+    // each line below will run for all divs in the parents selection
+    parents.append("div").text("header");
+    parents.append("div").style("width", d=>(d*25) + "px");
+    parents.append("div").text("footer");
+
+</script>
+
+</body>
+</html>

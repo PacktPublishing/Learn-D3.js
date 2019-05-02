@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            pointer-events: all;
+            border: solid 1px blue;
+        }
+        rect {
+            fill: red;
+        }
+        .grid {
+            stroke: gray;
+        }
+    </style>
+</head>
+<body>
+<h2>Open JavaScript console for results</h2>
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+    const chartWidth = width - margin*2,
+            chartHeight = height - margin*2;
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const chart = svg.append("g").attr("class", "chart")
+            .attr("transform", `translate(${[margin,margin]})`);
+
+    const rect = chart.append("rect")
+            .attr("x",300)
+            .attr("y",200)
+            .attr("width", 100)
+            .attr("height", 100)
+
+    const exes = d3.range(0,chartWidth+1,50).map(d => [[d,0],[d,chartHeight]]);
+    const wyes = d3.range(0,chartHeight+1,50).map(d => [[0,d],[chartWidth,d]]);
+
+    const line = d3.line();
+
+    const grid = chart.selectAll(".grid")
+            .data(d3.merge([exes, wyes]))
+            .enter()
+            .append("path").attr("class","grid")
+            .attr("d", line)
+            .style("stroke-width", d => d[0][0] == chartWidth/2 || d[1][1] == chartHeight/2 ? 3 : 1)
+
+    const extent = [[0,0],[chartWidth,chartHeight]];
+
+    const zoomBehavior = d3.zoom()
+            .extent(extent)
+            .translateExtent(extent)
+            .scaleExtent([0.5,5])
+            .on('zoom', function() {
+                rect.attr("transform", d3.event.transform);
+                grid.attr("transform", d3.event.transform);
+            })
+
+
+    // 3x scale + (-300,-200)
+    const transform1 = d3.zoomTransform(svg.node)
+            .translate(-300,-200)
+            .scale(3);
+
+    const point1 = transform1.apply([-100,50]);
+    console.log("Point 1", point1.toString());
+
+    const x1 = transform1.applyX(25);
+    const y1 = transform1.applyY(-25);
+    console.log("X1", x1, "Y1", y1);
+
+    // Transforms
+    console.log(".toString()", transform1)
+    console.log(".scale(1): ", transform1.scale(1))
+    console.log(".translate(0,0): ", transform1.translate(0,0))
+
+    // String generation
+    console.log(".toString()", ""+transform1)
+    console.log(".scale(1).toString(): ", ""+transform1.scale(1))
+    console.log(".translate(0,0).toString(): ", ""+transform1.translate(0,0))
+
+    // Apply
+    console.log(".apply([0,0]): array ", transform1.apply([0,0]))
+    console.log(".applyX(0): ", transform1.applyX(0))
+    console.log(".applyY(0) ", transform1.applyY(0))
+
+    // Inverting from zoomIdentity translate
+    console.log(".invert([0,0]): array ", transform1.invert([0,0]))
+    console.log(".invertX(0): ", transform1.invertX(0))
+    console.log(".invertY(0) ", transform1.invertY(0))
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+        }
+        svg {
+            border: solid 1px lightgray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const scale = d3.scaleLinear().range([0,250]);
+
+    const axis1 = d3.axisBottom(scale);
+    const axis2 = d3.axisTop(scale);
+    const axis3 = d3.axisLeft(scale);
+    const axis4 = d3.axisRight(scale);
+
+    const svg = d3.select("body").append("svg").attr("width", 500).attr("height",350);
+
+    svg.append("g")
+            .attr("transform", "translate(10,100)")
+            .call(axis1)
+            .append("text").attr("class","label")
+            .text("axisBottom")
+            .attr("transform", "translate(125,50)");
+
+    svg.append("g")
+            .attr("transform", "translate(10,250)")
+            .call(axis2)
+            .append("text").attr("class","label")
+            .text("axisTop")
+            .attr("transform", "translate(125,-50)");
+
+    svg.append("g")
+            .attr("transform", "translate(350,50)")
+            .call(axis3)
+            .append("text").attr("class","label")
+            .text("axisLeft")
+            .attr("transform", "rotate(90) translate(125,50)");
+
+    svg.append("g")
+            .attr("transform", "translate(400,50)")
+            .call(axis4)
+            .append("text").attr("class","label")
+            .text("axisRight")
+            .attr("transform", "rotate(90) translate(125,-50)");
+</script>
+</body>
+</html>

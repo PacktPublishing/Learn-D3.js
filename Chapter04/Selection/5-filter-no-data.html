@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p>
+
+<script>
+    // print function
+
+    // odd selection nodes (starts in 0 = even)
+    // returns [p#a1, p#a3, p#a5]
+    const odd_nodes = d3.selectAll("p").nodes().filter((d,i) => i%2 == 0);
+    const odd_selection = d3.selectAll(odd_nodes)
+    odd_selection.style("color", "red");
+    console.log("Odd Nodes", odd_nodes, odd_selection, odd_selection._groups);
+
+    // odd filter (starts in 0 = even)
+    // returns [p#a1, p#a3, p#a5]
+    const odd_f = d3.selectAll("p").filter((d,i) => i%2 == 0);
+    odd_f.style("text-decoration", "underline");
+    console.log("Odd Filter", odd_f, odd_f._groups);
+
+    // odd selection nodes (starts in 0 = even)
+    // returns [true, empty, true, empty, true]
+    const odd_s = d3.selectAll("p").select((d,i) => i%2 == 0);
+    console.log("Odd Selection", odd_s, odd_s._groups);
+
+    // odd selection nodes returning indexed elements
+    // returns [p#a1, empty, p#a3, empty, p#a5]
+    const odd_sn = d3.selectAll("p").select(function(d,i) {
+        return i%2 == 0 ? this : null
+    });
+    odd_sn.style("font-variant", "small-caps")
+    console.log("Odd Selection Nodes", odd_sn, odd_sn._groups);
+
+
+    // filter
+    const first_p_not_in_div = d3.selectAll(":not(div) >p")
+                               .filter(function(d,i) {
+                                   return i == 0;
+                               });
+    console.log("first <p> not in <div>", first_p_not_in_div, first_p_not_in_div.node());
+
+    // filtering loses the index (result is [p#a5])
+    const last_p_not_in_div = d3.selectAll(":not(div) >p")
+            .filter(function(d,i,nodes) {
+                return i == nodes.length - 1;
+            });
+    console.log("last <p> not in <div> filter", last_p_not_in_div, last_p_not_in_div._groups);
+
+    // select all, unlike filter, preserves the index (r4esult is [empty, p#a5])
+    const last_p_not_in_div2 = d3.selectAll(":not(div) >p")
+            .select(function(d,i,nodes) {
+                return i == nodes.length - 1;
+            });
+    console.log("last <p> not in <div> select", last_p_not_in_div2, last_p_not_in_div2._groups);
+
+
+</script>
+</body>
+</html>

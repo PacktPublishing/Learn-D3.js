@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+
+    const width = 800;
+    const height = 800;
+    const margin = 120;
+
+    const matrix = [
+        [0,3,3,3,0,0,0,2,4],
+        [3,0,5,0,0,0,0,0,0],
+        [8,5,0,6,0,0,4,0,0],
+        [9,0,8,0,9,0,0,0,0],
+        [0,0,0,9,0,8,0,0,0],
+        [0,0,0,0,9,0,7,8,0],
+        [0,0,9,0,0,7,0,7,0],
+        [3,0,0,0,0,8,6,0,7],
+        [4,0,0,0,0,0,0,9,0]
+    ];
+
+    const headers = ['A','B','C','D','E','F','G','H','I'];
+
+    console.log(matrix);
+
+    const chord = d3.chord()
+            .padAngle(.3)
+            .sortGroups((a,b) => d3.descending(a,b))
+            .sortSubgroups((a,b) => d3.descending(a,b));
+    const chords = chord(matrix);
+
+    const radius = height/2 - margin/2;
+
+    const ribbon = d3.ribbon().radius(radius);
+
+    const color = d3.scaleSequential(d3.interpolateRainbow).domain([0,matrix.length]);
+    const arc = d3.arc().innerRadius(radius+2).outerRadius(radius+30);
+
+    const canvas = d3.select("body").append("canvas").attr("width",width).attr("height",height);
+    const ctx = canvas.node().getContext("2d");
+    ctx.translate(width/2+margin/4, height/2+margin/4);
+
+    ribbon.context(ctx);
+    arc.context(ctx);
+
+    chords.forEach(function(d) {
+        ctx.save();
+
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = color(d.source.index);
+
+        ctx.beginPath();
+        ribbon(d);
+        ctx.fill();
+        ctx.restore();
+    });
+
+    chords.groups.forEach(function(d) {
+        ctx.save();
+
+        ctx.fillStyle = color(d.index);
+
+        ctx.beginPath();
+        arc(d);
+        ctx.fill();
+        ctx.restore();
+    });
+
+    chords.groups.forEach(function(d) {
+        ctx.save();
+
+        ctx.fillStyle = "white";
+        ctx.font = "18px 'Yanone Kaffeesatz', sans-serif";
+        ctx.textAlign = "middle";
+        ctx.textBaseline = "middle";
+
+        ctx.translate(arc.centroid(d)[0], arc.centroid(d)[1]);
+        ctx.rotate((arc.endAngle()(d) + arc.startAngle()(d))/2);
+
+        ctx.fillText(headers[d.index], 0, 0)
+
+        ctx.restore();
+    });
+
+</script>
+
+</body>
+</html>

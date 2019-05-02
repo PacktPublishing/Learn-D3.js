@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<div id="words">
+    <p>One</p>
+    <p>Two</p>
+    <p>Three</p>
+</div>
+<p>Four</p>
+<p>Five</p>
+
+<script>
+    const selection = d3.select("#words").selectAll("p");
+
+    selection.data([7,4,8])
+            .filter((d,i,nodes) => console.log(d,i,nodes,nodes[i]) || true)
+            .text((d,i,nodes) => d3.select(nodes[i]).text() + " " + d);
+
+    d3.selectAll(":not(div) > p")
+            .filter((d,i,nodes) => {
+                // Note that this (Window) and nodes[i] (P) are different!
+                console.log(d,i,nodes, nodes[i], this);
+                return true;
+            });
+</script>
+</body>
+</html>

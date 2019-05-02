@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <style>
+        svg {
+            border: solid black 1px;
+        }
+        text {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 300);
+
+    const defs = svg.append("defs");
+
+    const filter = defs.append("filter").attr("id", "shadow")
+    filter.append("feDropShadow")
+            .style("flood-color", "green")
+            .style("dx", 5)
+            .style("dy", 5)
+            .style("stdDeviation", 3);
+
+    const linearGradient = defs.append("linearGradient")
+            .attr("id","grad")
+            .attr("x1",0)
+            .attr("y1",0)
+            .attr("x2","100%")
+            .attr("y2",0);
+    linearGradient.append("stop")
+            .attr("offset", "0%")
+            .attr("stop-color", "magenta");
+    linearGradient.append("stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "yellow");
+
+    const clipPath = defs.append("clipPath").attr("id", "circle");
+    clipPath.append("circle").attr("cx", 175).attr("cy", 75).attr("r", 40);
+
+    svg.append("rect")
+            .attr("x",50)
+            .attr("y",50)
+            .attr("height",50)
+            .attr("width",50)
+            .attr("fill","red")
+            .attr("stroke","blue")
+            .attr("stroke-width",10)
+            .attr("stroke-opacity",0.5)
+    svg.append("path")
+            .attr("id", "path1")
+            .attr("d", "M150,200 L150,150 L100,150 C100,200 150,250 200,250 L200,200 Z")
+            .attr("fill","none")
+            .attr("stroke","blue")
+            .attr("stroke-dasharray","5 2 1 2")
+            .attr("stroke-width",2)
+            .style("filter", "url(#shadow)")
+    svg.append("path")
+            .attr("d", "M0,0 L0,-100 A100,100 0 0,0 -100,0 L0,0 Z")
+            .attr("transform", "translate(100,250) scale(0.5) ")
+            .attr("stroke","red")
+            .attr("stroke-opacity",.5)
+            .attr("stroke-width",4)
+            .attr("fill-opacity",.2)
+    const text = svg.append("text")
+            .attr("fill","url(#grad)")
+            .attr("font-size",20)
+            .attr("x",200)
+            .attr("y",100)
+            .text("Scalable")
+    text.append("tspan")
+            .attr("dy",20)
+            .attr("x",200)
+            .text("Vector")
+    text.append("tspan")
+            .attr("dy",20)
+            .attr("x",200)
+            .text("Graphics")
+    svg.append("image")
+            .attr("x", 125).attr("y", 25).attr("height", 100).attr("width", 100)
+            .attr("xlink:href", "../Data/Images/pluto.jpg")
+            .attr("clip-path", "url(#circle)")
+            .attr("opacity", 0.75)
+    svg.append("path")
+            .attr("d", "M100,200 C100,100 250,100 250,200")
+            .attr("transform", "scale(0.6) rotate(180,295,225)")
+            .attr("fill", "url(#grad)");
+
+</script>
+</body>
+</html>

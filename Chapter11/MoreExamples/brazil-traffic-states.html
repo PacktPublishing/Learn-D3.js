@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .country {
+            fill: gray;
+            stroke: black;
+            stroke-width: .05;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "estados_br.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const popScale = d3.scaleSequentialSqrt(d3.interpolateReds);
+
+    const map = {};
+
+    Promise.all([
+        d3.json('../Data/' + FILE),
+        d3.csv('../Data/mortes_acidentes_transito_2016_estados.csv', function(row) {
+            return {
+                cod_ibge: +row.cod_ibge,
+                deaths: +row.obitos
+            }
+        })
+    ]).then(function([shapes, thematic]) {
+        console.log(shapes);   // shape data
+        console.log(thematic); // thematic data
+
+        // save in a global context
+        map.features   = shapes.features;
+
+        // add data to properties
+        map.features.forEach(function(d) {
+            const entry = thematic.filter(t => t.cod_ibge == d.properties.codigo_ibg)[0];
+            if(entry) {
+                d.properties.deaths = entry.deaths;
+            }
+        })
+
+        projection.fitSize([width, height], shapes);
+
+        // configure the scale
+        popScale.domain([0, d3.max(map.features, d => d.properties.deaths)])
+        draw();
+    });
+
+    function draw() {
+        svg.selectAll("path.country")
+            .data(map.features)
+            .enter()
+            .append("path")
+            .attr("class","country")
+            .attr('d', geoPath)
+            .style("fill", d => popScale(d.properties.deaths))
+    }
+</script>
+
+</body>
+</html>

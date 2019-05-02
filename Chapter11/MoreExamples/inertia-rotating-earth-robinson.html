@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://unpkg.com/versor"></script>
+
+    <!-- See https://github.com/Fil/d3-inertia -->
+    <script src="https://unpkg.com/d3-inertia"></script>
+    <style>
+        svg {background-color:black;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-lowres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const defs = svg.append("defs");
+
+    // choose a projection
+    const projection = d3.geoRobinson()
+            .fitExtent([[0,0+25],[width,height-25]], {type: 'Sphere'});
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+
+    d3.geoInertiaDrag(svg, function() { render(); }, projection);
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+                map.merged = topojson.merge(topology, map.geometries)
+                map.mesh = topojson.mesh(topology, map.topology)
+
+                draw();
+
+            });
+
+    function render() {
+        svg.select(".graticule")
+                .attr('d', geoPath)
+        svg.selectAll(".land")
+                .attr('d', geoPath)
+        svg.selectAll(".mesh")
+                .attr('d', geoPath)
+    }
+
+    function draw() {
+        svg.append("path")
+                .datum({type: "Sphere"})
+                .attr("d", geoPath)
+                .style('fill', 'darkblue')
+                .style('fill-opacity',.5)
+                .style('stroke', 'darkgreen')
+                .style('stroke-width', 2);
+        svg.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .attr('d', geoPath)
+                .style("fill", 'none')
+                .style("stroke", "lightgreen")
+                .style('stroke-width', '.25');
+        svg.append("path").attr("class","land")
+                .datum(map.merged)
+                .attr('d', geoPath)
+                .style("fill", '#345434')
+                .style('fill-opacity',.8);
+        svg.append("path").attr("class","mesh")
+                .datum(map.mesh)
+                .attr('d', geoPath)
+                .style("fill", 'none')
+                .style("stroke", 'green')
+                .style("stroke-width", .25);
+    }
+
+</script>
+
+</body>
+</html>

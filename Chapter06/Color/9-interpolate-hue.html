@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text.label {
+            fill: black;
+            text-anchor: start;
+            font-size: 150%;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+
+</script>
+
+<svg height="500" width="800"></svg>
+<script>
+    const height=500, width=700;
+    const scale = d3.scaleLinear().range([50,500]).domain([0,1]);
+    const axis = d3.axisBottom(scale).ticks(10);
+    const data = d3.range(0,1,0.01);
+
+    const interHue1 = d3.interpolateHue(0,120);
+    const interHue2 = d3.interpolateHue(120,180);
+    const interHue3 = d3.interpolateHue(180,270);
+    const interHue4 = d3.interpolateHue(270,360);
+
+    drawScale(1, interHue1, 'd3.interpolateHue(0,360)');
+    drawScale(2, interHue2, 'd3.interpolateHue(60,240)');
+    drawScale(3, interHue3, 'd3.interpolateHue(120,240)');
+    drawScale(4, interHue4, 'd3.interpolateHue(180,240)');
+
+    function drawScale(order, func, label) {
+        const g = d3.select("svg").append("g").call(axis)
+                .attr("transform",`translate(0,${50 * order})`);
+        g.selectAll("rect").data(data).enter().append("rect")
+                .attr("width",5).attr("height",20)
+                .attr("x", scale).attr("y",-20)
+                .style("fill", d => d3.hsl(func(d), 1, 0.5)) ;
+        g.append("text").attr("class", "label")
+                .attr("x", 510).attr("y",-5)
+                .text(label)
+    }
+
+</script>
+
+
+</body>
+</html>

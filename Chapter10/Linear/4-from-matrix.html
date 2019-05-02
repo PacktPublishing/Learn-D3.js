@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        .faded {
+            opacity: .3;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const matrix = [
+        [0,3,3,3,0,0,0,2,4],
+        [3,0,5,0,0,0,0,0,0],
+        [8,5,0,6,0,0,4,0,0],
+        [9,0,8,0,9,0,0,0,0],
+        [0,0,0,9,0,8,0,0,0],
+        [0,0,0,0,9,0,7,8,0],
+        [0,0,9,0,0,7,0,7,0],
+        [3,0,0,0,0,8,6,0,7],
+        [4,0,0,0,0,0,0,9,0]
+    ];
+
+    const nodes = ['A','B','C','D','E','F','G','H','I'];
+
+    const edges = dvj.matrixToLinks(nodes, matrix);
+
+    const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+
+    const data = arcDiagLayout(nodes, edges);
+
+    console.log(data.nodes(), data.links())
+
+    color.domain([0, nodes.length]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[margin/2,margin/2 + height/2]})`);
+
+    const curve = dvj.curve().size([width-margin, height-margin]);
+
+    const widthScale = d3.scaleLinear()
+            .range([2,10])
+            .domain([0, d3.max(edges, d => d.value)]);
+
+    chart.selectAll("path")
+            .data(data.links())
+            .enter()
+            .append("path")
+            .attr("d", curve)
+            .style("stroke-width", d => widthScale(d.value))
+            .style("stroke", d => color(d.source.i))
+            .style('stroke-opacity', .3)
+            .style("fill", 'none');
+
+    chart.selectAll("circle")
+            .data(data.nodes())
+            .enter()
+            .append("circle")
+            .attr("cx", d => d.x)
+            .style("fill", (d,i) => color(i))
+            .attr("r", 15)
+            .on("mouseover", highlight)
+            .on("mouseout", d => d3.selectAll("path, circle").classed('faded', false));
+
+    chart.selectAll("text")
+            .data(data.nodes())
+            .enter()
+            .append("text")
+            .attr("x", d => d.x)
+            .text((d,i) => nodes[i])
+            .style("pointer-events",'none');
+
+    function highlight(d) {
+        d3.selectAll("path").classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle").classed('faded', n => !(n === d
+                                                   || n.sources.filter(s => s.target === d).length > 0
+                                                   || n.targets.filter(s => s.source === d).length > 0))
+    }
+
+</script>
+</body>
+</html>

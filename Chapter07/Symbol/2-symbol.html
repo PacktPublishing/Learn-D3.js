@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+
+    const star = d3.symbol().type(d3.symbolStar).size(50);
+
+    const svg = d3.select("body").append("svg").attr("height",400).attr("width",width);
+    svg.append("path")
+            .attr("d", star)
+            .attr("fill", "red")
+            .attr("transform", "translate(50,50)");
+
+</script>
+</body>
+</html>

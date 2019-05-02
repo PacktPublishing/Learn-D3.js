@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        #container {
+            width: 500px;
+            margin: 10px;
+        }
+        form {
+            margin: 10px 0;
+        }
+        .letter {
+            width: 20px;
+            padding: 0 10px;
+            font-family: 'impact', sans-serif;
+            font-size: 24pt;
+            border: solid 2px black;
+            color: white;
+        }
+        button {
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <span class="letter" id="pos0"></span>
+    <span class="letter" id="pos1"></span>
+    <span class="letter" id="pos2"></span>
+    <span class="letter" id="pos3"></span>
+    <span class="letter" id="pos4"></span>
+</div>
+<form>
+    <button type="button" id="w0">ONE</button>
+    <button type="button" id="w1">TWO</button>
+    <button type="button" id="w2">THREE</button>
+    <button type="button" id="w3">FOUR</button>
+</form>
+<script>
+    const labels = ["one", "two", "three", "four"];
+    const datasets = [
+        [
+            {value: "o", pos: 2},
+            {value: "n", pos: 1},
+            {value: "e", pos: 0},
+        ],[
+            {value: "t", pos: 2},
+            {value: "w", pos: 1},
+            {value: "o", pos: 0}
+        ],[
+            {value: "t", pos: 4},
+            {value: "h", pos: 3},
+            {value: "r", pos: 2},
+            {value: "e", pos: 1},
+            {value: "e", pos: 0}
+        ],[
+            {value: "f", pos: 3},
+            {value: "o", pos: 2},
+            {value: "u", pos: 1},
+            {value: "r", pos: 0}
+        ]
+    ];
+    let currentIndex = 0;
+    const colorScale = d3.scaleOrdinal(d3.schemeSet1);
+
+    d3.select("form")
+        .selectAll("button")
+            .style("background-color", (d,i) => colorScale(i))
+            .text((d,i) => labels[i].toUpperCase())
+            .on("click", function() {
+                currentIndex = d3.select(this).attr("id").substring(1);
+                redraw();
+            });
+
+    redraw();
+
+    function redraw() {
+        // bind
+        const step_select = d3.select("#container").selectAll(".letter");
+        const step_bind   = step_select
+                .data(datasets[currentIndex], function(d) {
+                    return d ? (4 - d.pos) : this.id.substring(3);
+                }).text(d => d.value);
+
+        //exit
+        const step_exit   = step_bind.exit();
+        const step_remove = step_exit.transition().remove();
+
+        // enter
+        const step_enter  = step_bind.enter();
+        const step_append = step_enter.append("span")
+                .attr("class", "letter")
+                        .text(d => d.value);
+
+        // merge + update
+        const step_merge = step_append.merge(step_select)
+        const step_update =
+                step_merge.transition()
+                          .style("background-color", d => colorScale(currentIndex));
+
+        console.log("2) UPDATE");
+
+        console.log(labels[currentIndex] + ": step_select", step_select._groups[0]);
+        console.log(labels[currentIndex] + ": step_bind", step_bind._groups[0]);
+        console.log(labels[currentIndex] + ": step_bind: enter", step_bind._enter[0]);
+        console.log(labels[currentIndex] + ": step_bind: exit",  step_bind._exit[0]);
+        console.log(labels[currentIndex] + ": step_update", step_update._groups[0]);
+
+        console.log("3) UPDATE/ENTER/APPEND");
+
+        console.log(labels[currentIndex] + ": step_enter", step_enter._groups[0]);
+        console.log(labels[currentIndex] + ": step_append", step_append._groups[0]);
+        console.log(labels[currentIndex] + ": step_merge", step_merge._groups[0]);
+
+        console.log("4) UPDATE/EXIT/REMOVE");
+
+        console.log(labels[currentIndex] + ": step_exit", step_exit._groups[0]);
+        console.log(labels[currentIndex] + ": step_remove", step_remove._groups[0]);
+    }
+
+</script>
+</body>
+</html>

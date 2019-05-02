@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+    polyline {
+        stroke: black;
+        stroke-width: 3;
+        fill-opacity: 0.5;
+    }
+</style>
+<body>
+<h2>SVG polyline + fill-rule</h2>
+<svg width="600" height="300">
+    <polyline points="150,150
+                       50,150
+                       100,20
+                       150,50
+                       200,200
+                       50,200
+                       20,154
+                       48,82
+                       32,20"
+              fill="blue"/>
+
+    <polyline points="450,150
+                      350,150
+                      400,20
+                      450,50
+                      500,200
+                      350,200
+                      320,154
+                      348,82
+                      332,20"
+             fill="red"
+             fill-rule="evenodd"/>
+</svg>
+</body>
+</html>

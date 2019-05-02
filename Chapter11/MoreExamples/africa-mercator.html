@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const color = d3.scaleOrdinal(d3.schemeGreens[9]);
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const popScale = d3.scaleSqrt().range([0.1, 10]);
+    const fontScale = d3.scaleSqrt().range([10,20])
+    const geoPath = d3.geoPath().projection(d3.geoMercator().scale(340));
+
+    Promise.all([
+        d3.json('../Data/africa.geojson'),
+        d3.json('../Data/africa-rivers.geojson'),
+        d3.csv('../Data/africa-cities.csv', function(row) {
+            return {
+                city: row.city,
+                coordinates: [+row.lng, +row.lat],
+                population: +row.population
+            };
+        })
+    ])
+    .then(([countries, rivers, cities]) =>  {
+        const filteredCities = cities.filter(d => d.population > 1000);
+        popScale.domain([0, d3.max(filteredCities, d => d.population)]);
+        fontScale.domain([0, d3.max(filteredCities, d => d.population)]);
+        drawGraticules();
+        drawCountries(countries);
+        drawRivers(rivers);
+        drawCities(filteredCities);
+
+    });
+
+    function drawCountries(data) {
+        svg.selectAll("g.country")
+                .data(data.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .style("fill", (d,i) => d3.rgb(color(i)).darker())
+                .attr("opacity", .4)
+                .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+    }
+
+    function drawRivers(data) {
+        console.log(data)
+        svg.selectAll("g.river")
+                .data(data.features)
+                .enter()
+                .append("g")
+                .attr("class","river")
+                .style("fill", 'none')
+                .attr("opacity", 1)
+                .append("path")
+                .style('stroke-width', d => d.properties.StrokeWeig)
+                .attr('d', geoPath)
+                .style("stroke", "navy");
+    }
+
+    function drawCities(data) {
+        svg.selectAll("g.city")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","city")
+                .attr('transform', d => `translate(${geoPath.projection()(d.coordinates)})`)
+                .on('mouseenter', showName)
+                .on('mouseleave', hideName)
+                .append("circle")
+                .style("fill", 'red')
+                .style("fill-opacity", d => popScale(d.population) <= 1 ? 1 : .25)
+                .attr('r', d => popScale(d.population))
+                .style("stroke-width", d => popScale(d.population) > 1 ? .25 : 0)
+                .style("stroke", "black");
+    }
+
+    function drawGraticules() {
+        svg.append("g").attr("class","equator")
+                .datum(d3.geoCircle().center([0,90]))
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "blue")
+                .style("fill", "none")
+                .style('stroke-width', 3)
+                .style('stroke-opacity', .2);
+
+        svg.append("g").attr("class","prime")
+                .datum(d3.geoCircle().center([90,0]))
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "red")
+                .style("fill", "none")
+                .style('stroke-width', 3)
+                .style('stroke-opacity', .2);
+
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style('stroke-width', d => '.25');
+    }
+
+    function showName(d) {
+        console.log(d.city)
+        d3.select(this)
+                .append('text')
+                .style('font-size', d => fontScale(d.population))
+                .text(d.city)
+    }
+    function hideName(d) {
+        d3.select(this).select('text').remove();
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .odd {
+            text-transform: uppercase;
+        }
+        .special {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="words">
+    <p class="odd">One</p>
+    <p>Two</p>
+    <p class="odd">Three</p>
+</div>
+<p>Four</p>
+<p class="odd">Five</p>
+
+<script>
+    d3.select("#words")
+      .selectAll("p")
+          .classed("odd", false)
+          .classed("special", (d,i) => i == 0);
+
+    d3.select("#words")
+      .selectAll("p")
+          .property("hidden", (d,i,nodes) => i == nodes.length-1);
+
+</script>
+</body>
+</html>

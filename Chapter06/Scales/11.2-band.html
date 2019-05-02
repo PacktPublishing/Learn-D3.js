@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill-opacity: .1;
+            fill: red;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const data = d3.range(0,100,5);
+
+    const bandScale = d3.scaleBand()
+            .domain(data)
+            .range([0,800])
+            .padding(.1);
+
+    console.log(0, bandScale(0));
+    console.log(20, bandScale(20));
+    console.log(40, bandScale(40));
+    console.log(60, bandScale(60));
+    console.log(80, bandScale(80));
+    console.log(100, bandScale(100));
+
+    const colorScale = d3.scaleSequential(d3.interpolatePlasma).domain([0,200]);
+
+    console.log("bandwidth", bandScale.bandwidth());
+    console.log("step", bandScale.step());
+    console.log("padding", bandScale.padding());
+
+    d3.select("body").append("svg").attr("height", 650).attr("width", 850);
+
+    d3.select("svg").append("g")
+            .selectAll("rect")
+            .data(data).join("rect")
+            .attr("x", bandScale).attr("y",22)
+            .attr("width", d => bandScale.bandwidth())
+            .attr("height", d => Math.random() * 200)
+            .attr("fill", (d,i,n) => colorScale(d3.select(n[i]).attr("height")));
+    
+</script>
+
+</body>
+</html>

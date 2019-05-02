@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const width  = 800;
+    const height = 500;
+    const margin = 250;
+
+    const stackOrder = [
+        'stackOrderNone',
+        'stackOrderAscending',
+        'stackOrderDescending',
+        'stackOrderInsideOut',
+        'stackOrderReverse'
+    ];
+
+    const stackOffset = [
+        'stackOffsetNone',
+        'stackOffsetExpand',
+        'stackOffsetDiverging',
+        'stackOffsetSilhouette',
+        'stackOffsetWiggle'
+    ];
+
+    const populations = [
+        {year: 1960, "A": 38174, "B": 17917, "C": 186808},
+        {year: 1980, "A": 69361, "B": 24537, "C": 229763},
+        {year: 2000, "A": 101720, "B": 30736, "C": 281983}
+    ];
+
+    const scale = d3.scaleLinear()
+            .range([margin,width - margin]);
+    const stack = d3.stack()
+            .keys(['C', 'A', 'B']);
+
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain([0,populations.length]);
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",height)
+            .attr("width", width)
+            .attr("viewBox", -100 + " 0 " + width + " " + height);
+
+    stackOffset.forEach((d,i) => draw(d, i));
+
+    function draw(offset, index) {
+        stack.offset(d3[offset]);
+
+        const stacked = stack(populations);
+
+        scale.domain([0, d3.max(d3.merge(d3.merge(stacked)))]);
+
+        const g = svg.append("g")
+                     .attr("transform", "translate("+[0,100*index]+")");
+
+        g.selectAll(".year")
+                .data(stacked)
+                .enter()
+                .append("g").attr("class", "year")
+                .style("fill", (d,i) => colorScale(i))
+                .each(function(d) {
+                    d3.select(this)
+                            .selectAll(".country")
+                            .data(d => d).enter()
+                            .append("rect").attr("class", "country")
+                            .attr('width', d => scale(d[1]) - scale(d[0]))
+                            .attr('height', 20)
+                            .attr('x', d => scale(d[0]))
+                            .attr('y', (d,i) => i * 22);
+
+                 });
+
+        g.append("text")
+                .text(offset)
+                .attr("x", 570)
+                .attr("y", 35)
+    }
+
+
+</script>
+</body>
+</html>

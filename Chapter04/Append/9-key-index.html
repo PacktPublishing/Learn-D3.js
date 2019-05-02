@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        p {margin: 0}
+    </style>
+</head>
+<body>
+<div></div>
+<script>
+    d3.select("div").selectAll("p")
+        .data([1,2,3,4,5]).enter().append("p")
+        .text((d,i) => "datum: " + d + ", i:" + i);
+
+    // update selection
+    d3.select("div").selectAll("p")
+        .data([2,4,6]) // will update first three indexes (0, 1, 2)
+        .style("color", "blue")
+        .text((d,i) => "updated: " + d + ",j:" + i);
+
+    // append enter selection
+    d3.select("div").selectAll("p")
+        .data([7,7,7,7,7,2,4,6]) // last 3 indexes added to enter selection
+        .enter().append("p")
+           .style("color", "red")
+           .text((d,i) => "appended: " + d + ",j:" + i);
+
+</script>
+</body>
+</html>

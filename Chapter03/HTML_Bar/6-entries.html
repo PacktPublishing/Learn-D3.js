@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale.v2.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-format.v1.min.js"></script>
+    <style>
+        .bar-chart {
+            border: solid 1px gray;
+            position: relative;
+            width: 800px;
+        }
+        .entry {
+            position: absolute;
+            width: 100%;
+        }
+        .bar {
+            height: 20px;
+            top: 1px;
+            left: 100px;
+            background-color: orange;
+            position: absolute;
+        }
+        .label {
+            padding: 4px 5px;
+            font-family: sans-serif;
+            font-size: 9pt;
+            position: absolute;
+            height: 20px;
+
+        }
+        .category {
+            text-align: right;
+            width: 80px;
+        }
+        .value {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const distances = [
+        {name: "Mercury", distance: 0.387},
+        {name: "Venus", distance: 0.723},
+        {name: "Earth", distance: 1},
+        {name: "Mars", distance: 1.52},
+        {name: "Jupiter", distance: 5.2},
+        {name: "Saturn", distance: 9.54},
+        {name: "Uranus", distance: 19.2},
+        {name: "Neptune", distance: 30.1},
+        {name: "Ceres", distance: 2.765},
+        {name: "Pluto", distance: 39.481},
+        {name: "Eris", distance: 67.67},
+        {name: "Haumea", distance: 43},
+        {name: "Makemake", distance: 45.346}
+    ];
+
+    const barScale = d3.scaleLinear()
+                       .domain([0, d3.max(distances, d => d.distance)])
+                       .range([0, 600]);
+
+    distances.sort((a,b) => d3.ascending(a.distance, b.distance));
+
+    // selects the entire chart (one node)
+    const chart = d3.select("body")
+                    .append("div").attr("class", "bar-chart")
+                    .style("height", distances.length * 21 + "px");
+
+    // selects each entry (a nodelist)
+    const entries = chart.selectAll("div").data(distances)
+            .enter().append("div")
+            .attr("class", "entry")
+            .style("top", (d,i) => i * 21 + "px");
+
+    // appends to each element in the entries selection
+    entries.append("div").attr("class", "label category")
+           .text(d => d.name);
+
+    entries.append("div").attr("class", "bar")
+           .style("width", d => barScale(d.distance) + "px");
+
+    entries.append("div").attr("class", "label value")
+           .style("left", d => (barScale(d.distance) + 100) + "px")
+           .text(d => d.distance + " AU");
+
+</script>
+</body>
+</html>

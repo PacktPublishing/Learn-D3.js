@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISS World temperatures</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+            font-size: 8pt;
+        }
+        .zero-axis line {
+            stroke-opacity: .3;
+        }
+        .zero-axis text {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const w  = 800, h = 600, m = 50;
+    const width = w - m*2, height = h - m*2;
+    const labelPadding = m-5, tickBleed = 5;
+
+    // Viewport configuration
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",h)
+            .attr("width",w);
+
+    // Clipping path to use in zoomable view
+    svg.append("defs")
+            .append("clipPath").attr("id", "chart")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height);
+
+    // The chart in the SVG
+    // All elements are added to this object
+    const chart = svg.append("g")
+            .attr("transform", `translate(${[m, m]})`);
+
+    // The zoomable view
+    // All elements in this object will be zoomed
+    const view = chart.append("g")
+            .attr("class", "view")
+            .attr("clip-path", "url(#chart)")
+            .append("g") // the clipped zoomable object
+
+    const line = d3.line();
+
+    // Scales configuratoon
+    const scaleY = d3.scaleLinear().range([height, 0]);
+    const scaleX = d3.scaleTime().range([0, width]);
+
+    // Axis configuration
+    const axisX = d3.axisBottom(scaleX) // this scale doesn't implement ticks!
+            .tickPadding(5)
+            .tickFormat(d3.timeFormat("%b %Y"))
+
+    const axisY = d3.axisLeft(scaleY)
+            .tickPadding(tickBleed)
+            .tickSizeOuter(0);
+
+    const axisZero = d3.axisRight(scaleY)
+            .tickValues([0])
+            .tickSizeOuter(0)
+            .tickSizeInner(width);
+
+    // Axis group rendering
+    const xG = chart.append("g").attr("class", "x-axis")
+            .attr("transform", `translate(${[0, height]})`);
+    const yG = chart.append("g").attr("class", "y-axis");
+    const zeroG = chart.append("g").attr("class", "zero-axis");
+
+    xG.append("text")
+            .attr("class","label")
+            .text("Years")
+            .attr("transform", `translate(${[(width/2),labelPadding]})`)
+    yG.append("text")
+            .attr("class","label")
+            .text("Average global temperature anomaly (°C)")
+            .attr("transform", `translate(${[-labelPadding,(height/2)]}) rotate(90)`)
+
+    // Zoom configuration
+    const extent = [[0,0],[width, height]];
+    const zoom = d3.zoom()
+            .scaleExtent([1, 100])
+            .extent(extent)
+            .translateExtent(extent)
+            .on('zoom', zoomed);
+    svg.call(zoom);
+
+    function zoomed() {
+        const t = d3.event.transform;
+
+        // rescale scales and axes
+        const newScaleX = t.rescaleX(scaleX)
+        axisX.scale(newScaleX);
+        axisX.tickFormat(d => d3.timeFormat(d.getMonth() == 0 ? "%Y" : "%b")(d));
+        xG.call(axisX);
+
+        // rescale horizontal scale for line chart
+        line.x(d => newScaleX(d3.isoParse(d.Date)))
+        d3.select(".line").datum(data.values).attr("d", line);
+    }
+
+    // Load data, set scale domains, call axes
+    const data = {};
+    d3.json('../Data/monthly_json.json')
+            .then(function(result) {
+                data.values = result.filter(d => d.Source == 'GISTEMP');
+
+                // Scales domain configuratoon
+                scaleY.domain(d3.extent(data.values, d => d.Mean))
+                scaleX.domain(d3.extent(data.values, d => d3.isoParse(d.Date)))
+
+                axisX.tickFormat(d => d3.timeFormat(d.getMonth() == 0 ? "%Y" : "%b")(d));
+
+                // Axis rendering
+                xG.call(axisX);
+                yG.call(axisY);
+                zeroG.call(axisZero);
+
+                // Line chart
+                line.x(d => scaleX(d3.isoParse(d.Date)))
+                    .y(d => scaleY(d.Mean));
+
+                view.append("path").attr("class", "line")
+                        .datum(data.values)
+                        .attr("d", line)
+                        .style("stroke", "red")
+                        .style("fill", "none");
+            });
+</script>
+</body>
+</html>

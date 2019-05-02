@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+            fill: white;
+        }
+        path {
+            stroke: white;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 1000, height = 800;
+
+    const svg = d3.select("body").append("svg")
+                  .attr("height", height)
+                  .attr("width", width);
+    const chart = svg.append("g")
+                     .attr("transform", d => `translate(${[width/2, height/2]})`);
+
+    const root = d3.hierarchy(simpleHierarchy)
+                   .sort((a,b) => b.height - a.height)
+                   .sum(d => d.values ? d.values[0] : 0);
+
+    root.eachBefore(function(d) {
+        d.number = d.parent ? `${d.parent.number}.${d.parent.children.indexOf(d) + 1}` : 1;
+    });
+
+    const partition = d3.partition()
+                        .size([360, height/2-50]) // angle in degrees (easier to rotate in CSS)
+    const partitionData = partition(root);
+    const nodes = partitionData.descendants();
+
+    const arc = d3.arc()
+                    .startAngle(d => d.x0 * Math.PI / 180) // must convert angles to radians
+                    .endAngle(d => d.x1 * Math.PI / 180)
+                    .innerRadius(d => d.y0)
+                    .outerRadius(d => d.y1);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.depth));
+
+    const fontScale = d3.scaleLinear()
+                        .domain(d3.extent(root.descendants(), d => d.depth).reverse())
+                        .range([12,30]);
+
+    drawPartition();
+    drawLabels();
+
+    function drawPartition() {
+        chart.selectAll("path")
+            .data(nodes)
+            .join("path")
+                .attr("d", arc)
+                .attr("fill", d => colorScale(d.depth));
+    }
+
+    function drawLabels() {
+        chart.selectAll("text")
+                .data(nodes)
+                .join("text")
+                .attr("x", d => arc.centroid(d)[0])
+                .attr("y", d => arc.centroid(d)[1])
+                .attr("transform", d => `rotate(${(d.x0+d.x1)/2},${arc.centroid(d)})`)
+                .text(d => d.number )
+                .style("font-size", d => fontScale(d.depth));
+    }
+
+</script>
+</body>
+</html>

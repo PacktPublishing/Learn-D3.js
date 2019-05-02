@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG circle</h2>
+<svg width="600" height="300">
+    <defs>
+        <linearGradient x2="1" id="rainbow">
+            <stop offset="0" stop-color="rgb(255,0,0)" />
+            <stop offset="0.25" stop-color="rgb(255,255,64)" />
+            <stop offset="0.5" stop-color="rgb(64,255,64)" />
+            <stop offset="0.75" stop-color="rgb(64,64,255)" />
+            <stop offset="1" stop-color="rgb(128,0,255)" />
+        </linearGradient>
+        <radialGradient cx="0.35" cy="0.35" r="1" id="glow">
+            <stop offset="0" stop-color="rgb(255,255,255)" />
+            <stop offset="0.5" stop-color="rgb(0,128,255)" />
+            <stop offset="1" stop-color="rgb(128,0,255)" />
+        </radialGradient>
+    </defs>
+
+    <rect x="0" y="0" width="200" height="200" fill="url(#rainbow)" transform="translate(50,50)"/>
+    <circle cx="100" cy="100" r="100" fill="url(#glow)" transform="translate(300,50)"/>
+</svg>
+</body>
+</html>

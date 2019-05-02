@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        .graticule, .equator {
+            fill: none;
+            stroke-width: 1;
+            stroke: gray;
+        }
+        .equator {
+            stroke-width: 3;
+        }
+        .background {
+            fill: blue;
+            fill-opacity: .1;
+            stroke: gray;
+            stroke-width: .5;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-lowres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoOrthographic()
+            .rotate([0,-20,0])
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    // background
+    svg.append("path").attr("class","background")
+            .datum({type: "Sphere"})
+            .attr("d", geoPath);
+
+    // graticule
+    svg.append("path").attr("class","graticule")
+            .datum(d3.geoGraticule())
+            .attr("d", geoPath);
+
+    svg.append("path").attr("class","equator")
+            .datum(d3.geoGraticule()
+                    .stepMinor([0,0])
+                    .stepMajor([180,90]))
+            .attr("d", geoPath);
+
+
+</script>
+
+</body>
+</html>

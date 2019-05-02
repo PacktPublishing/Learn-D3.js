@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diameter of asteroids</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <style>
+        path.domain {
+            fill: none;
+            stroke: #999;
+        }
+
+        line {
+            stroke: #666;
+            shape-rendering: crispEdges;
+        }
+
+        rect {
+            fill: red;
+            opacity: .5;
+        }
+
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 9pt;
+            text-anchor: middle;
+        }
+
+        .bar text {
+            font-size: 10pt;
+            text-anchor: start;
+        }
+        svg {
+            background: #eee;
+        }
+
+        h1 {
+            font-family: sans-serif;
+            color: #555;
+            text-align: center;
+            font-size: 16pt;
+        }
+
+        body {
+            background: #eee;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Diameters of asteroids (main belt)</h1>
+
+<script>
+    var svgWidth = 960, svgHeight = 500;
+    var margin = {top: 50, right: 30, bottom: 30, left: 70};
+    width  = svgWidth - margin.left - margin.right,
+    height = svgHeight - margin.top - margin.bottom;
+
+    var dimensions = {
+        height: "100%",
+        width: "100%",
+    };
+
+    var viewBox = {
+        viewBox: "0 0 " + svgWidth + " " + svgHeight
+    };
+
+    var xScale = d3.scaleLinear().range([0, width]);
+    var yScale = d3.scaleLinear().range([height, 0]);
+
+    var xAxis = d3.axisBottom().scale(xScale);
+    var yAxis = d3.axisLeft().scale(yScale);
+
+    var dataset;
+
+    var histograms = function (datasets) {
+
+        if (dataset == datasets.asteroids) {
+            dataset = datasets.tnos;
+            d3.select("h1")
+                    .html("Average diameters of "+dataset.length+" Kuiper belt objects");
+        } else {
+            dataset = datasets.asteroids;
+            d3.select("h1")
+                    .html("Average diameters of "+dataset.length+" main asteroid belt objects");
+        }
+
+        var bucketWidth = 10;
+
+        var thresholds = d3.range(0, d3.max(dataset, function (d) {
+            return d.diameterKm;
+        }), bucketWidth);
+
+        var histogram = d3.histogram()
+                .value(function (d) {
+                    return d.diameterKm;
+                })
+                .thresholds(thresholds);
+
+        var data = histogram(dataset);
+
+        xScale.domain([0, d3.max(thresholds)]);
+        yScale.domain([0, d3.max(data, function (d) {
+            return d.length;
+        })]);
+
+        var svg = d3.select("body")
+                .append("div").attrs(dimensions)
+                .append("svg").attrs(viewBox)
+
+        var defs = svg.append("defs");
+
+        svg.on("click", function () {
+            d3.select("body").selectAll("div").remove();
+            histograms(datasets)
+        });
+
+        svg.append("g")
+                .attr("id", "x")
+                .attr("transform", "translate(" + margin.left + "," + height + ")")
+                .call(xAxis);
+
+        svg.append("g")
+                .attr("id", "y")
+                .attr("transform", "translate(" + margin.left + "," + 0 + ")")
+                .call(yAxis);
+
+        svg.select("#x")
+                .append("text").attr("class", "scale")
+                .text("Average diameter (km)")
+                .attr("transform", "translate(" + width / 2 + "," + (margin.bottom * 1.20) + ")");
+
+        svg.select("#y")
+                .append("text").attr("class", "scale")
+                .text("Number of known objects")
+                .attr("transform", "rotate (-90, 0, 0) translate(" + -height / 2 + "," + -margin.left + ")");
+
+        var entry = svg.selectAll(".bar")
+                .data(data)
+                .enter()
+                .append("g").attr("class", "bar")
+                .attr("transform", "translate(" + margin.left + "," + 0 + ")")
+                .on("mouseover", function (d) {
+                    d3.select(this)
+                            .append("text").attr("class", "tooltip")
+                            .text(function (d) {
+                                if (d.length == 1) {
+                                    return d.length + " (" + d[0].name + ")";
+                                } else if (d.length > 0) {
+                                    return d.length + " objects between " + d.x0 + " and " + d.x1 + "km";
+                                } else {
+                                    return "";
+                                }
+                            })
+                            .attr("x", function (d) {
+                                return xScale(d.x0) - margin.right;
+                            })
+                            .attr("y", function (d) {
+                                return margin.top;
+                            });
+                })
+                .on("mouseout", function (d) {
+                    d3.select(this)
+                            .select(".tooltip").remove();
+                });
+
+        entry.append("rect")
+                .attr("x", function (d) {
+                    return xScale(d.x0);
+                })
+                .attr("y", function (d) {
+                    return yScale(d.length);
+                })
+                .attr("width", function (d) {
+                    return (xScale(d.x1) - xScale(d.x0)) * .9;
+                })
+                .attr("height", function (d) {
+                    return height - yScale(d.length);
+                });
+
+        entry.append("text")
+                .text(function (d) {
+                    if (d.length == 1) {
+                        return d.length + " (" + d[0].name + ")";
+                    } else if (d.length > 0) {
+                        return d.length;
+                    } else {
+                        return "";
+                    }
+                })
+                .attr("transform", function (d) {
+                    return "translate(" + xScale(d.x0) + "," + (yScale(d.length)) + ") rotate(290,0," + d3.max([-12, -(xScale(d.x1) - xScale(d.x0)) / 2]) + ") ";
+                })
+                .style("font-size", function (d) {
+                    return d3.min([12, (xScale(d.x1) - xScale(d.x0)) * .5]);
+                });
+
+    }
+
+    d3.json("../Data/sol_2016.json").then(function (data) {
+        histograms(data);
+    });
+
+</script>
+</body>
+</html>

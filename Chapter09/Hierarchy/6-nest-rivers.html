@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        table,td {
+            border: solid 1px gray;
+            vertical-align: top;
+        }
+        table {
+            width: 100%;
+        }
+        .bold {
+            font-weight: bold;
+        }
+
+        table table .bold {
+            color: blue;
+        }
+        table table table .bold {
+            color: green;
+        }
+        table table table table .bold {
+            color: red;
+        }
+        table table table table table .bold {
+            color: orange;
+        }
+
+        table table {
+            border-color: blue;
+        }
+        table table table {
+            border-color: green;
+        }
+        table table table table {
+            border-color: red;
+        }
+        table table table table table {
+            border-color: orange;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Amazon river</h1>
+<script>
+    // Building a hierarchy without using stratify().
+
+    // Using recursive function to convert table to hierarchy
+    d3.csv("../Data/amazon-river.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        // group direct tributaries by their destination rivers (one level)
+        const nested = d3.nest()
+                        .key(d => d.Confluence)
+                        .rollup(d => d.map(c => ({name: c.Tributary, length_km: +c.km})))
+                        .entries(result);
+
+        console.log("nested data", nested);
+
+        // assemble single-root hierarchy (many levels)
+        const hierarchy = makeHierarchy(nested, 'tributaries');
+
+        console.log("hierarchical data", hierarchy);
+
+        // wrap into d3.hierarchy object (generates depth and length)
+        const root = d3.hierarchy(hierarchy, d => d.tributaries);
+        console.log("D3 hierarchy", root);
+
+        draw(root);
+
+    });
+
+    function makeHierarchy(nested, childrenKey, item) {
+        // builds root
+        if(item == null || item.name == '') {
+            const item = nested.filter(d => d.key == '')[0].value[0];
+            return makeHierarchy(nested, childrenKey, item);
+        }
+
+        // if name is a key, it contains children
+        const group = nested.filter(d => d.key == item.name)[0];
+        if(group) {
+            const elements = [];
+            group.value.forEach(function(d) {
+                const item = makeHierarchy(nested, childrenKey, d);
+                elements.push(item);
+            });
+            item[childrenKey] = elements;
+        }
+        return item;
+    }
+
+    // Visual presentation
+
+    const formatInt = d3.format(",d");
+
+    function draw(data) {
+        makeTable(d3.select("body"), [data]);
+    }
+
+    function makeTable(element, data) {
+        const tr = element.append("table")
+                .selectAll("tr")
+                .data(data)
+                .enter()
+                .append("tr")
+                .each(function(d) {
+                    makeEntry(d3.select(this), d);
+                });
+    }
+
+    function makeEntry(tr, entry) {
+        if(entry.children) {
+            const table = tr.append("td").attr("colspan",100).append("table");
+            table.append("tr").append("td").attr("colspan",100).classed("bold", entry.depth >= 0).text(entry.data.name);
+            table.append("tr").append("td").attr("colspan",100).text("Length: " + formatInt(entry.data.length_km));
+
+            entry.children.forEach(function(child) {
+                const tr2 = table.append("tr")
+                makeEntry(tr2, child);
+            });
+        } else {
+            tr.append("td").classed("bold", entry.height == 0 && entry.depth == 1).text(entry.data.name);
+            tr.append("td").text("Length: "+ formatInt(entry.data.length_km));
+        }
+    }
+
+</script>
+</body>
+</html>

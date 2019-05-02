@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="../JavaScript/quaternion.js"></script>
+    <script src="https://unpkg.com/versor"></script>
+    <style>
+        .graticule {
+            fill: none;
+            stroke: green;
+            stroke-width: .25;
+        }
+        .ocean {
+            fill: lightblue;
+        }
+        .country {
+            stroke: white;
+            stroke-width: .25;
+            fill: gray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+
+    var projection = d3.geoOrthographic();
+
+    const scale = projection.scale(),
+          geoPath = d3.geoPath().projection(projection);
+
+    const map = {};
+
+    const drag = d3.drag()
+            .on("start", dragStart)
+            .on("drag", dragging);
+
+    const globe = svg.append("g")
+            .attr("class","globe")
+            .call(drag);
+
+    const state = {}
+
+    // https://observablehq.com/@d3/d3-versor-dragging
+    // library: https://github.com/Fil/versor/blob/master/src/versor.js
+    // https://www.jasondavies.com/maps/rotate/
+    function dragStart() {
+        const mouse = projection.invert(d3.mouse(this));
+        state.v0 = versor.cartesian(mouse);
+        state.r0 = projection.rotate();
+        state.q0   = versor(state.r0);
+    }
+
+    function dragging() {
+        projection.rotate(state.r0);
+        const mouse = projection.invert(d3.mouse(this));
+        const v1 = versor.cartesian(mouse);
+
+        const mouseDelta = versor.delta(state.v0, v1);
+        const q1   = versor.multiply(state.q0, mouseDelta)
+
+        projection.rotate(versor.rotation(q1));
+
+        render()
+    }
+
+    d3.json('../Data/' + file)
+        .then(function(data) {
+            map.topology   = data.objects[key];
+            map.features   = topojson.feature(data, map.topology).features;
+
+            drawGraticules();
+            draw();
+        });
+
+    function drawGraticules() {
+        globe.append("path").attr("class","ocean")
+                .datum({type: 'Sphere'})
+                .attr("d", geoPath);
+        globe.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .attr("d", geoPath);
+    }
+
+    function draw() {
+        globe.selectAll("path.country")
+                .data(map.features).enter()
+                .append("path")
+                .attr("class","country")
+                .attr("d", geoPath)
+    }
+
+    function render() {
+        globe.selectAll("path.country").attr('d', geoPath);
+        globe.selectAll("path.graticule").attr('d', geoPath);
+        globe.selectAll("path.ocean").attr('d', geoPath);
+    }
+
+
+
+</script>
+</body>
+</html>

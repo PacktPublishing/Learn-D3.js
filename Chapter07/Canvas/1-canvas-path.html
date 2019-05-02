@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Path</title>
+</head>
+<body>
+<canvas id="canvas" width="800" height="300"></canvas>
+<script>
+    const ctx = document.getElementById("canvas").getContext("2d");
+
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.moveTo(50,20);
+    ctx.lineTo(200,200);
+    ctx.lineTo(200,140);
+    ctx.lineTo(270,140);
+    ctx.closePath(200,210);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 4;
+
+    ctx.translate(200, -80);
+    ctx.beginPath();
+    ctx.moveTo(100,200);
+    ctx.bezierCurveTo(100,100,250,100,250,200);
+    ctx.bezierCurveTo(250,300,400,300,400,200);
+    ctx.fill();
+    ctx.stroke();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/d3-sankey"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            alignment-baseline: hanging;
+            text-anchor: middle;
+            fill: black;
+        }
+        .node rect { /* increase clickable area for dragging */
+            stroke-width: 20px;
+            stroke: transparent;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 3900;
+    const height = 1000;
+    const margin = 50;
+
+    const color = d3.scaleSequential(d3.interpolateCool);
+
+    const nodeSet = new Set();
+    let nodes = [];
+    const links = [];
+
+    const sankey = d3.sankey()
+            .nodeWidth(10)
+            .nodePadding(400)
+            .extent([[margin/2, margin/2], [width-margin, height-margin]])
+            .nodeAlign(d3.sankeyJustify)
+            .iterations(500);
+
+    let graph = [];
+
+    d3.csv("../Data/minard-steps.csv", function(row) {
+        nodeSet.add(row.from);
+        nodeSet.add(row.to);
+        return row;
+    }).then(function(rows) {
+        nodes = Array.from(nodeSet).map(d => ({node: d}));
+
+        rows.forEach(function(row) {
+            const obj = {
+                value: +row.survivors,
+                direction: +row.direction,
+                target: nodes.map(n => n.node).indexOf(row.to),
+                source: nodes.map(n => n.node).indexOf(row.from)
+            }
+            links.push(obj);
+        });
+
+        color.domain([0, nodes.length]);
+
+        sankey.nodes(nodes).links(links)
+
+        graph = sankey();
+
+        draw();
+    });
+
+    function draw() {
+        const svg = d3.select("body")
+                .append("svg")
+                .attr("width",1200)
+                .attr("height",300)
+                .attr('viewBox','0 0 4000 1000');
+        const chart = svg.append("g").attr("class", '.chart');
+
+        chart.selectAll('path.link')
+                .data(graph.links)
+                .enter()
+                .append("path").attr("class","link")
+                .attr("d", d3.sankeyLinkHorizontal())
+                .style("stroke", 'red')
+                .style("opacity", .3)
+                .style("stroke-width", d => d.width)
+                .style("stroke", (d,i) => d.target.node == 'Dead' ? d3.rgb(color(d.source.index)).darker(.75) : d.direction > 0 ? "#c97b20" : "#252523")
+                .style("fill", 'none');
+
+        chart.selectAll('g.node')
+                .data(graph.nodes)
+                .enter()
+                .append("g").attr("class",'node')
+                .attr("transform", d => `translate(${[d.x0, d.y0]})`)
+                .each(function(d, i) {
+                    d3.select(this)
+                        .append("rect")
+                        .attr("width", d.node == 'Kovno' || d.node == 'Moscow' || d.node == 'Dead' || d.node == 'Survived' ? 20 : d.x1 - d.x0)
+                        .attr("height", d.y1 - d.y0)
+                        .style("fill", d.node == 'Dead' || d.node == 'Survived' ? 'blue' : d3.rgb(color(i)).darker(.75));
+
+                    d3.select(this)
+                        .append("text").attr("class",'places')
+                        .attr("x", (d.x1 - d.x0)/2)
+                        .attr("y", (d.y1 - d.y0)/2 + 35)
+                        .attr("transform",`rotate(${-90},${[(d.x1 - d.x0)/2,(d.y1 - d.y0)/2]})`)
+                        .style("font-size", d.node == 'Kovno' || d.node == 'Moscow' || d.node == 'Dead' || d.node == 'Survived' ? 60 : 40)
+                        .style("opacity", d.node.length > 3 ? 1 : 0)
+                        .text(d.node);
+
+                    d3.select(this)
+                        .append("text").attr("class",'survivors')
+                        .attr("x", (d.x1 - d.x0)/2)
+                        .attr("y", (d.y1 - d.y0)/2 + ((d.node == 'Kovno' || d.node == 'Moscow' || d.node == 'Dead' || d.node == 'Survived') ? 15 : 5))
+                        .attr("transform", `rotate(${-90},${[(d.x1 - d.x0)/2,(d.y1 - d.y0)/2]})`)
+                        .style("font-size", 24)
+                        .text(d.value);
+                })
+                .call(d3.drag()
+                        .on('start', dragStart)
+                        .on('drag', dragging)
+                        .on('end', dragEnd)
+                );
+
+        chart.selectAll('text.places')
+                .data(graph.nodes)
+                .enter()
+
+
+        chart.selectAll('text.survivors')
+                .data(graph.nodes)
+                .enter()
+
+    }
+
+    function dragStart(d) {
+        d.dy = d3.event.y - d.y0;
+        d3.selectAll(".link, .node").style("pointer-events", 'none');
+        d3.select(this).raise().classed("active", true);
+    }
+
+    function dragging(d) {
+        d.y0 = d3.event.y - d.dy;
+        d3.select(this).attr("transform", `translate(${[d.x0,d.y0]})`);
+        sankey.update(graph);
+        d3.selectAll('.link').attr("d", d3.sankeyLinkHorizontal());
+    }
+
+    function dragEnd(d) {
+        d3.selectAll(".link, .node").style("pointer-events", 'auto')
+        d3.select(this).classed("active", false);
+    }
+
+</script>
+</body>
+</html>

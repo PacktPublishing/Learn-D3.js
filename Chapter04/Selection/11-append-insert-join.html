@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p>
+
+<script>
+
+    // append 1 - creating elements with append
+    // adds child element to div, as last child
+    d3.select("div").append("p").attr("id", "a6").text("Appended")
+
+    // insert 1 - creating elements with insert
+    // adds child element to div, before #a2 element
+    d3.select("div").insert("p", "#a2").attr("id", "i1").text("Inserted")
+
+    // join 1 - creating elements with join
+    // joins an element to the group, if it doesn' exist
+    // if it exists, it will replace it
+    d3.select("div p").join().attr("id", "j1").text("Joined")
+
+</script>
+</body>
+</html>

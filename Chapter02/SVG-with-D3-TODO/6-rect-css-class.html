@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+    .reds {
+        fill: red;
+    }
+    .semitr {
+        fill-opacity: 0.5;
+    }
+</style>
+<body>
+<h2>SVG rect using D3</h2>
+<script>
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 200);
+
+    svg.append("rect")
+            .attr("x", 50)
+            .attr("y", 50)
+            .attr("width", 90)
+            .attr("height", 90)
+            .classed("semitr", true);
+
+    svg.append("rect")
+            .attr("x", 200)
+            .attr("y", 50)
+            .attr("width", 175)
+            .attr("height", 100)
+            .attr("rx", 40)
+            .attr("ry", 40)
+            .classed("reds semitr", true);
+
+    svg.append("rect")
+            .attr("x", 450)
+            .attr("y", 25)
+            .attr("width", 100)
+            .attr("height", 150)
+            .classed("reds", true);
+</script>
+</body>
+</html>

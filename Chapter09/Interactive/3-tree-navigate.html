@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        path {
+            stroke: black;
+            fill: none;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 16px;
+            text-anchor: middle;
+            fill: white;
+        }
+        .leaf {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000, height = 600;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[60,60]})`);
+
+    const root = d3.hierarchy(simpleHierarchy).count();
+
+    const MAX_DEPTH = d3.max(root.descendants(), d => d.depth);
+
+    root.each(d => d.expand = d.depth); // add to control expanding nodes
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(root.descendants(), n => n.depth));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(root.links(), k => k.target.height));
+
+    const tree = d3.tree()
+            .size([width-120,height-120])
+            .separation((a,b) => (a.parent == b.parent ? 1 : 2) / (a.depth));;;
+    const treeData = tree(root);
+
+    const verticalLink = d3.linkVertical()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; });
+
+    draw(treeData)
+
+    function draw(d) {
+        const nodes = treeData.descendants()
+                        .filter(n => n.ancestors().indexOf(d) >= 0 ||
+                                     n.descendants().indexOf(d) >= 0)
+                        .filter(n => n.depth <= d.expand);
+
+        const links = treeData.links()
+                        .filter(k => k.target.depth <= d.expand)
+                        .filter(k => k.target.ancestors().indexOf(d) >= 0 ||
+                                     k.target.descendants().indexOf(d) >= 0)
+        // links
+        chart.selectAll("path")
+             .data(links).join("path")
+             .attr("d", verticalLink)
+             .style("stroke-width", d => (d.target.height + 1) * (d.target.height + 1))
+             .style("opacity", d => d.target.depth *.25 * .6 + .4);
+
+        // nodes
+        chart.selectAll("g.node")
+            .data(nodes, d => d.data.id) // key is necessary since nodes are added/removed out of order!
+            .join(
+                function(enter) {
+                    const g = enter.append("g").attr("class","node")
+                         .attr("transform", d => `translate(${[d.x, d.y]})`)
+                         .classed("leaf", d => !d.children)
+                         .on("click", toggle)
+                    g.append("circle")
+                         .attr("r", d => (d.height + 1) * 10)
+                         .style("fill", d => colorScale(d.depth));
+                    g.append("text")
+                         .text(d => d.children ? d.value : '')
+                         .attr("transform", "translate(0,5)")
+                         .style("font-size", d => 14 + (d.height*d.height));
+                },
+                 function(update) {
+                     update.select("text").text(n => n.depth != d.expand ? "" : d.children ? d.value : '');
+                 },
+                 function(exit) {
+                     exit.remove();
+                 }
+            );
+
+        chart.selectAll("g.node").raise();
+    }
+
+    // show or hide descendants
+    function toggle(d) {
+        if(d.expand <= d.depth) { // expand
+            d.expand = d.depth == MAX_DEPTH ? MAX_DEPTH : d.expand + 1;
+        } else { // collapse
+            d.descendants().forEach(k => k.expand = k.depth)
+        }
+        draw(d);
+    }
+
+</script>
+</body>
+</html>

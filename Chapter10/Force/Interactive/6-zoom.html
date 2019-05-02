@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        line {
+            fill: none;
+            stroke: black;
+        }
+        svg {border: solid 1px red}
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const nodes = [
+        {node: 'A', value: 79},
+        {node: 'B', value: 15},
+        {node: 'C', value: 24},
+        {node: 'D', value: 44},
+        {node: 'E', value: 125},
+        {node: 'F', value: 22},
+        {node: 'G', value: 20},
+        {node: 'H', value: 64},
+        {node: 'I', value: 69},
+        {node: 'J', value: 2},
+        {node: 'K', value: 8},
+        {node: 'L', value: 40},
+        {node: 'M', value: 26},
+        {node: 'N', value: 69},
+        {node: 'O', value: 77},
+        {node: 'P', value: 17},
+        {node: 'Q', value: 1},
+        {node: 'R', value: 58},
+        {node: 'S', value: 63},
+        {node: 'T', value: 91},
+        {node: 'U', value: 29},
+        {node: 'V', value: 10},
+        {node: 'W', value: 23},
+        {node: 'X', value: 2},
+        {node: 'Y', value: 20},
+        {node: 'Z', value: 1},
+    ];
+    
+    const links = [
+        {source: 0, target: 4, value: 3},
+        {source: 4, target: 8, value: 3},
+        {source: 8, target: 14, value: 3},
+        {source: 14, target: 20, value: 3},
+        {source: 0, target: 1, value: 1},
+        {source: 1, target: 2, value: 1},
+        {source: 2, target: 3, value: 1},
+        {source: 3, target: 4, value: 1},
+        {source: 4, target: 5, value: 1},
+        {source: 5, target: 6, value: 1},
+        {source: 6, target: 7, value: 1},
+        {source: 7, target: 8, value: 1},
+        {source: 8, target: 9, value: 1},
+        {source: 9, target: 10, value: 1},
+        {source: 10, target: 11, value: 1},
+        {source: 11, target: 12, value: 1},
+        {source: 12, target: 13, value: 1},
+        {source: 13, target: 14, value: 1},
+        {source: 14, target: 15, value: 1},
+        {source: 15, target: 16, value: 1},
+        {source: 16, target: 17, value: 1},
+        {source: 17, target: 18, value: 1},
+        {source: 18, target: 19, value: 1},
+        {source: 19, target: 20, value: 1},
+        {source: 20, target: 21, value: 1},
+        {source: 21, target: 22, value: 1},
+        {source: 22, target: 23, value: 1},
+        {source: 23, target: 24, value: 1},
+        {source: 24, target: 25, value: 1},
+        {source: 16, target: 15, value: 2},
+        {source: 17, target: 16, value: 2},
+        {source: 18, target: 17, value: 2},
+        {source: 19, target: 18, value: 2}
+    ];
+
+    color.domain([0,nodes.length]);
+
+    const sim = d3.forceSimulation(nodes);
+
+    sim.force("center", d3.forceCenter());
+
+    const offsetX = margin/2 + width/2;
+    const offsetY = margin/2 + height/2;
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g")
+            .attr("transform", `translate(${[offsetX,offsetY]})`);
+
+    sim.force("link", d3.forceLink(links).iterations(15));
+    sim.force("manybody", d3.forceManyBody().strength(100))
+    sim.force("collide", d3.forceCollide(30));
+
+    sim.on("tick", redraw);
+
+    const zoom = d3.zoom()
+        .on('zoom', function() {
+            chart.attr("transform",
+                   d3.event.transform.translate(offsetX, offsetY));
+        });
+    svg.call(zoom);
+
+    // Dragging behavior
+    const nodeDragged = d3.drag()
+            .on('drag', function(d) {
+                d.x = d3.event.x;
+                d.y = d3.event.y;
+            })
+            .on('start', function() {
+                if(sim.alpha() <= sim.alphaMin()) {
+                    sim.restart();
+                }
+                sim.alphaTarget(sim.alphaMin() + .1)
+            })
+            .on('end', () => sim.alphaTarget(0));
+
+    draw();
+
+    function draw() {
+        svg.on('click', addNode);
+
+        chart.selectAll('line')
+                .data(links, d => d.source.node + '-' + d.target.node)
+                .join('line')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+                .style('stroke-width', d => d.value * d.value)
+
+        chart.selectAll('g.node')
+                .data(nodes, d => d.node)
+                .join("g").attr("class", 'node')
+                .style("transform", d => `translate(${[d.x, d.y]})`)
+                .each(function(d,i) {
+                    d3.select(this).append("circle")
+                        .attr("r", 15)
+                        .style("fill", color(i))
+                        .style("stroke", 'black')
+                    d3.select(this).append("text")
+                        .text(d => d.node)
+                })
+                .on('click', removeNode)
+                .call(nodeDragged);
+
+    }
+
+    function redraw() {
+        chart.selectAll('g.node')
+                .attr("transform", d => `translate(${[d.x, d.y]})`);
+
+        chart.selectAll('line')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+    }
+
+    function removeNode(d) {
+        d3.event.stopPropagation(); // required so event doesn't also create new node
+
+        // 1) Update data
+        nodes.splice(d.index, 1); // remove from nodes array
+        for (let i = 0; i < links.length;) { // remove connecting links from links array
+            if(links[i].source == d || links[i].target == d) {
+                links.splice(i, 1);
+            } else {
+                ++i;
+            }
+        }
+
+        // 2) Update simulation
+        sim.nodes(nodes);           // update simulation with new nodes
+        sim.force("link")
+                .links(links)       // update simulation with new links
+                .initialize(nodes); // update nodes with new links
+
+        // 3) Update SVG data bindings
+        d3.select(this).remove();       // update SVG elements: remove node
+        d3.selectAll("line") // update SVG elements: remove links
+                .data(links, d => d.source.node + '-' + d.target.node)
+                .join(); // same as exit().remove()
+
+        // 4) Reheat simulation
+        if(sim.alpha() < .05) {
+            sim.alpha(.05);
+            sim.restart();
+        }
+    }
+
+    function addNode() {
+
+        // 1) Find the nearest node to the point where the mouse was clicked
+        const nearest = sim.find(d3.mouse(chart.node())[0], d3.mouse(chart.node())[1]);
+
+        // 2) Create new nodes and links
+        const newNode = {
+            node: nearest.node + (links.filter(n => n.source == nearest).length+1),
+            value: 1
+        };
+        const newLink = {
+            source: nearest.index,
+            target: nodes.length-1, value: 2
+        }
+
+        // 3) Update the data
+        nodes.push(newNode);
+        links.push(newLink);
+
+        // 4) Update the simulation
+        sim.nodes(nodes); // update nodes
+        sim.force("link")
+            .links(links)       // binds new links to simulation
+            .initialize(nodes); // update nodes with new links
+
+        // 5) Update SVG data bindings
+        chart.selectAll('line')
+            .data(links)
+            .join('line') // same as enter().append("line")
+            .attr("x1", d => d.source.x)
+            .attr("x2", d => d.target.x)
+            .attr("y1", d => d.source.y)
+            .attr("y2", d => d.target.y)
+            .style('stroke-width', d => d.value * d.value)
+
+        chart.selectAll('g.node').raise()
+            .data(nodes).join("g").attr("class", 'node')
+            .each(function(d,i) {
+                d3.select(this).append("circle")
+                    .attr("r", 15)
+                    .style("fill", color(i))
+                d3.select(this).append("text")
+                    .text(d => d.node)
+            })
+            .on('click', removeNode)
+            .call(nodeDragged);
+
+        // 6) Reheat simulation
+        if(sim.alpha() < .05) {
+            sim.alpha(.05);
+            sim.restart();
+        }
+    }
+
+</script>
+</body>
+</html>

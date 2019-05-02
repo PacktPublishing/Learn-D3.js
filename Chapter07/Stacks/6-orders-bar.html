@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const width  = 800;
+    const height = 500;
+    const margin = 250;
+
+    const stackOrder = [
+        'stackOrderNone',
+        'stackOrderAscending',
+        'stackOrderDescending',
+        'stackOrderInsideOut',
+        'stackOrderReverse'
+    ];
+
+    const stackOffset = [
+        'stackOffsetNone',
+        'stackOffsetExpand',
+        'stackOffsetDiverging',
+        'stackOffsetSilhouette',
+        'stackOffsetWiggle'
+    ];
+
+    const populations = [
+        {year: 1960, "Mexico": 38174, "Canada": 17917, "USA": 186808},
+        {year: 1980, "Mexico": 69361, "Canada": 24537, "USA": 229763},
+        {year: 2000, "Mexico": 101720, "Canada": 30736, "USA": 281983}
+    ];
+
+    const scale = d3.scaleLinear()
+            .range([margin,width - margin]);
+    const stack = d3.stack()
+            .keys(['Canada', 'USA', 'Mexico']);
+
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain([0,populations.length]);
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",height)
+            .attr("width", width)
+            .attr("viewBox", -100 + " 0 " + width + " " + height);
+
+    stackOrder.forEach((d,i) => draw(d, i));
+
+    function draw(order, index) {
+        stack.order(d3[order]);
+
+        const stacked = stack(populations);
+
+        scale.domain([0, d3.max(d3.merge(d3.merge(stacked)))]);
+
+        const g = svg.append("g")
+                     .attr("transform", "translate("+[0,100*index]+")");
+
+        g.selectAll(".year")
+                .data(stacked)
+                .enter()
+                .append("g").attr("class", "year")
+                .style("fill", (d,i) => colorScale(i))
+                .each(function(d) {
+                    d3.select(this)
+                            .selectAll(".country")
+                            .data(d => d).enter()
+                            .append("rect").attr("class", "country")
+                            .attr('width', d => scale(d[1]) - scale(d[0]))
+                            .attr('height', 20)
+                            .attr('x', d => scale(d[0]))
+                            .attr('y', (d,i) => i * 22);
+
+                 });
+
+        g.append("text")
+                .text(order)
+                .attr("x", 570)
+                .attr("y", 35)
+    }
+
+
+</script>
+</body>
+</html>

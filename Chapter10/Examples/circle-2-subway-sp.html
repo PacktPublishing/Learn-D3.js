@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12px;
+            alignment-baseline: middle;
+            text-anchor: start;
+            fill: 'black';
+        }
+        .faded {
+            opacity: .1;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1400;
+    const height = 600;
+    const margin = 100;
+
+    const colors = ['blue', 'green', 'red', 'gold', 'purple', 'silver'];
+    const lines  = [1,2,3,4,5,15];
+    const colorScale = d3.scaleOrdinal().domain(lines).range(colors);
+
+    d3.json('../Data/metrosp.json').then(function(data) {
+
+        data.nodes = data.nodes.map(n => ({node: n.station+':'+n.line}));
+        data.links = data.links.map(n => ({source: n.source+':'+n.lines[0], target: n.target+':'+n.lines[1], lines: n.lines, value: 1}));
+
+        const circleLayout = dvj.circleDiagram().size([width-margin*2, height-margin*2]);
+        const circleData = circleLayout(data.nodes, data.links);
+
+        console.log(circleData.nodes(), circleData.links())
+
+        draw(circleData);
+
+    });
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[width/2 + margin/4,height/2 + margin/8]})`);
+
+        chart.selectAll('line')
+                .data(data.links())
+                .enter()
+                .append('line')
+                .attr("x1", d => d3.pointRadial(d.source.angle, d.source.radius)[0])
+                .attr("y1", d => d3.pointRadial(d.source.angle, d.source.radius)[1])
+                .attr("x2", d => d3.pointRadial(d.target.angle, d.target.radius)[0])
+                .attr("y2", d => d3.pointRadial(d.target.angle, d.target.radius)[1])
+                .style("stroke-width", d => d.lines[0] == d.lines[1] ? 4 : 10)
+                .style("stroke", d => d.lines[0] != d.lines[1] ? 'black' :colorScale(d.target.node.split(':')[1]))
+                .style("stroke-opacity", d => d.lines[0] == d.lines[1] ? 1 : .1)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("id", d => d.node)
+                .attr("cx", d => d3.pointRadial(d.angle, d.radius)[0])
+                .attr("cy", d => d3.pointRadial(d.angle, d.radius)[1])
+                .attr("r", 5)
+                .style("fill", d => colorScale(d.node.split(':')[1]))
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("line, circle, text").classed('faded', false));
+
+        chart.selectAll('text.location')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'location')
+                .attr("x", d => d3.pointRadial(d.angle, d.radius + 25)[0])
+                .attr("y", d => d3.pointRadial(d.angle, d.radius + 25)[1])
+                .attr("transform",d => `rotate(${-90 + d.angle * 180 / Math.PI},${[d3.pointRadial(d.angle, d.radius + 25)]})`)
+                .style("fill", d => d3.rgb(colorScale(d.node.split(':')[1])).darker(.5))
+                .text(d => d.node.split(':')[0])
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("line, circle, text").classed('faded', false));
+    }
+
+    function highlight(d) {
+        d3.selectAll("line").classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle, text").classed('faded', n => !(n === d
+        || n.sources.filter(s => s.target === d).length > 0
+        || n.targets.filter(s => s.source === d).length > 0))
+    }
+
+</script>
+</body>
+</html>

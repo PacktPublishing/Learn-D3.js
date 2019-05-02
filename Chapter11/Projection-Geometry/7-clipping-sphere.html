@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.geojson";
+
+    const color = d3.scaleOrdinal(d3.schemeGreens[9]);
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const defs = svg.append("defs");
+
+    // choose a projection
+    const projection = d3.geoInterruptedHomolosine()
+            .fitExtent([[10,10], [width-20, height-20]], {type: "Sphere"});
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    // configure graticule
+    const graticule = d3.geoGraticule().extent(d3.geoGraticule().extentMajor());
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(data) {
+                map.features   = data.features
+                drawGraticules();
+                draw();
+            });
+
+    function draw() {
+        svg.selectAll("path.country")
+                .data(map.features).enter()
+                .append("path").attr("class","country")
+                .attr("clip-path", "url(#clip)") // clipping
+                .style("fill", (d,i) => d3.rgb(color(i)).darker())
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class", "outline")
+                .datum({type: "Sphere"})
+                .attr("d", geoPath);
+    }
+
+    function drawGraticules() {
+        // clipping for interrupted projection
+        defs.append("clipPath").attr("id", "clip")
+                .append("path")
+                .datum({type: "Sphere"})
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","background")
+                .datum({type: "Sphere"})
+                .attr("clip-path", "url(#clip)") // clipping
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","equator")
+                .datum(d3.geoCircle().center([0,90]))
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .attr("clip-path", "url(#clip)") // clipping
+                .attr("d", geoPath);
+    }
+</script>
+<style>
+    .country {
+        stroke: white;
+        stroke-width: .25;
+    }
+    .outline {
+        fill: none;
+        stroke: darkgreen;
+        stroke-width: 2
+    }
+    .graticule {
+        fill: none;
+        stroke: green;
+        stroke-width: .25;
+    }
+    .equator {
+        stroke: gray;
+        fill: none;
+        stroke-opacity: .5;
+    }
+    .background {
+        fill: aquamarine;
+        stroke: black;
+        fill-opacity: .2;
+        stroke-width: 3;
+    }
+</style>
+</body>
+</html>

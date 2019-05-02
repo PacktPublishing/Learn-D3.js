@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../../JavaScript/LogSlider.js"></script>
+    <style>
+        text, span, p, button {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: black;
+        }
+        button,p {
+            font-size: 12pt;
+        }
+        .container {
+            position: absolute;
+        }
+        .form {
+            width: 190px;
+            padding: 10px;
+            position: absolute;
+            top: 0px;
+        }
+        .svg {
+            border: solid 1px lightgray;
+            width: 800px;
+            position: absolute;
+            left: 220px;
+        }
+        span {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="form"><form>
+        <p>Current alpha: <span id="alpha">0.0000</span>
+            <input id="c_alpha"         type='range' min='0' max='1000'>
+            <br>alphaMin: <span id="alphaMin">0.0000</span><br>
+            <input id="c_alphaMin"      type='range' min='0' max='1000'>
+            <br>alphaTarget: <span id="alphaTarget">0.0000</span><br>
+            <input id="c_alphaTarget"   type='range' min='0' max='1000'>
+            <br>alphaDecay: <span id="alphaDecay">0.0000</span><br>
+            <input id="c_alphaDecay"    type='range' min='0' max='1000'>
+            <br>iterations: <span id="iterations">0.0000</span><br>
+            <input id="c_iterations"    type='range' min='0' max='6904'>
+
+        <p>Automatic simulation<br>
+            <button id="restart" type="button" style="background: hsl(100,100%,80%)">Start</button>
+            <button id="stop" type="button" style="background: hsl(0,100%,80%)">Stop</button></p>
+        <p>Static simulation<br>
+            <button id="tick" type="button" style="background: hsl(240,100%,90%)">Tick</button>
+            <button id="reset" type="button" style="background: hsl(60,100%,80%)">Reset</button></p>
+    </form></div>
+    <div class="svg"></div>
+</div>
+
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+
+    const tickScale  = d3.scaleLinear().range([0, width-margin]).domain([0,1]);
+    const alphaScale = d3.scaleLinear().range([height-margin, 0]).domain([.0001,1]);
+
+    const alphaSlider       = new LogSlider({maxpos: 1000, minval: 0.0001, maxval: 1});
+    const alphaDecaySlider  = new LogSlider({maxpos: 1000, minval: 0.001, maxval: 1});
+    const alphaMinSlider    = new LogSlider({maxpos: 1000, minval: 0.0001, maxval: 1});
+    const alphaTargetSlider = new LogSlider({maxpos: 1000, minval: 0.0001, maxval: 1});
+
+    const events = [];
+
+    const format = d3.format('.6f');
+
+    const axisX = d3.axisBottom(tickScale);
+    const axisY = d3.axisLeft(alphaScale)
+                    .tickPadding(15)
+                    .ticks(16, '');
+
+    const svg = d3.select(".svg")
+            .append("svg")
+            .attr("width", width)
+            .attr("height",height);
+
+    svg.append("g").attr("class", "x-axis")
+            .attr("transform", `translate(${[margin/2,height - margin/2]})`)
+            .call(axisX);
+    svg.append("g").attr("class", "y-axis")
+            .attr("transform", `translate(${[margin/2,margin/2]})`)
+            .call(axisY);
+
+    const chart = svg.append("g").attr("class", 'chart')
+            .attr("transform", `translate(${[margin/2, margin/2]})`)
+
+    let tickCount = 0;
+
+    const sim = d3.forceSimulation().stop();
+    sim.alphaTarget(0.0001);
+
+    events.push({count: tickCount, alpha: sim.alpha()});
+
+    setupPanel();
+    drawReferences();
+
+    sim.on("tick", ticked);
+    sim.on('end', console.log('finished'))
+
+    function drawReferences() {
+        chart.selectAll('.point')
+                .data(events).enter()
+                .append("circle")
+                .attr("class",'point')
+                .attr("r", 2)
+                .style("fill", d => d.alpha > sim.alphaMin() ? 'darkgreen' : 'red')
+                .attr("cx", d => tickScale(d.count))
+                .attr("cy", d => alphaScale(d.alpha));
+
+        chart.append('line').attr("class",'lineMin')
+                .attr("x1", 0)
+                .attr("x2", width-margin)
+                .attr("y1", alphaScale(sim.alphaMin()))
+                .attr("y2", alphaScale(sim.alphaMin()))
+                .style("stroke", 'orange');
+
+        chart.append('line').attr("class",'lineTarget')
+                .attr("x1", 0)
+                .attr("x2",width-margin)
+                .attr("y1", alphaScale(sim.alphaTarget()))
+                .attr("y2", alphaScale(sim.alphaTarget()))
+                .style("stroke", 'blue');
+    }
+
+    function getDecayRate(iterations) {
+        return 1 - Math.pow(sim.alphaMin() - sim.alphaTarget(), 1/(iterations));
+    }
+
+    function getIterations(decayRate) {
+        return Math.round(Math.log(sim.alphaMin() - sim.alphaTarget()) / Math.log(1-decayRate));
+    }
+
+    function setupPanel() {
+        d3.select('#tick').on('click', staticTick).property('disabled', false);
+        d3.select('#stop').on('click', stop).property('disabled', true);
+        d3.select('#restart').on('click', start).property('disabled', false);
+        d3.select("#reset").on('click', reset);
+
+        d3.select('#alpha').text(format(sim.alpha()));
+        d3.select('#alphaMin').text(format(sim.alphaMin()));
+        d3.select('#alphaTarget').text(format(sim.alphaTarget()));
+        d3.select('#alphaDecay').text(format(sim.alphaDecay()));
+        d3.select('#iterations').text(getIterations(sim.alphaDecay()));
+
+        d3.select('#c_alpha').node().value = alphaSlider.position(sim.alpha());
+        d3.select('#c_alpha').on('input', function() {
+            sim.alpha(alphaSlider.value(+this.value));
+            d3.select('#alpha').text(format(sim.alpha()))
+                    .style('color', sim.alpha() < sim.alphaMin() ? 'red' : 'black')
+        });
+
+        d3.select('#c_alphaDecay').node().value = alphaDecaySlider.position(sim.alphaDecay());
+        d3.select('#c_alphaDecay').on('input', function() {
+            sim.alphaDecay(alphaDecaySlider.value(+this.value));
+            d3.select('#alphaDecay').text(format(sim.alphaDecay()));
+            d3.select('#c_iterations').node().value = getIterations(sim.alphaDecay());
+            d3.select('#iterations').text(getIterations(sim.alphaDecay()));
+        });
+
+        d3.select('#c_iterations').node().value = getIterations(sim.alphaDecay());
+        d3.select('#c_iterations').on('input', function() {
+            sim.alphaDecay(getDecayRate(+this.value));
+            d3.select('#iterations').text(+this.value);
+            d3.select('#c_alphaDecay').node().value = alphaDecaySlider.position(sim.alphaDecay());
+            d3.select('#c_alphaDecay').dispatch('input')
+        });
+
+        d3.select('#c_alphaTarget').node().value = alphaTargetSlider.position(sim.alphaTarget());
+        d3.select('#c_alphaTarget').on('input', function() {
+            sim.alphaTarget(alphaTargetSlider.value(+this.value));
+            d3.select('#alphaTarget').text(format(sim.alphaTarget()))
+            d3.select('#iterations').text(getIterations(sim.alphaDecay()));
+            d3.select('#c_iterations').node().value = getIterations(sim.alphaDecay());
+            updateAlphaTargetReference()
+        });
+
+        d3.select('#c_alphaMin').node().value = alphaMinSlider.position(sim.alphaMin());
+        d3.select('#c_alphaMin').on('input', function() {
+            sim.alphaMin(alphaMinSlider.value(+this.value));
+            d3.select('#alphaMin').text(format(sim.alphaMin()))
+            d3.select('#iterations').text(getIterations(sim.alphaDecay()));
+            d3.select('#c_iterations').node().value = getIterations(sim.alphaDecay());
+            updateAlphaMinReference()
+        });
+
+    }
+
+    function start() {
+        d3.select('#restart').property('disabled', true);
+        d3.select('#stop').property('disabled', false);
+        d3.select('#tick').property('disabled', true);
+        if (sim.alpha() < sim.alphaMin()) {
+            sim.alpha(1);
+            events.length = 0;
+            tickCount = 0;
+            events.push({count: tickCount, alpha: sim.alpha()});
+            chart.selectAll('.point').remove();
+        }
+        sim.restart();
+    }
+
+    function stop() {
+        sim.stop();
+        d3.select('#restart').property('disabled', false).text(sim.alpha() < sim.alphaMin() ? 'Start' : 'Restart');
+        d3.select('#stop').property('disabled', true);
+        d3.select('#tick').property('disabled', false);
+    }
+
+    function reset() {
+        location.reload();
+    }
+
+    function staticTick() {
+        sim.tick();
+        ticked();
+        stop();
+    }
+
+    function ticked() {
+        events.push({count: ++tickCount, alpha: sim.alpha()});
+        tickScale.domain([0,tickCount]);
+        d3.select('.x-axis').call(axisX);
+        updatePanel();
+        redraw();
+    }
+
+    function updatePanel() {
+        d3.select('#alpha')
+                .style('color', sim.alpha() < sim.alphaMin() ? 'red' : 'black')
+                .text(format(sim.alpha()));
+        d3.select('#alphaMin')
+                .text(format(sim.alphaMin()));
+        d3.select('#alphaTarget')
+                .text(format(sim.alphaTarget()));
+        d3.select('#alphaDecay')
+                .text(format(sim.alphaDecay()));
+        d3.select('#iterations')
+                .text(getIterations(sim.alphaDecay()));
+        d3.select('#c_alpha').node().value = alphaSlider.position(sim.alpha());
+        d3.select('#restart').property('disabled', sim.alpha() >= sim.alphaMin())
+                             .text(sim.alpha() < sim.alphaMin() ? 'Start' : 'Restart');
+        d3.select('#stop').property('disabled', sim.alpha() < sim.alphaMin())
+    }
+
+    function updateAlphaTargetReference() {
+        chart.select('.lineTarget')
+                .attr("y1", alphaScale(sim.alphaTarget()))
+                .attr("y2", alphaScale(sim.alphaTarget()));
+    }
+
+    function updateAlphaMinReference() {
+        chart.select('.lineMin')
+                .attr("y1", alphaScale(sim.alphaMin()))
+                .attr("y2", alphaScale(sim.alphaMin()));
+    }
+
+    function redraw() {
+        const selection = chart.selectAll('.point').data(events);
+
+        selection.enter()
+            .append("circle").attr("class",'point')
+            .attr("r", 2)
+            .style("fill", d => d.alpha > sim.alphaMin() ? 'darkgreen' : 'red')
+            .merge(selection)
+            .attr("cx", d => tickScale(d.count))
+            .attr("cy", d => alphaScale(d.alpha));
+    }
+
+</script>
+</body>
+</html>

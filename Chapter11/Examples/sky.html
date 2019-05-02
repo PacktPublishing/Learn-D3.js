@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="../JavaScript/planetary-positions.js"></script>
+    <style>
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 10px;
+            font-weight: 100;
+            alignment-baseline: middle;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const magnitudeRadiusScale = d3.scalePow().exponent(.6).range([3,.00001]);
+    const colorScale     = d3.scalePow().exponent(1.2).range(['white','orangered']);
+    const rightAscension = d3.scaleLinear().domain([0,24]).range([180,-180]);
+
+    const projection = d3.geoStereographic();
+
+    const geoPath = d3.geoPath().projection(projection);
+
+    Promise.all([
+                d3.json("../Data/planetary-data.json"),
+                d3.csv('../Data/hygfull.csv', function(row) {
+                    return {
+                        id: row.StarID,
+                        name: row.ProperName,
+                        coordinates: [rightAscension(+row.RA), +row.Dec],
+                        magnitude: +row.Mag,
+                        spectrum: row.Spectrum,
+                        colorIndex: +row.ColorIndex
+                    };
+                })
+            ])
+            .then(([planets, stars]) => {
+                // Stars
+                const starData = stars.filter(d => d.magnitude < 6);
+
+                colorScale.domain(d3.extent(starData, d => d.colorIndex));
+                magnitudeRadiusScale.domain(d3.extent(starData, d => d.magnitude));
+
+                // Planets
+                const now = new Date();
+                //const dayNumber = astro.dayNumber(2022, now.getMonth(), now.getDate(), (now.getHours() + now.getMinutes()/60));
+                dayNumber = 0;
+                console.log(now)
+
+                const planetaryData = [];
+                planets.orbitalElements
+                    .forEach(function(p) {
+                        const planet = astro.position(dayNumber, p);
+                        planetaryData.push({id: p.id, coordinates: [planet.ra, planet.dec]});
+                    });
+
+                drawGraticules();
+                drawEcliptic();
+                drawStars(starData);
+                drawPlanets(planetaryData);
+            });
+
+    function drawPlanets(data) {
+        console.log(data)
+        svg.selectAll("g.planet")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","planet")
+                .attr("transform", d => `rotate(-45,${geoPath.projection()(d.coordinates)}) translate(${geoPath.projection()(d.coordinates)})`)
+                .each(function(d) {
+                        d3.select(this)
+                                .append("circle")
+                                .style("fill", d => d.id == 'Sun' ? 'yellow' : d.id == 'Moon' ? 'gray' : 'orange')
+                                .attr('r', d => d.id == 'Sun' || d.id == 'Moon' ? 10 : 2);
+
+                        d3.select(this)
+                                .append('text')
+                                .attr('x', d => d.id == 'Sun' || d.id == 'Moon' ? 15 : 10)
+                                .style('text-anchor', 'start')
+                                .style("fill", d => d3.rgb(d.id == 'Sun' ? 'yellow' : d.id == 'Moon' ? 'gray' : 'orange').brighter())
+                                .text(d => d.id)
+                    })
+                }
+
+    function drawEcliptic() {
+        svg.append("g").attr("class","ecliptic")
+                .datum(d3.geoCircle().center([90,-66.5]))
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style("fill", "none")
+                .style('stroke-width', 2)
+                .style('stroke-opacity', .5);
+    }
+
+    function drawStars(data) {
+        svg.selectAll("g.star")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","star")
+                .attr("transform", d => `translate(${geoPath.projection()(d.coordinates)})`)
+                .each(function(d) {
+                    d3.select(this)
+                            .append("circle")
+                            .style("fill", colorScale(d.colorIndex))
+                            .attr('r', magnitudeRadiusScale(d.magnitude));
+
+                    d3.select(this)
+                            .append('text')
+                            .attr('x', d.name.indexOf('Rigel Kentaurus') == 0 ? -5 : 5)
+                            .attr('y', d.name == 'Rigel Kentaurus B' ? 10 : 0)
+                            .style('text-anchor', d.name.indexOf('Rigel Kentaurus') == 0 ? 'end' : 'start')
+                            .style("fill", colorScale(d.colorIndex))
+                            .text(d => d.magnitude < 1.4 ? d.name : '')
+                })
+
+
+    }
+
+    function drawGraticules() {
+       svg.append("g").attr("class","background")
+                .datum(d3.geoGraticule().outline())
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "black")
+                .style("fill", "black")
+                .style("fill-opacity", .8)
+                .style('stroke-width', 1);
+
+        console.log(d3.geoGraticule().lines())
+        svg.append("g").attr("class","equator")
+                .datum(d3.geoCircle().center([0,90]))
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style("fill", "none")
+                .style('stroke-width', 1)
+                .style('stroke-opacity', .5);
+
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style('stroke-width', d => '.25');
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        .shape {
+            fill-opacity: .9;
+            stroke: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+
+    // This file contains simple shapes on a sphere
+    d3.json('../Data/border-example.geojson')
+            .then(function(data) {
+
+        console.log(data);
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        const svg = d3.select("body").append("svg")
+                      .attr("width", width).attr("height", height);
+
+        const geoPath = d3.geoPath().projection(d3.geoMercator());
+
+        svg.selectAll("g.shape")
+                .data(data.features)
+                .enter()
+                .append("g")
+                .attr("class","shape")
+                .style("fill", (d,i) => color(i))
+                .append("path")
+                    .attr('d', geoPath)
+    })
+</script>
+
+</body>
+</html>

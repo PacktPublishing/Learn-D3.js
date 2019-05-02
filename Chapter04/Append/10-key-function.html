@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        p {margin: 0}
+    </style>
+</head>
+<body>
+<div>
+</div>
+<script>
+    d3.select("div").selectAll("p")
+        .data([1,2,3,4,5]).enter().append("p")
+        .text((d,i) => "datum: " + d + ", i:" + i);
+
+    d3.select("div").selectAll("p")
+        .data([2,4,6], d => d) // only new value (6) added to enter selection
+        .text((d,i) => "updated: " + d + ",j:" + i)
+        .style("color", "blue")
+        .enter().append("p")
+           .style("color", "red")
+           .text((d,i) => "appended: " + d + ",j:" + i);
+</script>
+</body>
+</html>

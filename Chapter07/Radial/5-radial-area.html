@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radial Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 600;
+    const margin = 100;
+    let data;
+
+    d3.json('../Data/monthly_json.json')
+      .then(function(result) {
+            data = result.filter(d => d.Source == 'GISTEMP')
+                  .map(d => {d.year = +d.Date.split("-")[0]; return d})
+                  .filter(d => d.year % 5 == 0);
+
+            const scaleRadius = d3.scaleLinear()
+                    .domain([-2, d3.max(data, d => d.Mean)])
+                    .range([0, width/2 - margin]);
+
+            const spiral = d3.areaRadial()
+                    .angle((d,i) => ((i % 12)/12) * Math.PI * 2)
+                    .outerRadius(d => scaleRadius(d.Mean))
+                    .innerRadius(d => scaleRadius(d.Mean/2))
+                    .curve(d3.curveNatural);
+
+            const svg = d3.select("body")
+                    .append("svg")
+                    .attr("height",height)
+                    .attr("width",width);
+
+            const g = svg.append("g")
+                         .attr("transform","translate("+[width/2,height/2]+")");
+
+            g.append("path")
+                    .datum(data)
+                    .attr("d", spiral)
+                    .style("opacity", .2)
+                    .style("fill", 'red');
+
+    });
+</script>
+</body>
+</html>

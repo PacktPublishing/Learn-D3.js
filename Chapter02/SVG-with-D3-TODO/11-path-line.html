@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG Move + Curve + Line using D3</h2>
+<script>
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 300);
+
+    svg.append("path")
+            .attr("d", "M100,200 C200,50 300,100 300,200 L400,250 500,100")
+            .attr("fill", "yellow")
+            .attr("stroke", "red")
+            .attr("stroke-width", 4)
+
+    const data = [  [100,200,"black"],
+                    [200,50,"green"],
+                    [300,100,"green"],
+                    [300,200,"blue"],
+                    [400,250,"green"],
+                    [500,100,"orange"]  ];
+
+    data.forEach(function(d) {
+        svg.append("circle")
+                .attr("cx", d[0])
+                .attr("cy", d[1])
+                .attr("r", 4)
+                .attr("stroke-width", 2)
+                .attr("stroke", "gray")
+                .attr("fill", d[2])
+    })
+
+</script>
+</body>
+</html>

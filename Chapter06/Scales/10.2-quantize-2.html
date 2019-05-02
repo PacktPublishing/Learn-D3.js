@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<script>
+    const data = d3.range(0,101,2);
+    const scaleGrading = d3.scaleQuantize()
+            .domain([0,100])
+            .range(['F','F','F','F','F','E','D','C','B','A']);
+    const scaleColor = d3.scaleOrdinal()
+            .domain(['F','E','D','C','B','A'])
+            .range(['black', 'red', 'orange', 'gold', 'green', 'blue']);
+
+    console.log(0, scaleGrading(0));
+    console.log(30, scaleGrading(30));
+    console.log(45, scaleGrading(45));
+    console.log(55, scaleGrading(55));
+    console.log(65, scaleGrading(65));
+    console.log(75, scaleGrading(75));
+    console.log(85, scaleGrading(85));
+    console.log(95, scaleGrading(95));
+    console.log(100, scaleGrading(100));
+
+    console.log(scaleColor('E'))
+
+    const axisScale = d3.scaleLinear()
+            .domain(scaleGrading.domain())
+            .range([0, 1000]);
+
+    const axis = d3.axisBottom()
+            .scale(axisScale)
+            .tickSize(25);
+
+    d3.select("body").append("svg").attr("height", 550).attr("width", 1050)
+            .append("g")
+            .attr("transform","translate(25,25)")
+            .call(axis);
+
+    d3.select("svg").append("g").attr("id","grades")
+            .selectAll("text")
+            .data(data).enter()
+            .append("text")
+            .text(d=>scaleGrading(d))
+            .attr("x", d=>d*10+25)
+            .attr("y", 20)
+            .style("fill", d => scaleColor(scaleGrading(d)));
+
+
+</script>
+
+</body>
+</html>

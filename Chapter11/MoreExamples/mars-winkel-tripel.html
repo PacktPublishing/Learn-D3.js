@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "mars.topojson";
+    const key  = "mars";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoWinkel3();
+
+    const color = d3.scaleSequentialLog(d3.interpolateOranges);
+    const linecolor = d3.scaleSequentialLog(d3.interpolateGreys);
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                color.domain([0,map.features.length])
+                linecolor.domain([0,map.features.length])
+
+                draw();
+                drawGraticules();
+
+            });
+
+    function draw() {
+        svg.append("path")
+                .datum({type: "Sphere"})
+                .style('fill', '#244474')
+                .attr("d", geoPath);
+
+        svg.selectAll("g.contours")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","contours")
+                .style("fill", (d,i) => color(i))
+                    .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", (d,i) => d3.rgb(linecolor(i)).darker())
+                    .style("fill-opacity", .03)
+                    .style("stroke-opacity", .2)
+                    .style('stroke-width', '.25');
+    }
+
+    function drawGraticules() {
+        svg.append("path").attr("class","equator")
+                .datum(d3.geoCircle().center([0,90]))
+                .attr('d', geoPath)
+                .style("stroke", "orange")
+                .style("fill", "none")
+                .style('stroke-width', 3)
+                .style('stroke-opacity', .2);
+        svg.append("path").attr("class","equator")
+                .datum(d3.geoCircle().center([0,-90]))
+                .attr('d', geoPath)
+                .style("stroke", "orange")
+                .style("fill", "none")
+                .style('stroke-width', 3)
+                .style('stroke-opacity', .2);
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25');
+    }
+</script>
+
+</body>
+</html>

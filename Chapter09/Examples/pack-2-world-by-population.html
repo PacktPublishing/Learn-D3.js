@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/un_regions.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 10px;
+            text-anchor: middle;
+            fill: blue;
+        }
+        circle {
+            stroke-width: .5px;
+            opacity: .8;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000;
+    const height = 1000;
+
+    const colorScale = d3.scaleSequential(d3.interpolatePuRd);
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        const nested = d3.nest()
+        //  .key(d => d.Supercontinent)
+            .key(d => d.Continent)
+        //    .key(d => d.UN_Region)
+            .key(d => d.Country)
+            .rollup(d => d.map(c => ({code: c.Code, area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+            .entries(result);
+
+        const root = d3.hierarchy(makeRoot(nested, false))
+                        .sum(d => d.data.population)
+                       // .sort((a,b) => b.height - a.height || a.value - b.value);
+
+        const pack = d3.pack()
+                .size([width-50,height-50])
+                .padding(1);
+
+        const nodes = pack(root).descendants();
+
+        colorScale.domain(d3.extent(nodes, n => n.height));
+
+        draw(pack(root).descendants());
+    });
+
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", d => `translate(${[25,25]})`);
+
+        packCircles(chart, data);
+        drawText(chart, data);
+
+    }
+
+    function packCircles(g, data) {
+        console.log("pack data", data);
+        g.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("transform", d => `translate(${[d.x, d.y]})`)
+            .attr("r", d => d.r)
+            .attr("fill", function(d) {
+                    return colorScale(d.height);
+                })
+            .attr("stroke", function(d) {
+                return d3.color(colorScale(d.value)).darker();
+            });
+
+    }
+
+    function drawText(g, data) {
+        g.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("transform", d => `translate(${[d.x, d.y]})`)
+            .text(d => d.data.id)
+            .style("font-size", function(d) {
+                const size = Math.min(2*d.r, (2*d.r - 8) / this.getComputedTextLength() * 9);
+                if(size > 5) {
+                    return size + "px";
+                }
+                return 0;
+            })
+            .attr("y", function(d) {
+                return +this.style.fontSize.split('px')[0]/4;
+            })
+            .attr("opacity", d => d.r > 11  && !d.children ? 1 : 0);
+    }
+</script>
+<h1>See console for results</h1>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            pointer-events: all;
+        }
+        .grid {
+            stroke: gray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 600;
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const colors = [['#e41a1c','#377eb8','#4daf4a'],['#984ea3','#ff7f00','#ffff33'],['#a65628','#f781bf','#999999']];
+    const data = d3.merge(colors.map((p,i) => p.map((q,j) => ({color: q, row: i, col: j}))))
+
+    // Grid
+    const exes = d3.range(0,width+1,50).map(d => [[d,0],[d,height]]);
+    const wyes = d3.range(0,height+1,50).map(d => [[0,d],[width,d]]);
+
+    const line = d3.line();
+
+    const grid = svg.selectAll(".grid")
+            .data(d3.merge([exes, wyes]))
+            .enter()
+            .append("path").attr("class","grid")
+            .attr("d", line)
+            .style("stroke-width", d => d[0][0] == width/2 || d[1][1] == height/2 ? 3 : 1)
+
+    // Drag configuration
+
+    const side = 96; // side of the square
+
+    const dragBehavior = d3.drag()
+        .on('start', function() {
+            d3.select(this).raise();
+            d3.select(this).style("cursor", "move")
+        })
+        .on('drag', function() {
+            const xRect = +d3.select(this).attr("x"),
+                  yRect = +d3.select(this).attr("y")
+            const x = xRect + d3.event.dx;
+            const y = yRect + d3.event.dy;
+
+            d3.select(this).attr("x", x)
+            d3.select(this).attr("y", y)
+        })
+        .on('end', function(d,i,nodes) {
+            d3.select(this).style("cursor", "auto")
+            console.log("d", d)
+            console.log("i", i)
+            console.log("nodes", nodes)
+            console.log("drag.subject", d3.event.subject)
+            console.log("this", this)
+        });
+
+    // Rectangles
+    svg.selectAll("rect.square")
+        .data(data)
+        .enter()
+        .append("rect").attr("class","square")
+        .attr("x", d => 2 + 100 * (d.row + 1))
+        .attr("y", d => 2 + 100 * (d.col + 1))
+        .attr("width", side)
+        .attr("height", side)
+        .style("fill", d => d.color)
+        .call(dragBehavior);
+
+</script>
+
+</body>
+</html>

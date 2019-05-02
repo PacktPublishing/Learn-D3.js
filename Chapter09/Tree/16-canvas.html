@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+</head>
+<body>
+<script>
+    const width = 1000, height = 600;
+    const canvas = d3.select("body").append("canvas")
+            .attr("height", height)
+            .attr("width", width);
+    const ctx = canvas.node().getContext("2d");
+    ctx.translate(60,60);
+
+    const root = d3.hierarchy(simpleHierarchy);
+
+    // generate labels
+    root.eachBefore(function(d) {
+        if(!d.parent) {
+            d.number = 1;
+        } else {
+            d.number = d.parent.number + "." + (d.parent.children.indexOf(d) + 1);
+        }
+    });
+
+    const tree = d3.cluster()
+            .size([width-120,height-120]); // top-down
+    const treeData = tree(root);
+    const nodes = treeData.descendants();
+    const links = treeData.links();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.depth));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(links, k => k.target.height));
+
+    const verticalLink = d3.linkVertical()
+            .x(d => d.x).y(d => d.y)
+            .context(ctx); // generate path commands for canvas
+
+
+    drawLinks();
+    drawNodes();
+    drawLabels();
+
+
+    function drawNodes() {
+        ctx.save();
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "none";
+        nodes.forEach(function(d) {
+            ctx.fillStyle = colorScale(d.depth);
+            ctx.beginPath();
+            ctx.arc(d.x, d.y, (d.height + 1) * 10, 0, 2 * Math.PI);
+
+            ctx.stroke();
+            ctx.fill();
+        });
+        ctx.restore();
+    }
+
+    function drawLinks() {
+        ctx.save();
+        ctx.fillStyle = "transparent";
+        links.forEach(function(d) {
+            ctx.lineWidth = (d.target.height + 1) * (d.target.height + 1);
+            ctx.globalAlpha =  d.target.depth *.25 * .6 + .4;
+            ctx.beginPath();
+            verticalLink(d);
+            ctx.stroke();
+        });
+        ctx.restore();
+    }
+
+    function drawLabels() {
+        const font = 'px "Yanone Kaffeesatz", sans-serif';
+        ctx.textBaseline = "baseline";
+
+        nodes.forEach(function(d,i) {
+            ctx.save(); // save current canvas state
+            ctx.fillStyle = d.height != 0 ? 'white' : 'black';
+            ctx.textAlign = d.height != 0 ? "center" : "end";
+
+            const fontSize = 14 + d.height*d.height;
+            ctx.font = fontSize + font;
+
+            ctx.translate(d.x, d.y);
+            if(d.height == 0) {
+                ctx.rotate(-Math.PI / 2);
+                ctx.translate(-15,5);
+            } else {
+                ctx.translate(0,5);
+            }
+            ctx.fillText(d.number, 0, 0);
+            ctx.restore(); // recover saved canvas state
+        });
+    }
+
+</script>
+</body>
+</html>

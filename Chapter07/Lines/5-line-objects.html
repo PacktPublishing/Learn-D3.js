@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 900;
+    const height = 600;
+
+    const data = [
+        {source: {x: 0, y: 0}, target: {x: 100, y: 200}},
+        {source: {x: 100, y: 200}, target: {x: 200, y: 400}},
+        {source: {x: 200, y: 400}, target: {x: 300, y: 150}},
+        {source: {x: 300, y: 150}, target: {x: 400, y: 50}},
+        {source: {x: 400, y: 50},  target: {x: 500, y: 350}},
+        {source: {x: 500, y: 350}, target: {x: 600, y: 500}},
+        {source: {x: 600, y: 500}, target: {x: 700, y: 100}},
+        {source: {x: 700, y: 100}, target: {x: 800, y: 250}}
+    ]
+
+    const line = d3.line()
+                    .x(d => d.source.x)
+                    .y(d => d.source.y);
+
+    // (the last point (target) was not included in the line)
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+    const g = svg.append("g").datum(data);
+    g.append("path")
+            .attr("d", line)
+            .style("stroke", "red")
+            .style("fill", "none")
+
+    g.selectAll("text")
+            .data(d => d).join('text')
+            .text(d => `${d.source.x},${d.source.y}`)
+                .attr('x',d => d.source.x + 10)
+                .attr("y",d => d.source.y + 10);
+
+
+</script>
+</body>
+</html>

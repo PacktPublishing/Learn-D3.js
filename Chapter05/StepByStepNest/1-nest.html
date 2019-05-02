@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<script>
+    d3.csv("../Data/rain_sao_paulo.csv")
+            .then(function(data) {
+                process(data)
+            });
+
+    function process(data) {
+
+        // nest by year, and month
+        let entries = d3.nest()
+                .key(function(d) {
+                    return +d.Year;
+                })
+                .key(function(d) {
+                    return +d.Month;
+                })
+                .rollup(function(d) {
+                    return +d[0].Rain_mm;
+                })
+                .entries(data);
+
+        console.log(entries);
+    }
+</script>
+</body>
+</html>

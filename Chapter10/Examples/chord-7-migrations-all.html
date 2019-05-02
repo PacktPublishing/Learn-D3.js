@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 8px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .2;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 800;
+    const margin = 100;
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2 + margin/4, height/2 + margin/4]})`);
+
+    const color = d3.scaleSequential(d3.interpolateRainbow);
+
+    chart.append("text").attr("id","loading")
+            .style("font-size",25)
+            .style("fill",'black')
+            .text('Loading...');
+
+    d3.csv("../Data/migration_2017.csv", function(row) {
+        const line = [];
+        for(key in row) {
+            if(isNaN(row[key])) continue;
+            const obj = {
+                value: +row[key] ,
+                source: row.Destination,
+                target: key
+            }
+            line.push(obj);
+        }
+        return line.filter(d => d.value != 0);
+    }).then(function(data) {
+        const links = d3.merge(data);
+        const groups = d3.nest()
+                        .key(d => d.source)
+        .key(d => d.target)
+        .rollup(d => d[0].value)
+        .map(links);
+        const columns = data.columns.filter((d,i) => i>3);
+
+        const matrix = makeMatrix(columns, groups);
+
+        draw(columns, matrix);
+    });
+
+    function makeMatrix(columns, groups) {
+        const matrix = [];
+        columns.forEach(function(destination) {
+            const row = [];
+            let target = groups.get(destination);
+            columns.forEach(function(origin) {
+                let value = target.get(origin);
+                if(value) {
+                    row.push(value);
+                } else {
+                   row.push(0);
+                }
+            });
+            matrix.push(row);
+        })
+        return matrix;
+    }
+
+    function draw(headers, matrix) {
+        //console.log(matrix);
+        color.domain([0,matrix.length]);
+
+        const chord = d3.chord().padAngle(.005)
+                        .sortGroups((a,b) => d3.descending(a,b))
+                        .sortSubgroups((a,b) => d3.descending(a,b))
+        const chords = chord(matrix);
+
+        const radius = height/2 - margin/2;
+
+        const ribbon = d3.ribbon().radius(radius);
+
+        chart.selectAll('path.ribbon')
+                .data(chords)
+                .enter().append("path").attr("class",'ribbon')
+                .attr("d", ribbon)
+                .style("opacity", .5)
+                .style("fill", d => color(d.target.index));
+
+        const arc = d3.arc().innerRadius(radius+2).outerRadius(radius+20);
+
+        chart.selectAll('path.arc')
+                .data(chords.groups)
+                .enter().append("path").attr("class",'arc')
+                .attr("d", arc)
+                .style("fill", d => color(d.index));
+
+        chart.selectAll("text")
+                .data(chords.groups)
+                .enter().append("text")
+                .attr("x", d => arc.centroid(d)[0])
+                .attr("y", d => arc.centroid(d)[1])
+                .text(d => d.value > 3000000 ? headers[d.index] : '')
+                .style("fill", d => contrast(color(d.index)))
+                .attr("transform",d => `rotate(${(arc.endAngle()(d) + arc.startAngle()(d))*90/Math.PI},${arc.centroid(d)})`);
+
+        chart.selectAll("#loading").remove();
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 150 ? 'black' : 'white';
+    }
+
+</script>
+
+</body>
+</html>

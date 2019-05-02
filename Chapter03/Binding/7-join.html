@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<body>
+
+<h1>Distance from the Sun (in AU)</h1>
+
+<script>
+
+    const distances = [
+        {name: "Mercury", distance: 0.387},
+        {name: "Venus", distance: 0.723},
+        {name: "Earth", distance: 1},
+        {name: "Mars", distance: 1.52},
+        {name: "Jupiter", distance: 5.2},
+        {name: "Saturn", distance: 9.54},
+        {name: "Uranus", distance: 19.2},
+        {name: "Neptune", distance: 30.1},
+        {name: "Ceres", distance: 2.765},
+        {name: "Pluto", distance: 39.481},
+        {name: "Eris", distance: 67.67},
+        {name: "Haumea", distance: 43},
+        {name: "Makemake", distance: 45.346}
+    ];
+
+    d3.select("body")          // select the body element
+            .append("ul")      // append an <ul> element inside <body>
+            .selectAll("li")   // select all <li> elements (there are none)
+            .data(distances)   // load the data from the numbers array
+            .join("li")        // obtains enter selection from data and appends 5 new <li> elements
+            .text(function(d, i) {
+                return d.name + ": " + d.distance;
+            });
+
+</script>
+</body>
+</html>

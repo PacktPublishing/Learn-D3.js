@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        g {
+            fill: blue;
+        }
+        g:first-of-type {
+            fill: red;
+        }
+    </style>
+</head>
+<body>
+<svg>
+    <g transform="translate(50,10)"></g>
+    <g transform="translate(200,10)"></g>
+</svg>
+<script>
+
+    // d3.selectAll("g").transition().append("rect") // this won't work
+    d3.selectAll("g")
+            .transition()
+            .selection()     // get the selection
+            .append("rect"); // this works
+
+    d3.selectAll("rect").attr("height", 50).attr("width", 50);
+
+</script>
+</body>
+</html>

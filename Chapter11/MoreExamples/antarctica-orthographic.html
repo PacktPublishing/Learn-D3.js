@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoOrthographic()
+                         .rotate([0,90,0]);
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    // configure graticule
+    const graticule = d3.geoGraticule().extent(d3.geoGraticule().extentMajor());
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                drawGraticules();
+                draw();
+            });
+
+    function draw() {
+        svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .style("fill", 'lightblue')
+                    .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+                    .style('stroke-width', '.25');
+    }
+
+    function drawGraticules() {
+        svg.append("g").attr("class","background")
+                .datum(d3.geoGraticule().outline())
+                .append("path")
+                .attr('d', geoPath)
+                .style("fill", "royalblue")
+                .style("fill-opacity", .8)
+                .style('stroke-width', 1);
+
+        console.log(d3.geoGraticule10())
+        svg.append("g").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "lightblue")
+                .style('stroke-width', '.25');
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill: blue;
+        }
+        .bifurcation {
+            fill: #41b2ba;
+            stroke: #41b2ba;
+        }
+        .river {
+            fill: none;
+            stroke: #41b2ba;
+            stroke-linecap: round;
+        }
+        rect {
+            stroke: blue;
+            fill: none;
+        }
+        text {
+            font-family: sans-serif;
+            fill: #4a774a;
+            text-anchor: end;
+        }
+        .node {
+            font-size: 12px;
+            transform: translate(0px,-20px);
+        }
+        .leaf {
+            font-size: 12px;
+            transform: translate(-6px,-12px);
+            text-anchor: middle;
+        }
+        .root {
+            font-size: 16px;
+            font-weight: bold;
+            transform: translate(0,16px);
+        }
+
+    </style>
+</head>
+<body>
+<script>
+    const height = 800;
+    const width = 1000;
+
+    const lengthScale = d3.scaleLinear().range([1,8]);
+
+    d3.csv("../Data/amazon-river.csv").then(function(result) {
+        result.forEach(d => d.km = +d.km);
+        console.log("tabular data", result);
+
+        const stratify = d3.stratify()
+                        .id(d => d.Tributary)
+        .parentId(d => d.Confluence);
+
+        const root = d3.hierarchy(stratify(result));
+
+        lengthScale.domain(d3.extent(root.children, d => d.data.data.km));
+
+        // tree
+        const tree = d3.cluster()
+                .size([height-50,width-75])
+                .separation((a,b) => (a.parent == b.parent ? 1 : 2));
+        const treeData = tree(root.sort((a,b) => b.height - a.height));
+
+        console.log(treeData);
+
+        draw(treeData);
+    });
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", `translate(${width - 25},50)`);
+
+        drawLinks(chart.append("g").attr("class", "links"), data.links());
+        drawNodes(chart.append("g").attr("class", "nodes"), data.descendants());
+
+    }
+
+    function drawNodes(g, data) {
+        const node = g.selectAll("g")
+            .data(data)
+            .enter()
+            .append('g')
+            .attr('transform', function(d) {
+                return 'translate(' + [-d.y, d.x] + ')';
+            });
+
+        node.append("text")
+                .attr('x', 5)
+                .attr('y', 5)
+                .attr("class", function(d) {
+                    if(d.height > 0 && d.depth != 0) {
+                        return "node";
+                    } else if (d.depth == 0){
+                        return "root";
+                    } else {
+                        return "leaf";
+                    }
+                })
+                .text(d => d.data.id);
+    }
+
+    const link = d3.linkHorizontal()
+            .x(function(d) { return -d.y; })
+            .y(function(d) { return d.x; });
+
+    function drawLinks(g, data) {
+        g.selectAll("path.river")
+                .data(data)
+                .enter()
+                .append('path')
+                .attr("class", "river")
+                .attr("d", link)
+                .attr("stroke-width", d => lengthScale(d.target.data.data.km));
+    }
+
+</script>
+</body>
+</html>
+

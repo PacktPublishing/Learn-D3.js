@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to view selections</h1>
+
+<table border="1" id="main-table">
+<thead>
+   <tr><th>Type</th><th>Example</th><th>Description</th></tr>
+</thead>
+<tbody>
+   <tr><td>Descendant</td><td><pre>table td</pre></td><td>Selects elements that descend from the elements represented by the previous selector.</td></tr>
+   <tr><td>Child</td><td><pre>table > tbody > tr > td</pre></td><td>Selects elements that are child nodes of the elements represented by the previous selector.</td></tr>
+   <tr><td>Next-sibling</td><td><pre>#sec2 + div + form</pre></td><td>Selects sibling elements that appear after the elements represented by the previous selector.</td></tr>
+   <tr><td>Subsequent-sibling</td><td><pre>#sec2 ~ form</pre></td><td>Selects sibling elements that immediately follow the elements represented by the previous selector.</td></tr>
+</tbody>
+</table>
+
+<script>
+    const selection = d3.select("body")
+            .select("#main-table")
+                .style("border-collapse", "collapse") // applying style to <table>
+            .selectAll("tr")
+            .selectAll("td")
+                .style("color", "blue"); // applying style to <td>
+
+    console.log(selection);
+
+    const flatSelection = d3.selectAll("body #main-table tr td");
+
+    console.log(flatSelection);
+</script>
+</body>
+</html>

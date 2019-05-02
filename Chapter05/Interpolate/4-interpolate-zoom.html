@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        circle {
+            fill: hsla(240,100%,50%,.5)
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 24px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            fill: navy;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const height=500, width=700;
+
+    const inter = d3.interpolateZoom([50,50,50],[width-50,height-50,50]);
+    console.log(inter.duration)
+
+    // Using a circle to visualize the interpolator's generated data
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const circle = svg.append("circle")
+            .attr("r", 50)
+            .attr("cx", 50)
+            .attr("cy", 50);
+    const text = svg.append("text")
+            .attr("x", width/2)
+            .attr("y", height/2)
+            .text('')
+
+    const format = d3.format('.0f');
+    const percent = d3.format('.0%');
+
+    // The circle will show the smooth zooming effect
+    svg.transition()
+            .duration(inter.duration)
+            .delay(500)
+            .attrTween("zoom", function(d) {
+                return function(t) {
+                    const v = inter(t);
+                    circle.attr("cx", v[0]).attr("cy", v[1]).attr("r", v[2]);
+                    text.text(`t: ${percent(t)}, x: ${format(v[0])}, y: ${format(v[1])}, r: ${format(v[2])}`);
+                }
+            })
+
+
+</script>
+</body>
+</html>

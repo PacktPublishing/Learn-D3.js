@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+    text {
+        font-size: 18pt
+    }
+</style>
+<body>
+<h2>SVG arcs using D3</h2>
+<script>
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 300)
+            .attr("viewBox", "0 0 562 150");
+
+    svg.append("g")
+       .attr("transform", "translate(300,180)")
+            .append("path")
+            .attr("d", "M-100,-100 L0,-100 A100,100 0 0,1 -100,0 L-100,-100 z")
+            .attr("fill-opacity", .2)
+            .attr("stroke", "red")
+            .attr("stroke-width", 4)
+            .attr("stroke-opacity", .5)
+
+    svg.append("g")
+       .attr("transform", "translate(290,170)")
+            .append("path")
+            .attr("d", "M-100,-100 L0,-100 A100,100 0 1,0 -100,0 L-100,-100 z")
+            .attr("fill-opacity", .2)
+            .attr("stroke", "red")
+            .attr("stroke-width", 4)
+            .attr("stroke-opacity", .5)
+
+
+
+</script>
+</body>
+</html>

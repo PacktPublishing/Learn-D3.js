@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/arc.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000;
+    const height = 1000;
+    const margin = 100;
+
+    const colors = ['blue', 'green', 'red', 'gold', 'purple', 'silver'];
+    const lines  = [1,2,3,4,5,15];
+    const colorScale = d3.scaleOrdinal().domain(lines).range(colors);
+    const xScale = d3.scaleOrdinal().domain(lines).range([0, -0.15, -0.08, -0.17, -0.1, 0.01]);
+    const yScale = d3.scaleOrdinal().domain(lines).range([0, -.01, -.1, 0.2, 0.16, 0.08]);
+    const xStrength = d3.scaleOrdinal().domain(lines).range([0.99, 0.01, 0, 0.1, 0.1, 0.01]);
+    const yStrength = d3.scaleOrdinal().domain(lines).range([0, 0.8, 0.99, 0.08, 0.1, 0.8]);
+
+    d3.json('../Data/metrosp.json').then(function(data) {
+        data.links.forEach(function(link) {
+            const nodeKeys = data.nodes.map(n => n.station+':'+n.line);
+            link.source = nodeKeys.indexOf(link.source+":"+link.lines[0]);
+            link.target = nodeKeys.indexOf(link.target+":"+link.lines[1]);
+        });
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[width * .4,height * .55]})`);
+
+        const sim = d3.forceSimulation(data.nodes);
+        sim.force("center", d3.forceCenter())
+        sim.force("link", d3.forceLink(data.links)
+                            .iterations(15)
+                            .distance(d => d.lines[0] != d.lines[1] ? 0 : 2)
+                            .strength(d => d.lines[0] != d.lines[1] ? 2 : .1));
+        sim.force("x", d3.forceX()
+                         .x(d => xScale(d.line) * width)
+                         .strength(d => xStrength(d.line)));
+        sim.force("y", d3.forceY()
+                         .y(d => yScale(d.line) * height)
+                         .strength(d => yStrength(d.line)));
+        sim.force("manybody", d3.forceManyBody()
+                                .strength(-100))
+        sim.force("collide", d3.forceCollide(20)
+                               .iterations(10));
+
+        for(let i = 0; i < 300; i++) {
+            sim.tick();
+        }
+        draw(chart,data);
+        sim.stop();
+
+    });
+
+    function draw(chart, data) {
+        chart.selectAll('line')
+                .data(data.links).enter()
+                .append('line')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+                .style("fill", 'none')
+                .style("stroke", d => d.lines[0] == d.lines[1] ? colorScale(d.lines[0]) : 'black')
+                .style("stroke-width", d => d.lines[0] != d.lines[1] ? 12 : 4)
+
+        chart.selectAll("circle")
+                .data(data.nodes).enter()
+                .append("circle")
+                .attr("r", 15)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .style("fill", d => colorScale(d.line))
+                .style("stroke", 'black')
+                .style("stroke-width", .5)
+
+        chart.selectAll("text")
+                .data(data.nodes).enter()
+                .append("text")
+                .text(d => d.station.substring(0,6))
+                .attr("x", d => d.x)
+                .attr("y", d => d.y)
+                .style("fill", d => d.line == 4 || d.line == 15 ? 'black' : 'white')
+    }
+
+
+</script>
+</body>
+</html>

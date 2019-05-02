@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .a circle {
+            fill: hsla(240,100%,50%,.2);
+            stroke: blue;
+        }
+        .b rect {
+            fill: hsla(0,100%,50%,.2);
+            stroke: red;
+        }
+        .dot, .sqr {
+            stroke: black;
+            stroke-width: .5;
+            fill: rgba(0,0,0,.1);
+        }
+        svg {
+            background-color: rgba(0,255,0,0.1);
+            border: solid 1px green;
+            position: absolute;
+            left: 50px;
+            top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const width = 800, height = 300;
+
+    const svg = d3.select("body").append("svg")
+            .attr("height",height).attr("width",width);
+
+    let timerDots, timerSquares;
+    let dots = squares = 0;
+
+    svg.append("g").attr("class", "a")
+            .attr("transform", `translate(200,150)`)
+            .append("circle").attr("r", 100)
+            .on("click", () => timerDots = d3.timer(placeDots,500));
+
+    svg.append("g").attr("class", "b")
+            .attr("transform", `translate(500,50)`)
+            .append("rect").attr("height", 200).attr("width", 200)
+            .on("click", () => timerSquares = d3.timer(placeSquares,500));
+
+    const dispatch = d3.dispatch("dots", "squares");
+    dispatch.on("dots",
+                  d => d3.select(".b")
+                         .append("circle").attr("class","dot")
+                          .attr("r", d.r)
+                          .attr("cx", d.x)
+                          .attr("cy", d.y))
+              .on("squares",
+                  d => d3.select(".a")
+                         .append("rect").attr("class","sqr")
+                          .attr("x", d.x)
+                          .attr("y", d.y)
+                          .attr("width", d.s)
+                          .attr("height", d.s));
+
+    function placeDots() {
+        ++dots;
+        const randW = d3.randomUniform(0,200);
+        const randH = d3.randomUniform(0,200);
+        const randR = d3.randomUniform(0.5,10);
+        if(dots < 250) {
+            dispatch.call("dots", this, {x: randW(), y: randH(), r: randR()})
+        } else {
+            timerDots.stop();
+        }
+    }
+
+    function placeSquares() {
+        ++squares;
+        const angle  = d3.randomUniform(0,Math.PI * 2)();
+        const radius = d3.randomUniform(1,100)();
+        const randS = d3.randomUniform(1,15);
+
+        const x = radius * Math.cos(angle) - randS()/2;
+        const y = radius * Math.sin(angle) - randS()/2;
+
+        if(squares < 250) {
+            dispatch.call("squares", this, {x: x, y: y, s: randS()})
+        } else {
+            timerSquares.stop();
+        }
+    }
+</script>
+
+</body>
+</html>

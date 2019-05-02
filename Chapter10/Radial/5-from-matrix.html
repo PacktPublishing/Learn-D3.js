@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 18px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .3;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const matrix = [
+        [0,3,3,3,0,0,0,2,4],
+        [3,0,5,0,0,0,0,0,0],
+        [8,5,0,6,0,0,4,0,0],
+        [9,0,8,0,9,0,0,0,0],
+        [0,0,0,9,0,8,0,0,0],
+        [0,0,0,0,9,0,7,8,0],
+        [0,0,9,0,0,7,0,7,0],
+        [3,0,0,0,0,8,6,0,7],
+        [4,0,0,0,0,0,0,9,0]
+    ];
+
+    const nodes = ['A','B','C','D','E','F','G','H','I'];
+
+    const edges = dvj.matrixToLinks(nodes, matrix);
+
+    const circleLayout = dvj.circleDiagram().size([width-margin, height-margin]);
+
+    const data = circleLayout(nodes, edges);
+
+    color.domain([0, d3.max(edges, d => d.value)]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[margin/2 + width/2,margin/4 + height/2]})`);
+
+    const widthScale = d3.scaleLinear()
+            .range([2,10])
+            .domain([0, d3.max(edges, d => d.value)]);
+
+    chart.selectAll('line')
+            .data(data.links())
+            .enter()
+            .append('line')
+            .attr("x1", d => d3.pointRadial(d.source.angle, d.source.radius)[0])
+            .attr("y1", d => d3.pointRadial(d.source.angle, d.source.radius)[1])
+            .attr("x2", d => d3.pointRadial(d.target.angle, d.target.radius)[0])
+            .attr("y2", d => d3.pointRadial(d.target.angle, d.target.radius)[1])
+            .style("stroke-width", d => widthScale(d.value))
+            .style("stroke", d => color(d.source.i))
+            .style("stroke-opacity", .3)
+            .style("fill", 'none');
+
+    chart.selectAll("circle")
+            .data(data.nodes())
+            .enter()
+            .append("circle")
+            .attr("cx", d => d3.pointRadial(d.angle, d.radius)[0])
+            .attr("cy", d => d3.pointRadial(d.angle, d.radius)[1])
+            .style("fill", (d,i) => color(i))
+            .attr("r", 15)
+            .on("mouseover", highlight)
+            .on("mouseout", d => d3.selectAll("line, circle").classed('faded', false));
+
+    chart.selectAll("text")
+            .data(data.nodes())
+            .enter()
+            .append("text")
+            .attr("x", d => d3.pointRadial(d.angle, d.radius)[0])
+            .attr("y", d => d3.pointRadial(d.angle, d.radius)[1])
+            .text((d,i) => nodes[i]);
+
+    function highlight(d) {
+        d3.selectAll("line").classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle").classed('faded', n => !(n === d
+                                                    || n.sources.filter(s => s.target === d).length > 0
+                                                    || n.targets.filter(s => s.source === d).length > 0))
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            border: solid 1px black;
+            padding: 2px;
+        }
+        thead {
+            font-weight: bold
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead><tr><td>0 (a)</td><td>0.25</td><td>0.5</td><td>0.75</td><td>1 (b)</td></tr></thead>
+    <tbody></tbody>
+</table>
+<script>
+    const height=500, width=700;
+    const parseTime = d3.timeParse("%Y-%m-%d");
+    const formatTime = d3.timeFormat("%Y-%m-%d");
+
+    const data = [
+        [25, 123],
+        ["Part 0 of 100","Part 100 of 100"],
+        [new Date(), parseTime("2020-03-07")],
+        [[3,10,100],[30,100,0]],
+        ["red", "blue"],
+        [{a: -30, b: "red"}, {a: 50, b: "blue"}],
+    ]
+
+    data.forEach(function(d) {
+        const interpolate = d3.interpolate(d[0], d[1]);
+        const tr = d3.select("tbody").append("tr")
+        tr.append("td").text(print(interpolate(0)))
+        tr.append("td").text(print(interpolate(.25)))
+        tr.append("td").text(print(interpolate(.5)))
+        tr.append("td").text(print(interpolate(.75)))
+        tr.append("td").text(print(interpolate(1)))
+    })
+
+    function print(value) {
+        if(value.constructor.name == "Date") {
+            return formatTime(value);
+        }
+        if(value.constructor.name == "Array") {
+            return "["+value+"]";
+        }
+        if(value.constructor.name == "Object") {
+            return JSON.stringify(value);
+        }
+        return value
+    }
+
+</script>
+</body>
+</html>

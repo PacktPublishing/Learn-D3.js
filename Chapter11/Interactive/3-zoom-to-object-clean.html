@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        .dragging {
+
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoOrthographic();
+    const scale = projection.scale();
+    const translate = projection.translate();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+    const zoomBox = {};
+    let dragged = false;
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                drawGraticules();
+                draw();
+            });
+
+    const globe = svg.append("g")
+            .attr("class","globe");
+
+    function zoom(object) {
+        projection.fitSize([width, height], object);
+        render();
+    }
+
+    function draw() {
+        globe.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .on("click", d => zoom(d))
+                .style("fill", 'gray')
+                    .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+                    .style('stroke-width', '.25');
+    }
+
+    svg.on("dblclick", function() {
+        d3.event.stopPropagation();
+        projection
+                .scale(scale).translate(translate)
+              //.fitSize([width, height], {type: "Sphere"});
+        render();
+    });
+
+    function render() {
+        globe.selectAll("g.country").select("path").attr('d', geoPath);
+        globe.selectAll("path.graticule").attr('d', geoPath);
+        globe.selectAll("path.background").attr('d', geoPath);
+    }
+
+    function drawGraticules() {
+        globe.append("path").attr("class","background")
+                .datum({type: 'Sphere'})
+                .style("fill", 'lightblue')
+                .attr('d', geoPath);
+        globe.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', '.25');
+    }
+</script>
+
+</body>
+</html>

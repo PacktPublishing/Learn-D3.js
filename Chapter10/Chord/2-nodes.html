@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 11px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const width = 800;
+    const height = 800;
+    const margin = 120;
+
+    const matrix = [
+        [0,3,3,3,0,0,0,2,4],
+        [3,0,5,0,0,0,0,0,0],
+        [8,5,0,6,0,0,4,0,0],
+        [9,0,8,0,9,0,0,0,0],
+        [0,0,0,9,0,8,0,0,0],
+        [0,0,0,0,9,0,7,8,0],
+        [0,0,9,0,0,7,0,7,0],
+        [3,0,0,0,0,8,6,0,7],
+        [4,0,0,0,0,0,0,9,0]
+    ];
+
+    console.log(matrix);
+
+    const chord = d3.chord().padAngle(.3);
+    const chords = chord(matrix);
+
+    console.log(chords)
+
+    const radius = height/2 - margin/2;
+
+    const ribbon = d3.ribbon().radius(radius);
+
+
+    const color = d3.scaleSequential(d3.interpolateRainbow).domain([0,matrix.length]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2 + margin/4, height/2 + margin/4]})`);
+
+    chart.selectAll('path.ribbon')
+            .data(chords)
+            .join("path").attr("class",'ribbon')
+            .attr("d", ribbon)
+            .style("opacity", .3)
+            .style("fill", d => color(d.source.index));
+
+    const arc = d3.arc().innerRadius(radius+2).outerRadius(radius+30);
+
+    chart.selectAll('path.arc')
+            .data(chords.groups)
+            .join("path").attr("class",'arc')
+            .attr("d", arc)
+            .style("fill", d => color(d.index));
+
+</script>
+
+</body>
+</html>

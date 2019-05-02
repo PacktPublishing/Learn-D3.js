@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/arc.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1200;
+    const height = 900;
+    const margin = 100;
+
+    const color = d3.scaleOrdinal(d3.schemeDark2);
+    const radius = d3.scaleSqrt().range([0,160]);
+
+    const format = d3.format(',');
+
+    // proportional positions for the continents
+    const continentNames = ['North America','South America','Europe','Africa','Antarctica','Asia','Oceania'];
+    const xScale = d3.scaleOrdinal()
+            .range([-.2,-.28,0.3,0.02,0,.45,.5])
+            .domain(continentNames);
+    const yScale = d3.scaleOrdinal()
+            .range([-.3,-.1,-.1,-.1,0,-.20,-.1])
+            .domain(continentNames);
+
+    const links = [];
+    const migrationMap = new Map();
+    const continentSet = new Set();
+
+    Promise.all([
+        d3.csv('../Data/un_regions.csv', function(row) {
+            continentSet.add(row.Continent);
+            return {node: row.Country, code: row.Code, group: row.Continent};
+        }),
+        d3.csv("../Data/migration_2017.csv", function(row) {
+            migrationMap.set(row.Code, +row.Total);
+            return row;
+        })
+    ]).then(function([countries, migrationData]) {
+
+        countries.forEach(function(country) {
+            country.value = migrationMap.get(country.code);
+            if(!country.value) {
+                country.value = 0;
+            }
+        });
+        countries.sort((a,b) => d3.descending(a.value, b.value));
+
+        console.log(countries)
+
+        const root = [{node: 'World', value: 0}, {node: 'Americas', value: 0}, {node: 'Eurasia', value: 0}];
+        const continents = Array.from(continentSet).map(d => ({node: d, value: 0}));
+        const nodes = d3.merge([root, countries, continents]);
+
+        root.filter((n,i) => i > 0).forEach(function(row) {
+            const obj = {
+                target: nodes.map(n => n.node).indexOf(row.node),
+                source: nodes.map(n => n.node).indexOf('World')
+            }
+            links.push(obj);
+        });
+        continents.forEach(function(row) {
+            const obj = {target: nodes.map(n => n.node).indexOf(row.node)};
+            if(row.node == 'Europe' || row.node == 'Asia') {
+                obj.source = nodes.map(n => n.node).indexOf('Eurasia');
+            } else if(row.node.indexOf('America') >= 0) {
+                obj.source = nodes.map(n => n.node).indexOf('Americas');
+            } else {
+                obj.source = nodes.map(n => n.node).indexOf('World');
+            }
+            links.push(obj);
+        })
+        countries.forEach(function(row) {
+            const obj = {
+                target: nodes.map(n => n.node).indexOf(row.node),
+                source: nodes.map(n => n.node).indexOf(row.group)
+            }
+            links.push(obj);
+        });
+
+        color.domain([0,continents.length]);
+        radius.domain([0,d3.max(nodes, d => d.value)]);
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[width * .52, height * .5]})`);
+
+        const sim = d3.forceSimulation(nodes)
+        .force("manybody", d3.forceManyBody().strength(-250))
+        .force("manybody", d3.forceManyBody().strength(-250))
+        .force("center", d3.forceCenter())
+        .force("y", d3.forceY().y(d => height * yScale(d.group)).strength(.8))
+        .force("x", d3.forceX().x(d => width  * xScale(d.group)).strength(.8))
+        .force("link", d3.forceLink(links).strength(2))
+        .force("collide", d3.forceCollide(d => radius(d.value) + 1).iterations(5))
+        .alphaDecay(.38);
+
+        for(let i = 0; i < 150; i++) {
+            sim.tick();
+        }
+        sim.stop();
+
+        draw(chart, nodes);
+    });
+
+    function draw(chart, nodes) {
+        const node = chart.selectAll("g")
+                        .data(nodes).enter()
+                        .append("g")
+                        .attr("transform", d => `translate(${[d.x, d.y]})`);
+
+        node.append("circle")
+            .attr("r", d => radius(d.value))
+            .style("fill", (d,i) => color(d.group))
+            .style("opacity", d => d.value == 0 ? 0 : 1)
+
+        node.append("text").attr("class", "name").attr("id", d => d.code)
+            .text(d => d.node)
+            .attr("y", d => radius(d.value)*.1)
+            .style("font-size", function(d,i) {
+                const r = radius(d.value);
+                const scale = (d.node.length <= 3 ? 1.6 : 2.5) * r;
+                let size = 8 * scale / this.getComputedTextLength();
+                if(size < 11) {
+                    d3.select(this).text(d.code);
+                    size = 1.2 * r;
+                }
+                return size > 9 ? size : 0;
+            });
+
+        node.append("text").attr("class", "total")
+            .text((d,i) => i <= 22 ? format(d.value) : '')
+            .attr("y", d => .8 * radius(d.value))
+            .style("alignment-baseline", 'baseline')
+            .style("font-size", d => .25 * radius(d.value));
+
+        node.append("text").attr("class", "rank")
+            .text((d,i) => i <= 22 ? ordinal(i-2) : '')
+            .attr("y", d => -radius(d.value) + 4)
+            .style("alignment-baseline", 'hanging')
+            .style("font-size", d => radius(d.value)/3);
+    }
+
+    const ordinalSuffixes = ['th', 'st', 'nd', 'rd'];
+
+    function ordinal(number) {
+        const value = number % 100;
+        return number + (ordinalSuffixes[(value - 20) % 10] || ordinalSuffixes[value] || ordinalSuffixes[0]);
+    }
+
+</script>
+</body>
+</html>

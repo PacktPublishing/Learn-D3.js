@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Using HTML5 datasets</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>See more results in console.</h1>
+
+<ul id="list">
+    <li data-planet="p1" data-type="rocky">Mercury</li>
+    <li data-planet="p2" data-type="rocky">Venus</li>
+    <li data-planet="p3" data-type="rocky">Earth</li>
+    <li data-planet="p4" data-type="rocky">Mars</li>
+    <li data-planet="p5" data-type="gaseous">Jupiter</li>
+    <li data-planet="p6" data-type="gaseous">Saturn</li>
+    <li data-planet="p7" data-type="gaseous">Uranus</li>
+    <li data-planet="p8" data-type="gaseous">Neptune</li>
+</ul>
+
+<script>
+    const sel = d3.select("#list")
+            .selectAll("li")
+            .datum(function() {
+        return this.dataset;
+    });
+    sel.each(function(d,i) {
+        console.log(d.planet, d.type);
+    });
+</script>
+
+</body>
+</html>

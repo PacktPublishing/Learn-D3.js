@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        .graticule {
+            stroke: green;
+            stroke-width: .25px;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 680;
+
+    const scale = d3.scaleSqrt().range([.3,1])
+    const color = d3.scaleOrdinal(d3.schemeCategory10)
+
+    d3.csv('../Data/cities1000.csv', function(row) {
+        if(row.timezone.split("/")[0] == "Europe") {
+            return {
+                city: row.asciiname,
+                coordinates: [+row.longitude, +row.latitude],
+                population: +row.population,
+                country: row.country_code
+            }
+        }
+    })
+    .then(function(data) {
+
+        console.log(data);
+        const svg = d3.select("body").append("svg")
+                      .attr("width", width).attr("height", height);
+
+        const projection = d3.geoConicConformal()
+                .translate([480,340])
+                .center([20,50]) // Krakow, Poland
+                .scale(1200)
+        const geoPath = d3.geoPath()
+                          .projection(projection);
+
+        scale.domain([0,d3.max(data, d => d.population)]);
+
+        svg.append("path")
+                .classed("graticule", true)
+                .datum(d3.geoGraticule10())
+                .attr("d", geoPath);
+
+        svg.selectAll("circle")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("transform", d => `translate(${geoPath.projection()(d.coordinates)})`)
+                .attr("r", d => scale(d.population))
+                .style("fill", 'black')
+                .attr("d", geoPath)
+    })
+</script>
+
+</body>
+</html>

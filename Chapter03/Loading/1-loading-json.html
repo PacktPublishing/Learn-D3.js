@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+</head>
+<body>
+<p>Loading example: see results in console log.</p>
+
+<script>
+
+    d3.json("../Data/sol_2016.json")
+            .then(function(data) {
+                const planets = [];
+
+                data.planets.forEach(function(obj) {
+                    planets.push({
+                        name: obj.name,
+                        distance: obj.semiMajorAxisAU
+                    });
+                    distances.push(obj.semiMajorAxisAU);
+                });
+
+                console.log(planets);
+
+                draw(planets);
+            });
+
+    function draw(distances) {
+        d3.select("body").append("ol")
+                .selectAll("li")
+                .data(distances)
+                .join("li")
+                .text(d => d.name + " (" + d.distance + " AU)");
+    }
+
+</script>
+</body>
+</html>

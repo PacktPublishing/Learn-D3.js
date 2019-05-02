@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Radial Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .blank text,
+        .tick:first-of-type {display: none}
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 10pt
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800, height = 600, margin = 150;
+
+    // A radial scale with 12 angular axes
+    const angularData = d3.range(0,12,1);   // angular domain
+    const radialData  = d3.range(0,101,10); // radial domain
+
+    const scaleRadius = d3.scaleLinear()
+            .domain(d3.extent(radialData))
+            .range([0, width/2 - margin]);
+
+    const axis = d3.axisBottom(scaleRadius)
+            .ticks(5)
+            .tickSize(4)
+            .tickPadding(2)
+            .tickSizeOuter(0); // removes edge lines from domain
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",height)
+            .attr("width",width);
+
+    // place in middle of viewport
+    const g = svg.append("g")
+            .attr("transform",`translate(${[width/2,height/2]})`);
+
+    // renders the radial axis
+    g.selectAll("g.axis")
+        .data(angularData).join("g").attr("class", "axis")
+        .classed("blank",(d,i) => i != 0) // blank labels in all except first
+        .call(axis)
+        .attr("transform", (d,i) => `rotate(${(i * 360/12)})`);
+
+    // moves tick lines to center of domain
+    d3.selectAll(".tick line").attr("y1", -3).attr("y2", 4);
+
+</script>
+</body>
+</html>

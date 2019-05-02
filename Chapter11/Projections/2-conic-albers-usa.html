@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+
+    <script src="../JavaScript/tissot.js"></script>
+    <script src="../JavaScript/projection-albers.js"></script>
+    <link rel="stylesheet" href="../CSS/tissot.css">
+    <link rel="stylesheet" href="../CSS/projections.css">
+</head>
+<body>
+<div class="container">
+    <div id="sidebar"></div>
+    <svg id="map" width="960" height="500">
+        <defs/>
+    </svg>
+</div>
+<script>
+    const width = 960, height = 500;
+    projections = [
+        {
+            name: "Conic Albers",
+            projection: d3.geoAlbers().scale(350),
+            tissot: {radius: 1.5, stepLon: 20},
+            file: "world-medres.topojson",
+            key: "world"
+        },{
+            name: "Conic Albers USA",
+            projection: d3.geoAlbersUsa(),
+            tissot: {radius: 1.5, stepLon: 20},
+            file: "world-medres.topojson",
+            key: "world",
+            filter: d => d.properties.ISO_A3 === 'USA'
+        }
+    ];
+
+    projections.forEach(function(d,i) {
+        d3.select("#sidebar")
+                .append("p")
+                .attr("id", "p"+i)
+                .on("click", () => showMap(d, i))
+        .text(d.name);
+    })
+
+    showMap(projections[0], 0);
+</script>
+
+</body>
+</html>

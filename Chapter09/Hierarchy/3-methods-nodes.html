@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+</head>
+<body>
+<script>
+    console.log("Original hierarchy", simpleHierarchy);
+
+    // 1) d3.hierarchy() and configuration
+    const root = d3.hierarchy(simpleHierarchy);
+    root.count(); // set values property with leaf count
+    console.log("Root", root);
+
+    // 2) leaves()
+    const leaves = root.leaves();
+    console.log("root.leaves()", leaves);
+
+    // 3) descendants()
+    const descendants = root.descendants();
+    console.log("root.descendants()", descendants);
+
+    // 4) descendants() after sorting the hierarchy by height
+    root.sort((a,b) => b.height - a.height);
+    console.log("Descendant array of height-sorted root", root.descendants());
+
+    // 5) Create and detach a subtree (deep copy): node.copy()
+    const subgroup1 = root.children.filter(d => d.data.id == 'group_1')[0].copy();
+    console.log("Subgroup 1 (deep copy)", subgroup1);
+
+    const leaves2 = subgroup1.leaves();
+    console.log("subgroup1.leaves()", leaves2);
+
+    const descendants2 = subgroup1.descendants();
+    console.log("subgroup1.descendants()", descendants2);
+
+    // 6) Make a map of all descendants (to facilitate retrieval)
+    const descendantMap = new Map(root.descendants().map(d => [d.data.id, d]));
+    console.log(descendantMap);
+
+    // 7) Reference a subtree of the main hierarchy
+    const subgroup3 = descendantMap.get("subg_3");
+    console.log("Subgroup 3 (reference)", subgroup3);
+
+    // 8) ancestors() of the subtree
+    const ancestors = subgroup3.ancestors();
+    console.log("subgroup3.ancestors()", ancestors);
+
+    // 9) root.links() to obtain {source,target objects)
+    const links = root.links();
+    console.log("root.links()", links);
+    console.log("subgroup1.links()", subgroup1.links());
+
+    // 10) node.path(other) to obtain shortest path
+    const destination = descendantMap.get("leaf_13");
+    const origin = descendantMap.get("leaf_1");
+    const steps = origin.path(destination);
+    console.log("Path from leaf_13 to leaf_1 node.path(other)", steps);
+
+</script>
+<h1>See results in JavaScript console</h1>
+</body>
+</html>

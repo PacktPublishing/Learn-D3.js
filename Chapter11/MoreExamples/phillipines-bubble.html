@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+            background: hsla(240,100%,75%,.5);
+        }
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 800;
+
+    const color = d3.scaleOrdinal(d3.schemeGreens[9]);
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const popScale = d3.scaleSqrt().range([0.1, 20]);
+    const fontScale = d3.scaleSqrt().range([10,20])
+    const colorScale = d3.scaleSequential(d3.interpolateCool);
+
+    const projection = d3.geoMercator()
+            .translate([400,400])
+            .center([121, 13])
+            .scale(3000);
+
+    const geoPath = d3.geoPath().projection(projection);
+
+    Promise.all([
+        d3.json('../Data/world-medres.geojson'),
+        d3.csv('../Data/cities1000.csv', function(row) {
+            if(row.country_code == "PH") {
+                return {
+                    city: row.asciiname,
+                    coordinates: [+row.longitude, +row.latitude],
+                    population: +row.population
+                };
+            }
+        })
+    ])
+    .then(([countries, cities]) =>  {
+        const filteredCities = cities.filter(d => d.population > 1000);
+        popScale.domain([0, d3.max(filteredCities, d => d.population)]);
+        fontScale.domain(popScale.domain());
+        colorScale.domain(popScale.domain());
+        drawGraticules();
+        drawCountry(countries.features.filter(d => d.properties.ISO_A3 == "PHL")[0]);
+        drawCities(filteredCities);
+
+    });
+
+    function drawCountry(country) {
+        svg.append("path")
+                .datum(country)
+                .attr("class","country")
+                .style("fill", "white")
+                .style("fill-opacity", .8)
+                .attr('d', geoPath)
+
+    }
+
+    function drawCities(data) {
+        console.log(data)
+        svg.selectAll("g.city")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","city")
+                .attr('transform', d => `translate(${geoPath.projection()(d.coordinates)})`)
+                .on('mouseenter', showName)
+                .on('mouseleave', hideName)
+                .append("circle")
+                .style("fill", d => colorScale(d.population))
+                .style("fill-opacity", d => popScale(d.population) <= 1 ? 1 : .25)
+                .attr('r', d => popScale(d.population))
+                .style("stroke-width", d => popScale(d.population) > 5 ? .25 : 0)
+                .style("stroke", "black");
+    }
+
+    function drawGraticules() {
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .append("path")
+                .attr("d", geoPath)
+                .style("fill", 'none')
+                .style("stroke", "gray")
+                .style('stroke-width', .25);
+    }
+
+    function showName(d) {
+        console.log(d.city)
+        svg.append('text').classed("tooltip", true)
+                .attr('transform', `translate(${geoPath.projection()(d.coordinates)})`)
+                .style('font-size', fontScale(d.population))
+                .text(d.city)
+    }
+    function hideName(d) {
+        d3.selectAll(".tooltip").remove();
+    }
+</script>
+
+</body>
+</html>

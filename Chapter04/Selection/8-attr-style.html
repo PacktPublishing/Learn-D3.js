@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .odd {
+            text-transform: uppercase;
+        }
+        .even {
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+<body>
+<div id="words">
+    <p>One</p>
+    <p>Two</p>
+    <p>Three</p>
+</div>
+<p>Four</p>
+<p>Five</p>
+
+<script>
+    d3.select("#words")     // initial selection: div#words
+        .style("border", "solid 1px black")  // applied to div#words
+        .selectAll("p")
+            .data([1,4,9])
+            .style("font-family", "sans-serif")    // applied to each <p>
+            .style("text-decoration", "underline")
+            .style("color", d => `hsl(${ Math.sqrt(d) * 120},100%,50%)`)
+            .style("transform", d => `rotate(${2 * Math.sqrt(d)}deg)`)
+            .attr("class", (d,i) => i%2 == 0 ? "odd" : "even")
+            .text((d,i,n) => d3.select(n[i]).text() + " " + d);
+
+</script>
+</body>
+</html>

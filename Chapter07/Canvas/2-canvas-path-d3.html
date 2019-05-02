@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVG Path</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<script>
+    const canvas = d3.select("body")
+                  .append("canvas")
+                  .attr("width", "800")
+                  .attr("height", "300");
+
+    const ctx = canvas.node().getContext("2d");
+
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+    ctx.moveTo(50,20);
+    ctx.lineTo(200,200);
+    ctx.lineTo(200,140);
+    ctx.lineTo(270,140);
+    ctx.closePath(200,210);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 4;
+
+    ctx.translate(200, -80);
+    ctx.beginPath();
+    ctx.moveTo(100,200);
+    ctx.bezierCurveTo(100,100,250,100,250,200);
+    ctx.bezierCurveTo(250,300,400,300,400,200);
+    ctx.fill();
+    ctx.stroke();
+
+</script>
+
+</body>
+</html>

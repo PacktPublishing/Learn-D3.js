@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p> <!-- Will be removed: automatic exit() -->
+
+<script>
+
+    // context is necessary (otherwise new <p> elements will be created at root)
+    d3.select("body") // context where new elements will be created
+            .selectAll("p")
+            .data([1,2,3,4]) // only 4 elements - one element will be removed
+            .join("p")
+            .text(d => "Joined " + d)
+
+</script>
+</body>
+</html>

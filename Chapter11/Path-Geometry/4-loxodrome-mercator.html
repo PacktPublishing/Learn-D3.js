@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="../JavaScript/wgs84_resampling.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 14px;
+        }
+        .selected {
+            stroke-width: 4;
+            stroke: white;
+            stroke-opacity: 1
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // reference
+   /* const projection = d3.geoAzimuthalEquidistant()
+            .rotate([60,-60,-20])
+            .center([0,0])
+            .scale(500); */
+
+    const projection = d3.geoMercator()
+            .scale(380)
+            .center([-60,45]);
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    const airports = [
+        {
+            "id":"LHR",
+            "name":"London Heathrow Airport",
+            "city":"London",
+            "passengers":78014598,
+            "coordinates":[-0.461941,51.4706]
+        },{
+            "id":"LAX",
+            "name":"Los Angeles International Airport",
+            "city":"Los Angeles",
+            "passengers":84557968,
+            "coordinates":[-118.4079971,33.94250107]
+        }];
+
+    const route = {
+        "id":"LHR-LAX",
+        "source": airports[0],
+        "target": airports[1],
+    };
+
+    d3.json('../Data/' + file).then( function(topology) {
+
+        map.topology   = topology.objects[key];
+        map.geometries = map.topology.geometries;
+        map.features   = topojson.feature(topology, map.topology).features
+
+        drawGraticules();
+        draw();
+
+    });
+
+    function lineString(d) {
+        return {
+            id: d.id,
+            type: "LineString",
+            coordinates: [
+                    d.source.coordinates,
+                    d.target.coordinates
+            ]
+        }
+    }
+
+    function draw() {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+
+        globe.append("path")
+                .style("fill", 'blue')
+                .style("fill-opacity", .3)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+        svg.append("g").attr("class","orthodrome")
+                .datum(lineString(route))
+                .on('mouseenter', showMeasure)
+                .on('mouseleave', hideMeasure)
+                .append("path").attr("d", geoPath)
+                .style("fill", 'none')
+                .style("stroke", 'blue')
+                .style('stroke-width', 5)
+
+        svg.append("g").attr("class","loxodrome")
+                .datum(resample(lineString(route)))
+                .on('mouseenter', showMeasure)
+                .on('mouseleave', hideMeasure)
+                .append("path").attr("d", geoPath)
+                .style("fill", 'none')
+                .style("stroke", 'red')
+                .style('stroke-width', 5)
+
+        const airport = svg.selectAll("g.airport")
+                .data(airports).enter()
+                .append("g").attr("class","airport")
+                .attr("transform", d => `translate(${projection(d.coordinates)})`)
+
+        airport.append("circle")
+                .style("fill", 'yellow')
+                .style("stroke", "black")
+                .attr('r', 8);
+
+
+    }
+
+    const format = d3.format(',.0f')
+
+    function showMeasure(d) {
+        console.log('measure', geoPath.measure(d),
+                               d3.geoLength(d), // same as geoLength, with GeoJSON
+                               d3.geoDistance(d.coordinates[0], d.coordinates[1])) // same as geoLength (with points)
+
+        const radians = 2 * Math.PI; // radians in 180 deg
+        const earth = 40075; // circumference of the earth
+
+        const km = d3.geoLength(d) / radians * earth;
+
+        d3.select(this).append("rect").attr("class", "bkg").attr("rx",5).attr("ry",5)
+                .attr("x",-30).attr("y",-15)
+                .attr("height",55).attr("width",60)
+                .style("fill",'black').style("fill-opacity",.5)
+                .attr("transform", `translate(${geoPath.centroid(d)})`)
+
+        d3.select(this)
+                .append("text").attr("id", "measure_" + d.id)
+                .each(function() {
+                    d3.select(this).append("tspan")
+                            .text(d => d.id)
+                    d3.select(this).append("tspan").attr("x", 0).attr("dy", 20)
+                            .text(d => format(geoPath.measure(d)) + " px")
+                    d3.select(this).append("tspan").attr("x", 0).attr("dy", 15)
+                            .text(d => format(km) + " km")
+                })
+                .style("fill", "white")
+                .attr("text-anchor", "middle")
+                .attr("transform", `translate(${geoPath.centroid(d)})`);
+
+        d3.select(this).select("path").classed("selected", true);
+    }
+
+    function hideMeasure(d) {
+        d3.select("#measure_"+d.id).remove();
+        d3.select(".bkg").remove();
+        d3.select(this).select("path").classed("selected", false);
+    }
+
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+        svg.append("path").attr("class","background")
+                .datum(d3.geoGraticule().extent([[-180,-90],[179,90]]).outline())
+                .attr('d', geoPath) // clip the path!
+                .style("stroke", "black")
+                .style("fill", "blue")
+                .style("fill-opacity", .1)
+                .style('stroke-width', 2);
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', .25);
+
+    }
+
+</script>
+
+</body>
+</html>

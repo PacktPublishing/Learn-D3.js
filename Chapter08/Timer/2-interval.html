@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-size: 24pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const svg = d3.select("body").append("svg").attr("width", 800).attr("height", 600);
+
+    svg.append("text").text("Wait 1 second and start...")
+       .attr("transform", "translate(50,50)");
+
+    const start = d3.now();
+    const timer = d3.interval(function() {
+        d3.select("text").text(d3.now() - start)
+        if(d3.now() - start >= 10000) {
+            console.log("Will stop");
+            timer.stop();
+        }
+    }, 1000); // run the code every second
+
+
+</script>
+</body>
+</html>

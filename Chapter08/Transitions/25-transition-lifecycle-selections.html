@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h3>See console for results</h3>
+<p>Multiple transitions, same names, different selections</p>
+<script>
+
+    const format = d3.format(".3f");
+    let count = 0;
+
+    start = performance.now();
+
+    const a = d3.transition().select("h1")
+            .delay(400)
+            .duration(200)
+            .tween("", () => (t) => log("A frame "+ ++count + ": " + format(t)));
+
+    const b = d3.transition().select("p")
+            .delay(50)
+            .duration(150)
+            .tween("", () => (t) => log("B frame "+ ++count + ": " + format(t)));
+
+    const c = d3.transition() // scheduled for 200 milisseconds
+            .delay(100)
+            .duration(150)
+            .tween("", () => (t) => log("C frame "+ ++count + ": " + format(t)));
+
+    const c2 = c.transition().tween("", () => (t) => log("C2 frame "+ ++count + ": " + format(t)));
+    const b2 = b.transition().tween("", () => (t) => log("B2 frame "+ ++count + ": " + format(t)));
+
+    registerListeners(a, "A");
+    registerListeners(b, "B1");
+    registerListeners(c, "C1");
+    registerListeners(c2, "C2");
+    registerListeners(b2, "B2");
+
+    function registerListeners(t, name) {
+        t.on("start", (d,i) => {count = 0; log(name + " started")});
+        t.on("end", (d,i) => log(name + " ended"));
+        t.on("interrupt", (d,i) => log(name + " interrupted"));
+        t.on("cancel", (d,i) => log(name + " cancelled"));
+
+        t.end().then(() => log(name+".end.resolve()"))
+         .catch((k) => log(name+".end.reject()"));
+    }
+
+    function log(event) {
+        const time = format(performance.now() - start);
+        console.log(time + ": " + event)
+    }
+
+</script>
+</body>
+</html>

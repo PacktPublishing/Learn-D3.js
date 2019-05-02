@@ -1,0 +1,39 @@
+[
+    {
+        "continent": "North America",
+        "population": 579024000,
+        "areakm2": 24490000
+    },
+    {
+        "continent": "Asia",
+        "population": 4436224000,
+        "areakm2": 43820000
+    },
+    {
+        "continent": "Europe",
+        "population": 738849000,
+        "areakm2": 10180000
+    },
+    {
+        "continent": "Africa",
+        "population": 1216130000,
+        "areakm2": 30370000
+    },
+    {
+        "continent": "South America",
+        "population": 422535000,
+        "areakm2": 17840000
+    },
+    {
+        "continent": "Oceania",
+        "population": 39901000,
+        "areakm2": 9008500
+    },
+    {
+        "continent": "Antarctica",
+        "population": 1106,
+        "areakm2": 13720000
+    }
+]
+
+

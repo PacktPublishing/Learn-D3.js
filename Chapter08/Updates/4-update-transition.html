@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISS World temperatures</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+            font-size: 8pt;
+        }
+        .zero-axis line {
+            stroke-opacity: .3;
+        }
+        .zero-axis text {
+            opacity: 0;
+        }
+        #panel {
+            text-align: center;
+            width: 800px;
+        }
+    </style>
+</head>
+<body>
+<div id="panel"></div>
+<script>
+    const width  = 800;
+    const height = 600;
+    const margin = 100;
+    const labelPaddingX = 5;
+    const labelPaddingY = 5;
+    const tickBleed = 5;
+
+    const data = {};
+
+    // Viewport configuration
+    const svg = d3.select("body").append("svg")
+                  .attr("height",height)
+                  .attr("width",width);
+
+    const prev = d3.select("#panel").append("button").text("Previous Year");
+    const prevM = d3.select("#panel").append("button").text("Previous Month");
+    const nextM = d3.select("#panel").append("button").text("Next Month");
+    const next = d3.select("#panel").append("button").text("Next Year");
+
+
+    const scaleX = d3.scaleBand().range([width - margin/2, margin/2]);
+    const scaleY = d3.scaleLinear().range([height - margin/2, margin/2]);
+
+    const axisX = d3.axisBottom(scaleX) // this scale doesn't implement ticks!
+            .tickPadding(5)
+            .tickFormat(d => d3.isoParse(d).getMonth() != 0 ? d3.timeFormat("%b")(d) : d3.timeFormat("%b %Y")(d));
+
+    const axisY = d3.axisLeft(scaleY)
+            .tickPadding(tickBleed)
+            .tickSizeOuter(0);
+
+    const axisZero = d3.axisRight(scaleY)
+            .tickValues([0])
+            .tickSizeOuter(0)
+            .tickSizeInner(width - margin);
+
+    const xG = svg.append("g").attr("class", "x-axis")
+                 .attr("transform", `translate(${[0, height - margin/2]})`);
+    const yG = svg.append("g").attr("class", "y-axis")
+                 .attr("transform", `translate(${[margin/2,0]})`);
+    const zG = svg.append("g").attr("class", "zero-axis")
+                 .attr("transform", `translate(${[margin/2,0]})`)
+                 .call(axisZero);
+
+    const minYear = 1880, maxYear = 2016;
+
+    let year = 1890;
+    let month = 5;
+
+    const dateFilter = function(d) {
+        const date = d3.isoParse(d.Date);
+        const m = date.getMonth();
+        const y = date.getFullYear();
+        return m >= month && y == year || m < month && year == y-1;
+    }
+
+    d3.json('../Data/monthly_json.json')
+            .then(function(result) {
+                data.values = result.filter(d => d.Source == 'GISTEMP')
+
+                data.filteredValues = data.values.filter(dateFilter)
+                        .sort((a,b) => d3.descending(d3.isoParse(a.Date), d3.isoParse(b.Date)));
+                // Scales configuration
+                const max = d3.max(data.filteredValues, d => d.Mean);
+                const min = d3.min(data.filteredValues, d => d.Mean);
+
+                scaleY.domain([min > 0 ? 0 : min, max < 0 ? 0 : max]);
+                scaleX.domain(data.filteredValues.map(d => d3.isoParse(d.Date)))
+                      .paddingInner(.1)  // 10% of bar is padding
+                      .paddingOuter(.2); // before and after chart
+
+                // Axis configuration
+                const tickValues = data.filteredValues.map(d => d3.isoParse(d.Date));
+                axisX.tickValues(tickValues)
+
+                // Axis rendering
+                xG.call(axisX);
+                yG.call(axisY);
+
+
+
+                xG.append("text")
+                        .attr("class","x label")
+                        .text(month > 0 ? `${year}-${year+1}` : year)
+                        .attr("transform", `translate(${[(width/2),(margin/2 - labelPaddingY)]})`)
+                yG.append("text")
+                        .attr("class","y label")
+                        .text("Average global temperature anomaly (°C)")
+                        .attr("transform", `translate(${[-(margin/2 - labelPaddingX),(height/2)]}) rotate(90)`)
+
+                // Bar chart;
+                draw();
+
+                prev.on("click", prevYear)
+                next.on("click", nextYear)
+                prevM.on("click", prevMonth)
+                nextM.on("click", nextMonth)
+
+            });
+
+    function prevMonth() {
+        if(month == 0) {
+            month = 11;
+            prevYear();
+        } else if (year <= minYear) {
+            month = 0;
+            year = maxYear;
+        } else {
+            --month;
+        }
+        redraw();
+    }
+    function nextMonth() {
+        if(month == 11) {
+            month = 0;
+            nextYear();
+        } else if (year >= maxYear) {
+            month = 0;
+            nextYear();
+        } else {
+            ++month;
+        }
+        redraw();
+    }
+
+    function prevYear() {
+        if(year <= minYear) {
+            year = maxYear;
+            month = 0;
+        } else if(year == minYear+1) {
+            month = 0;
+            --year;
+        } else {
+            --year;
+        }
+        redraw();
+    }
+    function nextYear() {
+        if(year >= maxYear) {
+            year = minYear;
+            month = 0;
+        } else if(year == maxYear-1) {
+            month = 0;
+            ++year;
+        } else {
+            ++year;
+        }
+        redraw();
+    }
+
+    function redraw() {
+        data.filteredValues = data.values.filter(dateFilter)
+                        .sort((a,b) => d3.descending(d3.isoParse(a.Date), d3.isoParse(b.Date)));
+        console.log(data.filteredValues)
+        const max = d3.max(data.filteredValues, d => d.Mean);
+        const min = d3.min(data.filteredValues, d => d.Mean);
+        scaleY.domain([min > 0 ? 0 : min, max < 0 ? 0 : max]);
+
+        scaleX.domain(data.filteredValues.map(d => d3.isoParse(d.Date)))
+
+        const tickValues = data.filteredValues.map(d => d3.isoParse(d.Date));
+        axisX.tickValues(tickValues);
+        xG.transition().call(axisX);    // short transitions
+        yG.transition().call(axisY);
+        zG.transition().call(axisZero);
+
+        svg.selectAll("rect.bar")
+           .data(data.filteredValues) // no transition here (effect is undesirable)
+           .attr("height", d => Math.abs(scaleY(d.Mean) - scaleY(0)))
+           .attr("y", d => d.Mean < 0 ? scaleY(0) : scaleY(d.Mean))
+           .attr("x", d => scaleX(d3.isoParse(d.Date)))
+           .style("fill", d => d.Mean < 0 ? "blue" : "red");
+
+        d3.select(".label.x").text(month > 0 ? `${year}-${year+1}` : year)
+    }
+
+    function draw() {
+        svg.selectAll("rect.bar")
+                .data(data.filteredValues)
+                .enter()
+                .append("rect").attr("class", "bar")
+                .attr("width", scaleX.bandwidth())
+                .attr("height", d => Math.abs(scaleY(d.Mean) - scaleY(0)))
+                .attr("x", d => scaleX(d3.isoParse(d.Date)))
+                .attr("y", d => d.Mean < 0 ? scaleY(0) : scaleY(d.Mean))
+                .style("fill", d => d.Mean < 0 ? "blue" : "red");
+    }
+</script>
+</body>
+</html>

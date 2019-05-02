@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p>
+
+<script>
+    const arrays = [
+            [1,2,3,4,5,6], // to enter
+            [8,5,3,2],     // to exit
+            [4,4,4,4]      // to update
+    ]
+
+    arrays.forEach(function(data, i) {
+        d3.select("body")
+            .selectAll("p")
+            .data(data)
+            .join(
+                 function(selection) {
+                     console.log("enter", i, selection.nodes());
+                     selection.append("p").text(d => "Enter " + d)
+
+                 },
+                 function(selection) {
+                     console.log("update", i, selection.nodes());
+                     selection.style("color", "blue");
+                 },
+                 function(selection) {
+                     console.log("exit", i, selection.nodes());
+                     selection.remove();
+                 }
+            );
+    });
+</script>
+</body>
+</html>

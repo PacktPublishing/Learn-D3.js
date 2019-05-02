@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scale</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text,* {
+            font-family: 'Yanone Kaffeesatz','sans-serif';
+        }
+        h1 {
+            font-size: 16pt;
+            text-align: center;
+            font-weight: normal;
+        }
+        text {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+<h1>Cyclic schemes</h1>
+<svg width="800" height="800"></svg>
+<script>
+    const schemes = ['interpolateRainbow', 'interpolateSinebow'];
+
+    d3.select("body").append("svg");
+
+    schemes.forEach((scheme, index) => renderScheme(scheme, index))
+
+    function renderScheme(scheme, index) {
+        const scale = d3.scaleSequential(d3[scheme]).domain([0,600]);
+        const g = d3.select("svg").append("g")
+                .attr("transform", "translate(25,"+(index * 25)+")");
+
+        g.selectAll("rect").data(d3.range(0,601,5)).enter().append("rect")
+                .attr("height", 20).attr("width", 4)
+                .attr("y", 0).attr("x", d => d + 100)
+                .style("fill", d => scale(d));
+        g.append("text").attr("x", 0).attr("y", 15).text('d3.'+scheme);
+    }
+
+</script>
+
+</body>
+</html>

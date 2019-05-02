@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {background-color:black;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-lowres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoOrthographic().scale(150)
+            .rotate([0,0,0]);
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+                map.merged = topojson.merge(topology, map.geometries)
+                map.mesh = topojson.mesh(topology, map.topology)
+
+                drawGraticules();
+                draw();
+
+                let i = 0;
+                d3.interval(function(d) {
+                    if(i == 180) i = -180;
+                    geoPath.projection().rotate([i++,i++,i++])
+                    svg.select(".graticule path")
+                            .datum(d3.geoGraticule10())
+                            .attr('d', geoPath)
+                    svg.selectAll(".outline")
+                            .datum(map.merged)
+                            .attr('d', geoPath)
+                    svg.selectAll(".mesh")
+                            .datum(map.mesh)
+                            .attr('d', geoPath)
+                }, 100)
+            });
+
+
+    function draw() {
+        svg.append("path").attr("class","outline")
+                .datum(map.merged)
+                .style("fill", '#345434')
+                .attr('d', geoPath);
+        svg.append("path").attr("class","mesh")
+                .datum(map.mesh)
+                .style("fill", 'none')
+                .style("stroke", 'white')
+                .style("stroke-width", .5)
+                .attr('d', geoPath);
+    }
+
+    function drawGraticules() {
+
+        svg.append("path")
+                .datum({type: "Sphere"})
+                .style('fill', 'darkblue')
+                .style('stroke', 'darkgreen')
+                .style('stroke-width', 2)
+                .attr("d", geoPath);
+
+        svg.append("g").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "lightgreen")
+                .style('stroke-width', '.25');
+
+    }
+</script>
+
+</body>
+</html>

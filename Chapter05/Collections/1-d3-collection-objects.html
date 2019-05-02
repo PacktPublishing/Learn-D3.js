@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+    const objects = [
+        {label: 'tab1', x: 5, y: 0, visible: true},
+        {label: 'tab2', x: 10, y: 2, visible: false},
+        {label: 'tab3', x: 15, y: 2, visible: false}]
+
+    // equivalent
+    const d3keys = d3.keys(objects[0]);
+    const eskeys = Object.keys(objects[0]);
+    console.log("D3 Keys", d3keys);
+    console.log("ES6 Keys", eskeys);
+
+    // equivalent
+    const d3values = d3.values(objects[0]);
+    const esvalues = Object.values(objects[0]);
+    console.log("D3 Values", d3values);
+    console.log("ES6 Values", esvalues);
+
+    // different: ES6 = array, D3 = object
+    const esentries = Object.entries(objects[0]);
+    const d3entries = d3.entries(objects[0]);
+    console.log("D3 Entries", d3entries);
+    console.log("ES6 Entries", esentries);
+
+    // Convert
+    const esentries2 = d3entries.map(d => [d.key,d.value]);
+    console.log("D3 Entries converted to ES6", esentries);
+
+
+</script>
+</body>
+</html>

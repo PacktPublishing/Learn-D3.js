@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        h1 {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            font-size: 100px;
+        }
+    </style>
+</head>
+<body>
+<h1>delay...</h1>
+<script>
+    const start =  performance.now();
+
+    const ref = d3.transition().duration(0);
+
+    d3.select("h1")
+        .transition(ref).delay(1000)
+            .tween("", d => t => d3.select("h1").text(performance.now() - start))
+        .transition().delay(1000)
+            .tween("", d => t => d3.select("h1").text(performance.now() - start))
+        .transition().delay(1000)
+            .tween("", d => t => d3.select("h1").text(performance.now() - start))
+        .transition().delay(1000)
+            .tween("", d => t => d3.select("h1").text(performance.now() - start))
+        .transition().delay(1000)
+            .tween("", d => t => d3.select("h1").text(performance.now() - start))
+
+
+</script>
+</body>
+</html>

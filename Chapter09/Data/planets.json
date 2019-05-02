@@ -1,0 +1,1861 @@
+{
+    "star":{
+        "name":"Sol",
+        "diameterKm":1390000,
+        "color":"white",
+        "massKg":1.98892e30,
+        "massGM":132712439935.4841,
+        "equatorialGravity":274,
+        "density":1.409
+    },
+    "planets":[
+        {
+            "id":"p1",
+            "name":"Mercury",
+            "diameterKm":4879,
+            "semiMajorAxisAU":0.387,
+            "periheliumAU":0.3075,
+            "apheliumAU":0.4667,
+            "orbitalPeriodD":87.97,
+            "siderealRotationPeriodH":1407.5,
+            "axialInclination":0.01,
+            "massKg":3.301e23,
+            "category":"rocky",
+            "eccentricity":0.20563069,
+            "inclination":7.0,
+            "ascendingNodeLong":48.331,
+            "periheliumArgument":29.124,
+            "meanAnomaly":174.8,
+            "massGM":22027.573,
+            "equatorialGravity":3.7,
+            "density":5.43,
+            "volume":6.083e10
+        },
+        {
+            "id":"p2",
+            "name":"Venus",
+            "diameterKm":12104,
+            "semiMajorAxisAU":0.723,
+            "periheliumAU":0.718,
+            "apheliumAU":0.728,
+            "orbitalPeriodD":224.7,
+            "siderealRotationPeriodH":-243,
+            "axialInclination":177.3,
+            "massKg":4.867e24,
+            "category":"rocky",
+            "eccentricity":0.00677323,
+            "inclination":3.39,
+            "ascendingNodeLong":76.67,
+            "periheliumArgument":54.85,
+            "meanAnomaly":50.45,
+            "massGM":324774.91,
+            "equatorialGravity":8.87,
+            "density":5.243,
+            "volume":9.38e11
+        },
+        {
+            "id":"p3",
+            "name":"Earth",
+            "diameterKm":12756,
+            "semiMajorAxisAU":1,
+            "periheliumAU":0.9833,
+            "apheliumAU":1.0167,
+            "orbitalPeriodD":365.25636,
+            "siderealRotationPeriodH":23.93447,
+            "axialInclination":23.4394,
+            "massKg":5.972e24,
+            "category":"rocky",
+            "eccentricity":0.01671022,
+            "inclination":0,
+            "ascendingNodeLong":0,
+            "periheliumArgument":114.2,
+            "meanAnomaly":0,
+            "massGM":398511.56,
+            "equatorialGravity":9.780327,
+            "density":5.515,
+            "volume":1.08321e12,
+            "satellites":[
+                {
+                    "id":"p3.1",
+                    "name":"Moon",
+                    "diameterKm":3475,
+                    "semiMajorAxisKm":384400,
+                    "massKg":7.346e22,
+                    "category":"round",
+                    "equatorialGravity":1.622,
+                    "density":3.3464,
+                    "massGM":4901.986,
+                    "orbitalPeriodD":27.32158,
+                    "volume":2.2e10
+                }
+            ]
+    
+        },
+        {
+            "id":"p4",
+            "name":"Mars",
+            "diameterKm":6794,
+            "semiMajorAxisAU":1.52,
+            "periheliumAU":1.381,
+            "apheliumAU":1.666,
+            "orbitalPeriodD":686.97,
+            "siderealRotationPeriodH":24.623,
+            "axialInclination":25.19,
+            "massKg":6.417e23,
+            "category":"rocky",
+            "eccentricity":0.09341233,
+            "inclination":1.85,
+            "ascendingNodeLong":49.562,
+            "periheliumArgument":286.537,
+            "meanAnomaly":19.3564,
+            "massGM":42820.641,
+            "equatorialGravity":3.71,
+            "density":3.940,
+            "volume":1.6318e11,
+            "satellites":[
+                {
+                    "id":"p4.1",
+                    "name":"Phobos",
+                    "diameterKm":11.2,
+                    "semiMajorAxisKm":9380,
+                    "yearOfDiscovery":1877,
+                    "discoveredBy":"Asaph Hall"
+                },
+                {
+                    "id":"p4.2",
+                    "name":"Deimos",
+                    "diameterKm":6.4,
+                    "semiMajorAxisKm":23460,
+                    "yearOfDiscovery":1877,
+                    "discoveredBy":"Asaph Hall"
+                }
+            ]
+    
+        },
+        {
+            "id":"p5",
+            "name":"Jupiter",
+            "diameterKm":142984,
+            "semiMajorAxisAU":5.2,
+            "periheliumAU":4.95,
+            "apheliumAU":5.46,
+            "orbitalPeriodD":4331.6,
+            "siderealRotationPeriodH":9.925,
+            "axialInclination":3.13,
+            "massKg":1.899e27,
+            "category":"gaseous",
+            "eccentricity":0.04839266,
+            "inclination":1.31,
+            "ascendingNodeLong":100.49,
+            "periheliumArgument":275.07,
+            "meanAnomaly":18.818,
+            "massGM":126720270,
+            "equatorialGravity":23.12,
+            "density":1.33,
+            "volume":1.431e15,
+            "satellites":[
+                {
+                    "id":"p5.1",
+                    "name":"Methis",
+                    "diameterKm":40,
+                    "semiMajorAxisKm":127690,
+                    "yearOfDiscovery":1979,
+                    "discoveredBy":"Voyager 1"
+                },
+                {
+                    "id":"p5.2",
+                    "name":"Adrasthea",
+                    "diameterKm":11,
+                    "semiMajorAxisKm":128690,
+                    "yearOfDiscovery":1979,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p5.3",
+                    "name":"Amalthea",
+                    "diameterKm":110,
+                    "semiMajorAxisKm":181366,
+                    "yearOfDiscovery":1892,
+                    "discoveredBy":"Edward Emerson Barnard"
+                },
+                {
+                    "id":"p5.4",
+                    "name":"Thebes",
+                    "diameterKm":50,
+                    "semiMajorAxisKm":221889,
+                    "yearOfDiscovery":1979,
+                    "discoveredBy":"Voyager 1"
+                },
+                {
+                    "id":"p5.5",
+                    "name":"Io",
+                    "diameterKm":3630,
+                    "semiMajorAxisKm":421700,
+                    "massKg":8.93e22,
+                    "yearOfDiscovery":1610,
+                    "discoveredBy":"Galileo Galilei",
+                    "category":"round",
+                    "equatorialGravity":1.796,
+                    "density":3.528,
+                    "volume":2.53e10,
+                    "massGM":5958.989,
+                    "orbitalPeriodD":1.769138
+                },
+                {
+                    "id":"p5.6",
+                    "name":"Europa",
+                    "diameterKm":3122,
+                    "semiMajorAxisKm":671034,
+                    "massKg":4.8e22,
+                    "yearOfDiscovery":1610,
+                    "discoveredBy":"Galileo Galilei",
+                    "category":"round",
+                    "equatorialGravity":1.314,
+                    "density":3.01,
+                    "volume":1.59e10,
+                    "massGM":3203.04,
+                    "orbitalPeriodD":3.551181
+                },
+                {
+                    "id":"p5.7",
+                    "name":"Ganymede",
+                    "diameterKm":5262,
+                    "semiMajorAxisKm":1070412,
+                    "massKg":1.48e23,
+                    "yearOfDiscovery":1610,
+                    "discoveredBy":"Galileo Galilei",
+                    "category":"round",
+                    "equatorialGravity":1.428,
+                    "density":1.936,
+                    "volume":7.6e10,
+                    "massGM":9876.04,
+                    "orbitalPeriodD":7.154553
+                },
+                {
+                    "id":"p5.8",
+                    "name":"Callisto",
+                    "diameterKm":4820,
+                    "semiMajorAxisKm":1882709,
+                    "massKg":1.08e23,
+                    "yearOfDiscovery":1610,
+                    "discoveredBy":"Galileo Galilei",
+                    "category":"round",
+                    "equatorialGravity":1.235,
+                    "density":1.83,
+                    "volume":5.9e10,
+                    "massGM":7206.84,
+                    "orbitalPeriodD":16.68902
+                },
+                {
+                    "id":"p5.9",
+                    "name":"Themisto",
+                    "diameterKm":8,
+                    "semiMajorAxisKm":7393216,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Charles Kowal, Elizabeth Roemer, Scott Sheppard et al"
+                },
+                {
+                    "id":"p5.10",
+                    "name":"Leda",
+                    "diameterKm":16,
+                    "semiMajorAxisKm":11187781,
+                    "yearOfDiscovery":1974,
+                    "discoveredBy":"Charles Kowal"
+                },
+                {
+                    "id":"p5.11",
+                    "name":"Himalia",
+                    "diameterKm":170,
+                    "semiMajorAxisKm":11451971,
+                    "yearOfDiscovery":1904,
+                    "discoveredBy":"Charles Perrine"
+                },
+                {
+                    "id":"p5.12",
+                    "name":"Lysithea",
+                    "diameterKm":36,
+                    "semiMajorAxisKm":11740560,
+                    "yearOfDiscovery":1938,
+                    "discoveredBy":"Seth Barnes Nicholson"
+                },
+                {
+                    "id":"p5.13",
+                    "name":"Elara",
+                    "diameterKm":86,
+                    "semiMajorAxisKm":11778034,
+                    "yearOfDiscovery":1905,
+                    "discoveredBy":"Charles Perrine"
+                },
+                {
+                    "id":"p5.14",
+                    "name":"S/2000 J11",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":12570424,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.29",
+                    "name":"Carpo",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":17144873,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.30",
+                    "name":"S/2003 J12",
+                    "diameterKm":1,
+                    "semiMajorAxisKm":17739539,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.31",
+                    "name":"Euporie",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":19088434,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.64",
+                    "name":"S/2003 J3",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":19621780,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.32",
+                    "name":"S/2003 J18",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":19812577,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.33",
+                    "name":"Thelxinoe",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":20453753,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.34",
+                    "name":"Euanthe",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":20464854,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.15",
+                    "name":"Helike",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":20540266,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.35",
+                    "name":"Orthosie",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":20567971,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.36",
+                    "name":"Jocasta",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":20722566,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.37",
+                    "name":"S/2003 J16",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":20743779,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.16",
+                    "name":"Praxidike",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":20823948,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.17",
+                    "name":"Harpalyke",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":21063814,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.38",
+                    "name":"Mneme",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":21129786,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.18",
+                    "name":"Hermippe",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":21182086,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.39",
+                    "name":"Thyone",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":21405570,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.19",
+                    "name":"Ananke",
+                    "diameterKm":28,
+                    "semiMajorAxisKm":21454952,
+                    "yearOfDiscovery":1951,
+                    "discoveredBy":"Seth Barnes Nicholson"
+                },
+                {
+                    "id":"p5.40",
+                    "name":"Herse",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":22134306,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.41",
+                    "name":"Aitne",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":22285161,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.42",
+                    "name":"Kale",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":22409207,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.43",
+                    "name":"Taygete",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":22438648,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.44",
+                    "name":"S/2003 J19",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":22709061,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.45",
+                    "name":"Chaldene",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":22713444,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.46",
+                    "name":"S/2003 J15",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":22720999,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.47",
+                    "name":"S/2003 J10",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":22730813,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.48",
+                    "name":"S/2003 J23",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":22739654,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.21",
+                    "name":"Erinome",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":22986266,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.49",
+                    "name":"Aoede",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":23044175,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.50",
+                    "name":"Kallichore",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":23111823,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.51",
+                    "name":"Kalyke",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":23180773,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.22",
+                    "name":"Carme",
+                    "diameterKm":46,
+                    "semiMajorAxisKm":23197992,
+                    "yearOfDiscovery":1938,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.52",
+                    "name":"Callirrhoe",
+                    "diameterKm":9,
+                    "semiMajorAxisKm":23214986,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.23",
+                    "name":"Eurydome",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":23230858,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.53",
+                    "name":"Pasithee",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":23307318,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.54",
+                    "name":"Kore",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":23345093,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.55",
+                    "name":"Cyllene",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":23396269,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.56",
+                    "name":"Eukelade",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":23483694,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.57",
+                    "name":"S/2003 J4",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":23570790,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.24",
+                    "name":"Pasiphae",
+                    "diameterKm":60,
+                    "semiMajorAxisKm":23609042,
+                    "yearOfDiscovery":1908,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p5.58",
+                    "name":"Hegemone",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":23702511,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.59",
+                    "name":"Arche",
+                    "diameterKm":3,
+                    "semiMajorAxisKm":23717051,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.60",
+                    "name":"Isonoe",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":23800647,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.61",
+                    "name":"S/2003 J9",
+                    "diameterKm":1,
+                    "semiMajorAxisKm":23857808,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.25",
+                    "name":"S/2003 J5",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":23973926,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.26",
+                    "name":"Sinope",
+                    "diameterKm":38,
+                    "semiMajorAxisKm":24057865,
+                    "yearOfDiscovery":1914,
+                    "discoveredBy":"Seth Barnes Nicholson"
+                },
+                {
+                    "id":"p5.62",
+                    "name":"Sponde",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":24252627,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.63",
+                    "name":"Autonoe",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":24264445,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.27",
+                    "name":"Megaclite",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":24687239,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p5.28",
+                    "name":"S/2003 J2",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":30290846,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                }
+            ]
+    
+        },
+        {
+            "id":"p6",
+            "name":"Saturn",
+            "diameterKm":120536,
+            "semiMajorAxisAU":9.54,
+            "periheliumAU":9.05,
+            "apheliumAU":10.12,
+            "orbitalPeriodD":10759,
+            "siderealRotationPeriodH":10.57,
+            "axialInclination":26.73,
+            "massKg":5.685e26,
+            "eccentricity":0.055723219,
+            "inclination":2.485,
+            "category":"gaseous",
+            "ascendingNodeLong":113.643,
+            "periheliumArgument":336.014,
+            "meanAnomaly":320.347,
+            "massGM":37936005,
+            "equatorialGravity":10.44,
+            "density":0.687,
+            "volume":8.2713e14,
+            "satellites":[
+                {
+                    "id":"p6.1",
+                    "name":"Pan",
+                    "diameterKm":28.4,
+                    "semiMajorAxisKm":133584,
+                    "yearOfDiscovery":1990,
+                    "discoveredBy":"Mark Showalter"
+                },
+                {
+                    "id":"p6.19",
+                    "name":"Daphne",
+                    "diameterKm":7.8,
+                    "semiMajorAxisKm":136505,
+                    "yearOfDiscovery":2005,
+                    "discoveredBy":"Cassini-Huygens"
+                },
+                {
+                    "id":"p6.2",
+                    "name":"Atlas",
+                    "diameterKm":36,
+                    "semiMajorAxisKm":137670,
+                    "yearOfDiscovery":1980,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p6.3",
+                    "name":"Prometheus",
+                    "diameterKm":120,
+                    "semiMajorAxisKm":139380,
+                    "yearOfDiscovery":1980,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p6.4",
+                    "name":"Pandora",
+                    "diameterKm":100,
+                    "semiMajorAxisKm":141720,
+                    "yearOfDiscovery":1980,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p6.5",
+                    "name":"Epimetheus",
+                    "diameterKm":120,
+                    "semiMajorAxisKm":151422,
+                    "yearOfDiscovery":1966,
+                    "discoveredBy":"J. Fountain, S. Larson"
+                },
+                {
+                    "id":"p6.6",
+                    "name":"Janus",
+                    "diameterKm":190,
+                    "semiMajorAxisKm":151472,
+                    "yearOfDiscovery":1966,
+                    "discoveredBy":"Audouin Dollfus"
+                },
+                {
+                    "id":"p6.20",
+                    "name":"Aegaeon",
+                    "diameterKm":0.5,
+                    "semiMajorAxisKm":167500,
+                    "yearOfDiscovery":2008,
+                    "discoveredBy":"Cassini-Huygens"
+                },
+                {
+                    "id":"p6.7",
+                    "name":"Mimas",
+                    "diameterKm":392,
+                    "semiMajorAxisKm":185404,
+                    "massKg":3.75e19,
+                    "category":"round",
+                    "equatorialGravity":0.0636,
+                    "density":1.15,
+                    "massGM":2.502,
+                    "orbitalPeriodD":0.9424,
+                    "volume":3.3e7,
+                    "yearOfDiscovery":1789,
+                    "discoveredBy":"William Herschel"
+                },
+                {
+                    "id":"p6.21",
+                    "name":"Methone",
+                    "diameterKm":3.2,
+                    "semiMajorAxisKm":194440,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Cassini-Huygens"
+                },
+                {
+                    "id":"p6.22",
+                    "name":"Anthe",
+                    "diameterKm":2,
+                    "semiMajorAxisKm":197700,
+                    "yearOfDiscovery":2007,
+                    "discoveredBy":"Cassini-Huygens"
+                },
+                {
+                    "id":"p6.23",
+                    "name":"Pallene",
+                    "diameterKm":4.4,
+                    "semiMajorAxisKm":212280,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Cassini-Huygens"
+                },
+                {
+                    "id":"p6.8",
+                    "name":"Enceladus",
+                    "diameterKm":500,
+                    "semiMajorAxisKm":237950,
+                    "massKg":1.08e20,
+                    "category":"round",
+                    "equatorialGravity":0.111,
+                    "density":1.61,
+                    "massGM":7.207,
+                    "orbitalPeriodD":1.3702,
+                    "volume":6.7e7,
+                    "yearOfDiscovery":1789,
+                    "discoveredBy":"William Herschel"
+                },
+                {
+                    "id":"p6.9",
+                    "name":"Tethys",
+                    "diameterKm":1060,
+                    "semiMajorAxisKm":294619,
+                    "massKg":1.024e20,
+                    "category":"round",
+                    "equatorialGravity":0.145,
+                    "density":0.96,
+                    "massGM":6.833,
+                    "orbitalPeriodD":1.8878,
+                    "volume":6.3e8,
+                    "yearOfDiscovery":1684,
+                    "discoveredBy":"Giovanni Cassini"
+                },
+                {
+                    "id":"p6.10",
+                    "name":"Telesto",
+                    "diameterKm":30,
+                    "semiMajorAxisKm":294619,
+                    "yearOfDiscovery":1980,
+                    "discoveredBy":"B. Smith, H. Reitsema, S. Larson, J. Fountain"
+                },
+                {
+                    "id":"p6.11",
+                    "name":"Calypso",
+                    "diameterKm":28,
+                    "semiMajorAxisKm":294619,
+                    "yearOfDiscovery":1980,
+                    "discoveredBy":"D. Pascu, P. Seidelmann, W. Baum, D. Currie"
+                },
+                {
+                    "id":"p6.12",
+                    "name":"Dione",
+                    "diameterKm":1120,
+                    "semiMajorAxisKm":377396,
+                    "massKg":1.095e21,
+                    "category":"round",
+                    "equatorialGravity":0.231,
+                    "density":1.48,
+                    "massGM":73.069,
+                    "orbitalPeriodD":2.7369,
+                    "volume":7.4e8,
+                    "yearOfDiscovery":1684,
+                    "discoveredBy":"Giovanni Cassini"
+                },
+                {
+                    "id":"p6.13",
+                    "name":"Helene",
+                    "diameterKm":34,
+                    "semiMajorAxisKm":377396,
+                    "yearOfDiscovery":1980,
+                    "discoveredBy":"P. Laques, J. Lecacheux"
+                },
+                {
+                    "id":"p6.24",
+                    "name":"Polydeuces",
+                    "diameterKm":2.6,
+                    "semiMajorAxisKm":377396,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Cassini-Huygens"
+                },
+                {
+                    "id":"p6.14",
+                    "name":"Rhea",
+                    "diameterKm":1530,
+                    "semiMajorAxisKm":527108,
+                    "massKg":2.306e21,
+                    "category":"round",
+                    "equatorialGravity":0.264,
+                    "density":1.23,
+                    "massGM":153.879,
+                    "orbitalPeriodD":4.5182,
+                    "volume":1.9e9,
+                    "yearOfDiscovery":1672,
+                    "discoveredBy":"Giovanni Cassini"
+                },
+                {
+                    "id":"p6.15",
+                    "name":"Titan",
+                    "diameterKm":5150,
+                    "semiMajorAxisKm":1221930,
+                    "massKg":1.35e23,
+                    "category":"round",
+                    "equatorialGravity":1.35,
+                    "density":1.88,
+                    "massGM":9008.55,
+                    "orbitalPeriodD":15.945,
+                    "volume":7.16e10,
+                    "yearOfDiscovery":1655,
+                    "discoveredBy":"Christian Huygens"
+                },
+                {
+                    "id":"p6.16",
+                    "name":"Hyperion",
+                    "diameterKm":300,
+                    "semiMajorAxisKm":1481010,
+                    "yearOfDiscovery":1848,
+                    "discoveredBy":"William Bond, George Bond, William Lassell"
+                },
+                {
+                    "id":"p6.17",
+                    "name":"Iapetus",
+                    "diameterKm":1460,
+                    "semiMajorAxisKm":3560820,
+                    "massKg":1.81e21,
+                    "category":"round",
+                    "equatorialGravity":0.22,
+                    "density":1.08,
+                    "massGM":120.781,
+                    "orbitalPeriodD":79.322,
+                    "volume":1.67e9,
+                    "yearOfDiscovery":1671,
+                    "discoveredBy":"Giovanni Cassini"
+                },
+                {
+                    "id":"p6.25",
+                    "name":"Kiviuq",
+                    "diameterKm":16,
+                    "semiMajorAxisKm":11294800,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.26",
+                    "name":"Ijiraq",
+                    "diameterKm":12,
+                    "semiMajorAxisKm":11355316,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.18",
+                    "name":"Phoebe",
+                    "diameterKm":214,
+                    "semiMajorAxisKm":12869700,
+                    "yearOfDiscovery":1899,
+                    "discoveredBy":"William Pickering"
+                },
+                {
+                    "id":"p6.27",
+                    "name":"Paaliaq",
+                    "diameterKm":22,
+                    "semiMajorAxisKm":15103400,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.28",
+                    "name":"Skathi",
+                    "diameterKm":8,
+                    "semiMajorAxisKm":15672500,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.29",
+                    "name":"Albiorix",
+                    "diameterKm":32,
+                    "semiMajorAxisKm":16266700,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Matthew Holman"
+                },
+                {
+                    "id":"p6.30",
+                    "name":"S/2007 S2",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":16560000,
+                    "yearOfDiscovery":2007,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna, Brian Marsden"
+                },
+                {
+                    "id":"p6.31",
+                    "name":"Bebhionn",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":17153520,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.32",
+                    "name":"Erriapus",
+                    "diameterKm":10,
+                    "semiMajorAxisKm":17236900,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.33",
+                    "name":"Skoll",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":17473800,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.34",
+                    "name":"Siarnaq",
+                    "diameterKm":40,
+                    "semiMajorAxisKm":17776600,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.35",
+                    "name":"Tarqeq",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":17910600,
+                    "yearOfDiscovery":2007,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.36",
+                    "name":"S/2004 S13",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":18056300,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.37",
+                    "name":"Greip",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":18065700,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.38",
+                    "name":"Hyrrokkin",
+                    "diameterKm":8,
+                    "semiMajorAxisKm":18168300,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.39",
+                    "name":"Jarnsaxa",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":18556900,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.40",
+                    "name":"Tarvos",
+                    "diameterKm":15,
+                    "semiMajorAxisKm":18562800,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.41",
+                    "name":"Mundilfari",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":18725800,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.42",
+                    "name":"S/2006 S1",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":18930200,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.43",
+                    "name":"S/2004 S17",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":19099200,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.44",
+                    "name":"Bergelmir",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":19104000,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.45",
+                    "name":"Narvi",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":19395200,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.46",
+                    "name":"Suttungr",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":19579000,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.47",
+                    "name":"Hati",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":19709300,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.48",
+                    "name":"S/2004 S12",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":19905900,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.49",
+                    "name":"Farbauti",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":19984800,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.50",
+                    "name":"Thyrmr",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":20278100,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.51",
+                    "name":"Aegir",
+                    "diameterKm":8,
+                    "semiMajorAxisKm":20482900,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.52",
+                    "name":"S 2007 S3",
+                    "diameterKm":5,
+                    "semiMajorAxisKm":20518500,
+                    "yearOfDiscovery":2007,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.53",
+                    "name":"Bestla",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":20570000,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.54",
+                    "name":"S/2004 S7",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":20576700,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.55",
+                    "name":"S/2006 S3",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":21076300,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.61",
+                    "name":"Fenrir",
+                    "diameterKm":4,
+                    "semiMajorAxisKm":21930644,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.56",
+                    "name":"Surtur",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":22288916,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.57",
+                    "name":"Kari",
+                    "diameterKm":7,
+                    "semiMajorAxisKm":22321200,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.58",
+                    "name":"Ymir",
+                    "diameterKm":18,
+                    "semiMajorAxisKm":22429673,
+                    "yearOfDiscovery":2000,
+                    "discoveredBy":"Brett Gladman, John Kavelaars, et al."
+                },
+                {
+                    "id":"p6.59",
+                    "name":"Loge",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":22984322,
+                    "yearOfDiscovery":2006,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p6.60",
+                    "name":"Fornjot",
+                    "diameterKm":6,
+                    "semiMajorAxisKm":24504879,
+                    "yearOfDiscovery":2004,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                }
+            ]
+    
+        },
+        {
+            "id":"p7",
+            "name":"Uranus",
+            "diameterKm":51118,
+            "yearOfDiscovery":1781,
+            "semiMajorAxisAU":19.2,
+            "periheliumAU":18.3,
+            "apheliumAU":20.1,
+            "orbitalPeriodD":30799,
+            "siderealRotationPeriodH":17.24,
+            "eccentricity":0.044405586,
+            "inclination":0.7726,
+            "category":"gaseous",
+            "ascendingNodeLong":73.9898,
+            "periheliumArgument":96.541,
+            "meanAnomaly":142.96,
+            "massGM":5793498.6,
+            "equatorialGravity":8.69,
+            "density":1.27,
+            "volume":6.833e13,
+            "axialInclination":97.77,
+            "massKg":8.682e25,
+            "discoveredBy":"William Herschel",
+            "satellites":[
+                {
+                    "id":"p7.1",
+                    "name":"Cordelia",
+                    "diameterKm":40,
+                    "semiMajorAxisKm":49751,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.2",
+                    "name":"Ophelia",
+                    "diameterKm":43,
+                    "semiMajorAxisKm":53764,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.3",
+                    "name":"Bianca",
+                    "diameterKm":51,
+                    "semiMajorAxisKm":59165,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.4",
+                    "name":"Cressida",
+                    "diameterKm":80,
+                    "semiMajorAxisKm":61766,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.5",
+                    "name":"Desdemona",
+                    "diameterKm":64,
+                    "semiMajorAxisKm":62658,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.6",
+                    "name":"Juliet",
+                    "diameterKm":94,
+                    "semiMajorAxisKm":64360,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.7",
+                    "name":"Portia",
+                    "diameterKm":135,
+                    "semiMajorAxisKm":66097,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.8",
+                    "name":"Rosalind",
+                    "diameterKm":72,
+                    "semiMajorAxisKm":69927,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.22",
+                    "name":"Cupid",
+                    "diameterKm":18,
+                    "semiMajorAxisKm":74800,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Mark Showalter, Jack Lissauer"
+                },
+                {
+                    "id":"p7.9",
+                    "name":"Belinda",
+                    "diameterKm":90,
+                    "semiMajorAxisKm":75255,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.10",
+                    "name":"Perdita",
+                    "diameterKm":30,
+                    "semiMajorAxisKm":76420,
+                    "yearOfDiscovery":1999,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.11",
+                    "name":"Puck",
+                    "diameterKm":162,
+                    "semiMajorAxisKm":86004,
+                    "yearOfDiscovery":1986,
+                    "discoveredBy":"Voyager 2"
+                },
+                {
+                    "id":"p7.23",
+                    "name":"Mab",
+                    "diameterKm":25,
+                    "semiMajorAxisKm":97734,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Mark Showalter, Jack Lissauer"
+                },
+                {
+                    "id":"p7.12",
+                    "name":"Miranda",
+                    "diameterKm":472,
+                    "semiMajorAxisKm":129390,
+                    "massKg":6.59e19,
+                    "category":"round",
+                    "equatorialGravity":0.08,
+                    "density":1.2,
+                    "massGM":4.398,
+                    "orbitalPeriodD":1.414,
+                    "volume":5.5e7,
+                    "yearOfDiscovery":1948,
+                    "discoveredBy":"Gerard Kuiper"
+                },
+                {
+                    "id":"p7.13",
+                    "name":"Ariel",
+                    "diameterKm":1158,
+                    "semiMajorAxisKm":191020,
+                    "massKg":1.35e21,
+                    "category":"round",
+                    "equatorialGravity":0.27,
+                    "density":1.67,
+                    "massGM":90.086,
+                    "orbitalPeriodD":2.52,
+                    "volume":8.1e8,
+                    "yearOfDiscovery":1851,
+                    "discoveredBy":"William Lassell"
+                },
+                {
+                    "id":"p7.14",
+                    "name":"Umbriel",
+                    "diameterKm":1169,
+                    "semiMajorAxisKm":266300,
+                    "massKg":1.2e21,
+                    "category":"round",
+                    "equatorialGravity":0.23,
+                    "density":1.4,
+                    "massGM":80.076,
+                    "orbitalPeriodD":4.14,
+                    "volume":8.4e8,
+                    "yearOfDiscovery":1851,
+                    "discoveredBy":"William Lassell"
+                },
+                {
+                    "id":"p7.15",
+                    "name":"Titania",
+                    "diameterKm":1577,
+                    "semiMajorAxisKm":435910,
+                    "category":"round",
+                    "equatorialGravity":0.39,
+                    "density":1.72,
+                    "massGM":3.5e21,
+                    "orbitalPeriodD":8.71,
+                    "volume":2.06e9,
+                    "massKg":3.52e21,
+                    "yearOfDiscovery":1787,
+                    "discoveredBy":"William Herschel"
+                },
+                {
+                    "id":"p7.16",
+                    "name":"Oberon",
+                    "diameterKm":1523,
+                    "semiMajorAxisKm":583520,
+                    "category":"round",
+                    "equatorialGravity":0.35,
+                    "density":1.63,
+                    "massGM":200.857,
+                    "orbitalPeriodD":13.46,
+                    "volume":1.85e9,
+                    "massKg":3.01e21,
+                    "yearOfDiscovery":1787,
+                    "discoveredBy":"William Herschel"
+                },
+                {
+                    "id":"p7.24",
+                    "name":"Francisco",
+                    "diameterKm":22,
+                    "semiMajorAxisKm":4276000,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Matthew Holman et al"
+                },
+                {
+                    "id":"p7.17",
+                    "name":"Caliban",
+                    "diameterKm":72,
+                    "semiMajorAxisKm":7231000,
+                    "yearOfDiscovery":1997,
+                    "discoveredBy":"Brett Gladman et al"
+                },
+                {
+                    "id":"p7.18",
+                    "name":"Stephano",
+                    "diameterKm":32,
+                    "semiMajorAxisKm":8004000,
+                    "yearOfDiscovery":1999,
+                    "discoveredBy":"Brett Gladman et al"
+                },
+                {
+                    "id":"p7.25",
+                    "name":"Trinculo",
+                    "diameterKm":18,
+                    "semiMajorAxisKm":8504000,
+                    "yearOfDiscovery":2001,
+                    "discoveredBy":"Matthew Holman et al"
+                },
+                {
+                    "id":"p7.19",
+                    "name":"Sycorax",
+                    "diameterKm":150,
+                    "semiMajorAxisKm":12179000,
+                    "yearOfDiscovery":1997,
+                    "discoveredBy":"Seth Barnes Nicholson et al"
+                },
+                {
+                    "id":"p7.26",
+                    "name":"Margaret",
+                    "diameterKm":20,
+                    "semiMajorAxisKm":14345000,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt"
+                },
+                {
+                    "id":"p7.20",
+                    "name":"Prospero",
+                    "diameterKm":50,
+                    "semiMajorAxisKm":16256000,
+                    "yearOfDiscovery":1999,
+                    "discoveredBy":"Matthew Holman et al"
+                },
+                {
+                    "id":"p7.21",
+                    "name":"Setebos",
+                    "diameterKm":48,
+                    "semiMajorAxisKm":17418000,
+                    "yearOfDiscovery":1999,
+                    "discoveredBy":"John Kavelaars et al"
+                },
+                {
+                    "id":"p7.27",
+                    "name":"Ferdinand",
+                    "diameterKm":20,
+                    "semiMajorAxisKm":20901000,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Matthew Holman et al"
+                }
+            ]
+    
+        },
+        {
+            "id":"p8",
+            "name":"Neptune",
+            "diameterKm":49492,
+            "yearOfDiscovery":1846,
+            "semiMajorAxisAU":30.1,
+            "periheliumAU":29.77,
+            "apheliumAU":30.44,
+            "orbitalPeriodD":60190,
+            "siderealRotationPeriodH":16.11,
+            "axialInclination":28.32,
+            "massKg":1.024e26,
+            "eccentricity":0.011214269,
+            "inclination":1.76798,
+            "category":"gaseous",
+            "ascendingNodeLong":131.7943,
+            "periheliumArgument":265.65,
+            "meanAnomaly":267.77,
+            "massGM":6833152,
+            "equatorialGravity":11.15,
+            "density":1.638,
+            "volume":6.254e13,
+            "discoveredBy":"Urbain Le Verrier, John Couch Adams, Johann Galle",
+            "satellites":[
+                {
+                    "id":"p8.1",
+                    "name":"Naiad",
+                    "diameterKm":66,
+                    "semiMajorAxisKm":48227,
+                    "yearOfDiscovery":1989,
+                    "discoveredBy":"Voyager"
+                },
+                {
+                    "id":"p8.2",
+                    "name":"Thalassa",
+                    "diameterKm":82,
+                    "semiMajorAxisKm":50074,
+                    "yearOfDiscovery":1989,
+                    "discoveredBy":"Voyager"
+                },
+                {
+                    "id":"p8.3",
+                    "name":"Despina",
+                    "diameterKm":150,
+                    "semiMajorAxisKm":52526,
+                    "yearOfDiscovery":1989,
+                    "discoveredBy":"Voyager"
+                },
+                {
+                    "id":"p8.4",
+                    "name":"Galatea",
+                    "diameterKm":176,
+                    "semiMajorAxisKm":61953,
+                    "yearOfDiscovery":1989,
+                    "discoveredBy":"Voyager"
+                },
+                {
+                    "id":"p8.5",
+                    "name":"Larissa",
+                    "diameterKm":194,
+                    "semiMajorAxisKm":73548,
+                    "yearOfDiscovery":1981,
+                    "discoveredBy":"H. Reitsema, W. Hubbard, L. Leboftsky, D. J. Tholen"
+                },
+                {
+                    "id":"p8.6",
+                    "name":"Proteus",
+                    "diameterKm":420,
+                    "semiMajorAxisKm":117646,
+                    "yearOfDiscovery":1989,
+                    "discoveredBy":"Voyager"
+                },
+                {
+                    "id":"p8.7",
+                    "name":"Triton",
+                    "diameterKm":2700,
+                    "semiMajorAxisKm":354759,
+                    "category":"round",
+                    "equatorialGravity":0.78,
+                    "density":2.061,
+                    "massGM":1428.022,
+                    "orbitalPeriodD":5.877,
+                    "volume":1e10,
+                    "massKg":2.14e22,
+                    "yearOfDiscovery":1846,
+                    "discoveredBy":"William Lassell"
+                },
+                {
+                    "id":"p8.8",
+                    "name":"Nereid",
+                    "diameterKm":340,
+                    "semiMajorAxisKm":5513818,
+                    "yearOfDiscovery":1949,
+                    "discoveredBy":"Gerard Kuiper"
+                },
+                {
+                    "id":"p8.9",
+                    "name":"Halimede",
+                    "diameterKm":62,
+                    "semiMajorAxisKm":16611000,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Matthew Holman, John Kavelaars, T. Grav, W. Fraser, D. Milisavljevic"
+                },
+                {
+                    "id":"p8.10",
+                    "name":"Sao",
+                    "diameterKm":44,
+                    "semiMajorAxisKm":22228000,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Matthew Holman, John Kavelaars, T. Grav, W. Fraser, D. Milisavljevic"
+                },
+                {
+                    "id":"p8.11",
+                    "name":"Laomedeia",
+                    "diameterKm":42,
+                    "semiMajorAxisKm":23567000,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Matthew Holman, John Kavelaars, T. Grav, W. Fraser, D. Milisavljevic"
+                },
+                {
+                    "id":"p8.12",
+                    "name":"Psamathe",
+                    "diameterKm":40,
+                    "semiMajorAxisKm":48096000,
+                    "yearOfDiscovery":2003,
+                    "discoveredBy":"Scott Sheppard, David Jewitt, Jan Kleyna"
+                },
+                {
+                    "id":"p8.13",
+                    "name":"Neso",
+                    "diameterKm":60,
+                    "semiMajorAxisKm":49285000,
+                    "yearOfDiscovery":2002,
+                    "discoveredBy":"Matthew Holman, John Kavelaars, T. Grav, W. Fraser, D. Milisavljevic"
+                }
+            ]
+    
+        },
+        {
+            "id":"d1",
+            "name":"Ceres",
+            "diameterKm":952.4,
+            "periheliumAU":2.547,
+            "apheliumAU":2.996,
+            "orbitalPeriodD":1680,
+            "axialInclination":4,
+            "massKg":9.3e20,
+            "yearOfDiscovery":1801,
+            "semiMajorAxisAU":2.765,
+            "eccentricity":0.0791,
+            "inclination":10.59,
+            "category":"dwarf",
+            "ascendingNodeLong":80.39,
+            "periheliumArgument":72.59,
+            "meanAnomaly":113.41,
+            "massGM":62.059,
+            "equatorialGravity":0.27,
+            "density":2.08,
+            "volume":4.37e8,
+            "discoveredBy":"Guiseppe Piazzi"
+        },
+        {
+            "id":"d2",
+            "name":"Pluto",
+            "number":134340,
+            "yearOfDiscovery":1930,
+            "category":"dwarf",
+            "semiMajorAxisAU":39.481,
+            "eccentricity":0.249,
+            "periheliumAU":29.658,
+            "apheliumAU":49.305,
+            "inclination":17.1,
+            "diameterKm":2306,
+            "orbitalPeriodD":90613,
+            "ascendingNodeLong":110.3,
+            "periheliumArgument":113.763,
+            "equatorialGravity":0.6,
+            "density":2.0,
+            "volume":6.33e9,
+            "meanAnomaly":14.86,
+            "massKg":1.31e22,
+            "massGM":874.163,
+            "discoveredBy":"Clyde W. Tombaugh",
+            "satellites":[
+                {
+                    "id":"s134340.1",
+                    "name":"Charon",
+                    "diameterKm":1212,
+                    "semiMajorAxisKm":17530,
+                    "massKg":1.52e21,
+                    "category":"round",
+                    "equatorialGravity":0.28,
+                    "volume":9.2e8,
+                    "density":1.65,
+                    "massGM":101.43,
+                    "orbitalPeriodD":6.387,
+                    "yearOfDiscovery":1978,
+                    "discoveredBy":"James W. Christy"
+                },
+                {
+                    "id":"s134340.2",
+                    "name":"Nyx",
+                    "diameterKm":88,
+                    "semiMajorAxisKm":48708,
+                    "yearOfDiscovery":2005,
+                    "discoveredBy":"HST Pluto Companion Search Team"
+                },
+                {
+                    "id":"s134340.3",
+                    "name":"Hydra",
+                    "diameterKm":72,
+                    "semiMajorAxisKm":64749,
+                    "yearOfDiscovery":2005,
+                    "discoveredBy":"HST Pluto Companion Search Team"
+                }
+            ]
+    
+        },
+        {
+            "id":"d3",
+            "name":"Eris",
+            "diameterKm":2320,
+            "periheliumAU":37.77,
+            "number":136199,
+            "apheliumAU":97.558,
+            "orbitalPeriodD":203600,
+            "massKg":1.67e22,
+            "yearOfDiscovery":2003,
+            "category":"dwarf",
+            "semiMajorAxisAU":67.67,
+            "eccentricity":0.44177,
+            "ascendingNodeLong":35.87,
+            "periheliumArgument":151.43,
+            "meanAnomaly":197.634,
+            "massGM":1114.391,
+            "equatorialGravity":0.8,
+            "density":2.25,
+            "volume":7.23e9,
+            "inclination":44.1,
+            "discoveredBy":"Michael Brown, Chadwick Trujillo, David Rabinowitz",
+            "satellites":[
+                {
+                    "id":"s136199.1",
+                    "name":"Dysnomia",
+                    "diameterKm":174,
+                    "semiMajorAxisKm":37350,
+                    "yearOfDiscovery":2005,
+                    "discoveredBy":"Michael Brown"
+                }
+            ]
+    
+        },
+        {
+            "id":"d4",
+            "name":"Haumea",
+            "number":136108,
+            "diameterKm":1150,
+            "semiMajorAxisAU":43.000,
+            "eccentricity":0.198,
+            "periheliumAU":34.484,
+            "apheliumAU":51.516,
+            "orbitalPeriodD":103468,
+            "massKg":4e21,
+            "yearOfDiscovery":2003,
+            "category":"dwarf",
+            "ascendingNodeLong":121.10,
+            "periheliumArgument":239.18,
+            "meanAnomaly":202.67,
+            "massGM":266.92,
+            "equatorialGravity":0.44,
+            "density":2.9,
+            "volume":1.45e9,
+            "inclination":28.2,
+            "discoveredBy":"Michael Brown",
+            "satellites":[
+                {
+                    "id":"s136108.1",
+                    "name":"Namaka",
+                    "diameterKm":170,
+                    "semiMajorAxisKm":25657,
+                    "yearOfDiscovery":2005,
+                    "discoveredBy":"Michael Brown"
+                },
+                {
+                    "id":"s136108.2",
+                    "name":"Hi'iaka",
+                    "diameterKm":310,
+                    "semiMajorAxisKm":49880,
+                    "yearOfDiscovery":2005,
+                    "discoveredBy":"Michael Brown"
+                }
+            ]
+    
+        },
+        {
+            "id":"d5",
+            "name":"Makemake",
+            "number":136472,
+            "diameterKm":1460,
+            "periheliumAU":37.918,
+            "category":"dwarf",
+            "semiMajorAxisAU":45.346,
+            "eccentricity":0.164,
+            "inclination":29.0,
+            "apheliumAU":52.775,
+            "orbitalPeriodD":113183,
+            "massKg":4e21,
+            "volume":1.8e9,
+            "density":2.0,
+            "yearOfDiscovery":2005,
+            "ascendingNodeLong":79.382,
+            "periheliumArgument":298.41,
+            "equatorialGravity":0.5,
+            "meanAnomaly":85.13,
+            "massGM":266.91,
+            "discoveredBy":"Michael Brown, Chadwick Trujillo, David Rabinowitz",
+            "satellites":[
+                {
+                    "id":"s136472.1",
+                    "name":"MK2",
+                    "diameterKm":175,
+                    "semiMajorAxisKm":21000,
+                    "yearOfDiscovery":2016,
+                    "discoveredBy":"Michael Brown"
+                }
+            ]
+    
+        }
+    ]
+}

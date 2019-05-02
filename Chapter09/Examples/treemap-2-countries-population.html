@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/un_regions.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+            font-size: 10px;
+            fill: white;
+            font-weight: 100;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 2000;
+    const height = 1000;
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        const nested = d3.nest()
+       //                 .key(d => d.Supercontinent)
+        .key(d => d.Continent)
+      //  .key(d => d.UN_Region)
+        .key(d => d.Country)
+        .rollup(d => d.map(c => ({area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+        .entries(result);
+
+        const root = d3.hierarchy(makeRoot(nested));
+        root.sort((a,b) => b.height - a.height || a.value - b.value);
+        root.sum(d => d.children ? d.value : d.data.population);
+
+        console.log("Sorted", root);
+
+        const treemap = d3.treemap()
+                .size([width-50,height-50])
+                .paddingInner(5)
+                .paddingOuter(10)
+                .paddingTop(50);
+        const data = treemap(root)
+        // rounding
+        // padding
+
+        draw(data.descendants());
+    });
+
+    const colorScale = d3.scaleOrdinal(d3.schemeBlues[5].reverse());
+
+    function draw(nodes) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", d => `translate(${[25,25]})`);
+
+        drawCells(chart, nodes);
+        drawLabels(chart, nodes);
+    }
+
+    function drawCells(chart, nodes) {
+        chart.selectAll("rect")
+            .data(nodes)
+            .enter()
+            .append("rect")
+            .attr("x", d => d.x0)
+            .attr("y", d => d.y0)
+            .attr("width", d => d.x1 - d.x0)
+            .attr("height", d => d.y1 - d.y0)
+            .attr("fill", d => colorScale(d.height));
+    }
+
+    function drawLabels(chart, nodes) {
+        chart.selectAll("text")
+            .data(nodes)
+            .enter()
+            .append("text")
+            .attr("x", d => (d.x0 + d.x1) / 2)
+            .text(d => d.x1 - d.x0 > 25 && d.y1 - d.y0 > 25 ? d.data.id : '')
+            .style("font-size", function(d) {
+                if(d.height != 0) {
+                    return "25px";
+                }
+                let size = 3 * Math.min(((d.x1-d.x0) + (d.y1-d.y0))/30, 3*(d.x1-d.x0) / this.getComputedTextLength());
+
+                if(size > 12) {
+                    return size + "px";
+                }
+                return 0;
+            })
+            .attr("y", function(d) {
+                if(d.height != 0) {
+                    return d.y0 + +this.style.fontSize.split('px')[0];
+                } else {
+                    return d.y0 + (d.y1-d.y0)/2 + +this.style.fontSize.split('px')[0] * .3;
+                }
+            });
+    }
+
+
+
+</script>
+</body>
+</html>

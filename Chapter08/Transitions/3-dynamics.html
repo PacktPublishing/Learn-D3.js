@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        g {
+            fill: green;
+        }
+        g:last-of-type {
+            fill: blue;
+        }
+        g:first-of-type {
+            fill: red;
+        }
+    </style>
+</head>
+<body>
+<svg>
+    <g transform="translate(50,10)"></g>
+    <g transform="translate(150,10)"></g>
+    <g transform="translate(250,10)"></g>
+</svg>
+<script>
+
+    d3.selectAll("g").append("rect").attr("height", 50).attr("width", 50);
+
+    d3.selectAll("g")
+            .transition()
+            .delay((d,i) => 500 + 500 * i)
+            .duration((d,i) => 1000 + 1000 * i*i)
+            .style("opacity", 0);
+
+
+
+</script>
+</body>
+</html>

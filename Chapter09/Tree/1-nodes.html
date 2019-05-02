@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+</head>
+<body>
+<script>
+    const width = 1000, height = 600;
+    const svg = d3.select("body").append("svg")
+                  .attr("height", height)
+                  .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[60,60]})`);
+
+
+    const root = d3.hierarchy(simpleHierarchy);
+
+    const tree = d3.tree()
+                   .size([width-120,height-120]); // top-down
+    const treeData = tree(root);
+
+    console.log(treeData);
+
+    const nodes = treeData.descendants();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+                         .domain(d3.extent(nodes, n => n.depth));
+
+    drawNodes();
+
+    function drawNodes() {
+        chart.selectAll("circle")
+            .data(nodes)
+            .join("circle")
+            .attr("r", 20)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .style("fill", d => colorScale(d.depth));
+    }
+
+
+</script>
+</body>
+</html>

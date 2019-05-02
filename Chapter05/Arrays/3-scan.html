@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+    const array = [4,2,9,12,6,23, NaN, 9,71,55, undefined, 49];
+    const objects = [{label: 'label1', value: 5}, {label: 'label2', value: 3}, {label: 'label3', value: 9}]
+
+    const scan = d3.scan(array);
+    console.log("Scan index of min", scan);
+
+    const scan2 = d3.scan(objects, function(a,b) {
+        return a.value - b.value;
+    });
+    console.log("Scan2 index of min", scan2);
+
+    const scan3 = d3.scan(array, (a,b) => b-a);
+    console.log("Scan index of max", scan3);
+
+    const scan4 = d3.scan(objects, (a,b) => b.value - a.value);
+    console.log("Scan2 index of max", scan4);
+
+
+</script>
+</body>
+</html>

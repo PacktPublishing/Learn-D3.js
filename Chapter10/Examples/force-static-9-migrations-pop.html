@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/arc.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 2000;
+    const height = 1000;
+    const margin = 100;
+
+    const nodes = [];
+    const links = [];
+
+    const scaleWidth = d3.scaleLinear().range([.1,35]);
+    const scaleOpacity = d3.scaleSqrt().range([.3,.7]);
+    const scaleRadius   = d3.scaleLinear().range([0,90])
+    const scaleDistance = d3.scaleLinear().range([1,365])
+    const colorBrewer = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928'];
+    const nodeColors = d3.scaleOrdinal(colorBrewer);
+
+    const format = d3.format('.0%');
+
+    d3.csv("../Data/migration_2017.csv", function(row) {
+        nodes.push({node: row.Destination, pop: +row.Population, total: +row.Total, code: row.Code})
+        return row;
+    }).then(function(migrations) {
+        nodes.sort((a,b) => d3.descending(a.total/a.pop, b.total/b.pop));
+
+        migrations.forEach(function(d) {
+            for(const key in d) {
+                if(key != 'Destination' && key != 'Population' && key != 'Total' && key != 'Code' && +d[key]) {
+                    const link = {};
+                    link.value = +d[key];
+                    link.target = nodes.map(n => n.node).indexOf(d.Destination);
+                    link.source = nodes.map(n => n.node).indexOf(key);
+                    links.push(link);
+                }
+            }
+        });
+
+        nodes.forEach(function(node,i) {
+            const immigrantCountries = links.filter(link => link.source == i)
+            node.countries = immigrantCountries.length;
+        });
+
+        console.log(nodes, links)
+
+        scaleWidth.domain(d3.extent(links, d => d.value))
+        scaleOpacity.domain(d3.extent(links, d => d.value))
+        scaleRadius.domain(d3.extent(nodes, d => Math.sqrt(d.total/d.pop)))
+        scaleDistance.domain(d3.extent(nodes, d => d.total/d.pop))
+        nodeColors.domain([0,nodes.length].reverse())
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[width * .5,height * .5]})`);
+
+        const sim = d3.forceSimulation(nodes);
+        sim.force("center", d3.forceCenter());
+        sim.force("manybody", d3.forceManyBody().strength(30));
+        sim.force("x", d3.forceY().strength(.1))
+        sim.force('collision', d3.forceCollide(d => scaleRadius(Math.sqrt(d.total/d.pop))+1).iterations(10))
+
+        for(let i = 0; i < 300; i++) { sim.tick(); }
+        draw(chart,migrations);
+        sim.stop();
+    });
+
+    function draw(chart, data) {
+        const node = chart.selectAll('g.location')
+                .data(nodes).enter()
+                .append("g")
+                .attr("class", 'location')
+                .attr("transform", d => `translate(${[d.x,d.y]})`);
+
+        node.append("circle")
+                .attr("r", d => scaleRadius(Math.sqrt(d.total/d.pop)))
+                .style("fill", (d,i) => nodeColors(i))
+                .style("stroke",'black')
+                .style("stroke-width", .5)
+                .style("opacity", .75)
+
+        node.append("text").attr("class", "name").attr("id", d => d.code)
+                .text(d => d.node)
+                .attr("y", d => scaleRadius(Math.sqrt(d.total/d.pop))*.1)
+                .style("fill", (d,i) => contrast(nodeColors(i)))
+                .style("font-size", function(d,i) {
+                   const r = scaleRadius(Math.sqrt(d.total/d.pop));
+                    const scale = (d.node.length <= 3 ? 1.6 : 2.5) * r;
+                    let size = 8 * scale / this.getComputedTextLength();
+                    if(size < 11) {
+                        d3.select(this).text(d.code);
+                        size = 1.2 * r;
+                    }
+                    return size > 9 ? size : 0;
+                });
+
+        node.append("text").attr("class", "total")
+                .text((d,i) => i <= 50 ? format(d.total/d.pop) : '')
+                .attr("y", d => .8 * scaleRadius(Math.sqrt(d.total/d.pop)))
+                .style("alignment-baseline", 'baseline')
+                .style("fill", (d,i) => contrast(nodeColors(i)))
+                .style("font-size", d => .25 * scaleRadius(Math.sqrt(d.total/d.pop)));
+
+        node.append("text").attr("class", "rank")
+                .text((d,i) => i <= 50 ? ordinal(i+1) : '')
+                .attr("y", d => -scaleRadius(Math.sqrt(d.total/d.pop)) + 4)
+                .style("alignment-baseline", 'hanging')
+                .style("fill", (d,i) => contrast(nodeColors(i)))
+                .style("font-size", d => scaleRadius(Math.sqrt(d.total/d.pop)/3));
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 150 ? 'black' : 'white';
+    }
+
+    const ordinalSuffixes = ['th', 'st', 'nd', 'rd'];
+
+    function ordinal(number) {
+        const value = number % 100;
+        return number + (ordinalSuffixes[(value - 20) % 10] || ordinalSuffixes[value] || ordinalSuffixes[0]);
+    }
+
+
+</script>
+</body>
+</html>

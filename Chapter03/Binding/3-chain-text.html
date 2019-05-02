@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+</head>
+<body>
+
+<div>
+    <p>Paragraph 1</p>
+    <p>Paragraph 2</p>
+</div>
+
+<script>
+
+    let numbers = [6, 2, 5, 7, 9];
+
+    d3.select("body")             // select the body element
+         .select("div")           // select the first div element inside <body>
+              .selectAll("p")     // select all <p> elements (there are two)
+              .data(numbers)      // load the data from the numbers array
+                   .text(d => d)  // set contents of existing paragraphs
+              .enter()            // bind remaining data to placeholder array with 3 elements
+              .append("p")        // create 3 new <p> elements and add to end of <div>
+                   .text(d => d); // set the contents of the new paragraphs
+
+</script>
+</body>
+</html>

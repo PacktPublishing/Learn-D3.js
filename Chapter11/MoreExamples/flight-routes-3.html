@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const projection = d3.geoMercator()
+            .scale(120)
+            .center([0,30]);
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    const colorScale = d3.scaleLog().range(['yellow', 'red'])
+    const widthScale = d3.scaleLinear().range([.1, 3]);
+    const transparencyScale = d3.scaleLinear().range([.5, 1]);
+
+    Promise.all([
+                d3.json('../Data/' + file),
+                d3.csv('../Data/airports-busiest.csv', function(row) {
+                    return {
+                        id: row.iata,
+                        name: row.name,
+                        city: row.city,
+                        passengers: +row.passengers,
+                        coordinates: [+row.longitude, +row.latitude],
+                    };
+                }),
+                d3.csv('../Data/routes-busiest.csv', function(row) {
+                    row.airlines = +row.airlines;
+                    return row;
+                })
+            ])
+            .then( function([topology, airports, routes]) {
+
+                // at least 2 airlines per route
+                const filteredRoutes = routes.filter(r => r.airlines > 2);
+
+                // at least 10 million passengers per year
+                const filteredAirports = airports.filter(a => a.passengers > 10000000)
+
+                filteredRoutes.forEach(function(filteredRoutes) {
+                    const s = filteredAirports.filter(a => a.id == filteredRoutes.source);
+                    const t = filteredAirports.filter(a => a.id == filteredRoutes.target);
+                    filteredRoutes.source = t ? t[0] : undefined;
+                    filteredRoutes.target = s ? s[0] : undefined;
+                })
+
+                colorScale.domain(d3.extent(filteredRoutes, d => d.airlines))
+                widthScale.domain(colorScale.domain())
+                transparencyScale.domain(colorScale.domain())
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features
+
+                drawGraticules();
+                draw(filteredAirports, filteredRoutes.filter((k,i) => k.source && k.target));
+
+            });
+
+    function lineString(d) {
+        return {
+            id: d.id,
+            properties: {
+                airlines: d.airlines
+            },
+            type: "LineString",
+            coordinates: [
+                    d.source.coordinates,
+                    d.target.coordinates
+            ]
+        }
+    }
+
+    function draw(airports, routes) {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+
+        globe.append("path")
+                .style("fill", '#333')
+                .style("fill-opacity", .6)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+        svg.selectAll("g.airport")
+                .data(airports)
+                .enter()
+                .append("g")
+                .attr("class","airport")
+                .attr("transform", d => `translate(${projection(d.coordinates)})`)
+                .append("circle")
+                    .style("fill", 'yellow')
+                    .style("stroke", "black")
+                    .attr('r', 2);
+
+        svg.selectAll("g.route")
+                .data(routes)
+                .enter()
+                .append("g")
+                .attr("class","route")
+                .append("path")
+                .datum(lineString)
+                .attr("d", geoPath)
+                .style("fill", 'none')
+                .style("stroke-opacity", d => transparencyScale(d.properties.airlines))
+                .style("stroke", d => colorScale(d.properties.airlines))
+                .style('stroke-width', d => widthScale(d.properties.airlines));
+
+    }
+
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+        svg.append("path").attr("class","background")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath) // clip the path!
+                .style("fill", "blue")
+                .style("fill-opacity", .5)
+                .style('stroke-width', 2);
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', .25);
+    }
+
+</script>
+
+</body>
+</html>

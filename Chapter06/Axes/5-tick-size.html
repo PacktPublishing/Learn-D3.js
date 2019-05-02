@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px lightgray;
+        }
+        .domain {
+            stroke-width: 2;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const height  = 75;
+    const width   = 800;
+    const marginX = 50;
+    const marginY = 50;
+
+    const scaleX = d3.scaleLinear().range([marginX, width - marginX]);
+
+    const axisX = d3.axisBottom(scaleX)
+                    .tickSize(25);
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height",height);
+
+    svg.append("g").attr("class", "x-axis")
+            .attr("transform", "translate(0,"+(height - marginY)+")")
+            .call(axisX);
+
+    // Another way to control tick size and position
+    // d3.selectAll(".tick line").attr("y2", 25);
+    // d3.selectAll(".tick text").attr("y", 30);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        rect {
+            stroke: black;
+            stroke-width: .5px
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+            fill: white;
+            font-weight: 100;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 1000, height = 800;
+
+    const svg = d3.select("body").append("svg")
+                    .attr("height", height)
+                    .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[25,25]})`);
+
+    const root = d3.hierarchy(simpleHierarchy)
+                    .sort((a,b) => b.height - a.height )
+                    .sum(d => d.values ? d.values[0] : 0);
+
+    const treemap = d3.treemap()
+                      .size([width - 100, height - 100]);
+    const mapData = treemap(root);
+    const nodes = mapData.descendants();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+                         .domain(d3.extent(nodes, n => n.height));
+    const fontScale = d3.scaleLinear()
+                        .domain(d3.extent(root.descendants(), d => d.depth).reverse())
+                        .range([16,40]);
+
+    drawTreemap();
+
+    function drawTreemap() {
+        chart.selectAll("rect")
+            .data(nodes)
+            .join("rect")
+                .attr("x", d => d.x0)
+                .attr("y", d => d.y0)
+                .attr("width", d => d.x1 - d.x0)
+                .attr("height", d => d.y1 - d.y0)
+                .attr("fill", d => colorScale(d.height));
+    }
+</script>
+</body>
+</html>

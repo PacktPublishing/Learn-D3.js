@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {border: solid 1px gray;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+
+    d3.json('../Data/border-example.topojson')
+            .then(function(data) {
+
+        console.log(data);
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        const svg = d3.select("body").append("svg")
+                      .attr("width", width).attr("height", height);
+
+        const geoPath = d3.geoPath().projection(d3.geoMercator());
+
+        const mergedGeoJSON = topojson.merge(data, data.objects['border-example'].geometries)
+
+        console.log(mergedGeoJSON)
+
+        svg.append("g")
+                .datum(mergedGeoJSON)
+                .attr("class","country")
+                .style("fill", (d,i) => color(i))
+                .attr("opacity", .9)
+                .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+    })
+</script>
+
+</body>
+</html>

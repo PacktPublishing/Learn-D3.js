@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        * {
+            font-family: sans-serif;
+        }
+        .bar {
+            fill: orange;
+        }
+        .label {
+            font-size: 9pt;
+        }
+        .category {
+            text-anchor: end;
+        }
+    </style>
+</head>
+<body>
+<h1><span id="chart">Average</span> distance from the Sun</h1>
+<svg class="bar-chart"></svg>
+<form>
+    <button type="button" id="avg">Average</button>
+    <button type="button" id="max">Maximum</button>
+    <button type="button" id="min">Minimum</button>
+</form>
+
+<script>
+    // chart keys are used in data properties and button ids
+    const charts = [
+        {key: "avg", title: "Average", color: "orange"},
+        {key: "max", title: "Maximum", color: "blue"},
+        {key: "min", title: "Minimum", color: "red"},
+    ];
+
+    // data used for each chart
+    const chart = {
+        width: 800,
+        height: 0,          // the height is set after data is loaded
+        current: charts[0]  // chart to display first
+    }
+
+    // after loading the data file, this will contain all data
+    const planets = [];
+
+    // scale functions and formats
+    const barScale = d3.scaleLinear().range([0, 600]);
+    const colorScale = d3.scaleLinear().range([0, 1]);
+    const format = d3.format(".2f");
+
+    // the container SVG
+    const svg = d3.select("svg.bar-chart");
+
+    d3.selectAll("button")
+        .on("click", function() {
+            chart.current = charts.filter(c => c.key == this.id)[0]; // the button's ID
+            draw();
+        });
+
+    d3.json("../Data/sol_2016.json").then(function(data) {
+        data.planets.forEach(function(obj) {
+            planets.push({
+                name: obj.name,
+                avg: obj.semiMajorAxisAU,
+                max: obj.apheliumAU,
+                min: obj.periheliumAU});
+        });
+        init();
+    });
+
+    function setupView() {
+        // disable all buttons
+        d3.selectAll("button")
+          .property("disabled", false);
+        // enable only buttons that are not current chart
+        d3.select("#" + chart.current.key)
+          .property("disabled", true);
+
+        // update page title
+        d3.select("#chart")
+          .text(chart.current.title);
+
+        // sort the planets using current data
+        planets.sort((a,b) => d3.ascending(a[chart.current.key], b[chart.current.key]));
+
+        // update scale domain with current data
+        const maxValue = d3.max(planets, d => d[chart.current.key]);
+        barScale.domain([0, maxValue]);
+        colorScale.domain([0, maxValue]);
+    }
+
+    // runs once
+    function init() {
+        // viewport setup
+        chart.height = planets.length * 21;
+        svg.attr("width", chart.width)
+           .attr("height", chart.height);
+
+        // setup
+        setupView();
+
+        // bind the data and draw the first chart
+        svg.selectAll("g")
+            .data(planets)
+            .enter().append("g").attr("class", "entry")
+            .attr("transform", (d,i) => `translate(0,${i * 21})`)
+            .each(function(d) {
+                const entry = d3.select(this); // the current entry
+
+                entry.append("text").attr("class", "label category")
+                    .attr("y", 15)
+                    .attr("x", 90)
+                    .text(d.name);
+
+                entry.append("rect").attr("class", "bar")
+                    .attr("x", 100)
+                    .attr("height", 20)
+                    .attr("width", barScale(d[chart.current.key]) )
+                    .style("fill", d3.color(chart.current.color).darker(colorScale(d[chart.current.key])) )
+
+                entry.append("text").attr("class", "label value")
+                    .attr("y", 15)
+                    .attr("x", barScale(d[chart.current.key]) + 105)
+                    .text(format(d[chart.current.key]) + " AU");
+            });
+    }
+
+    function draw() {
+        setupView();
+
+        svg.selectAll("g.entry").data(planets)
+            .each(function (d) {
+                d3.select(this).select(".label.category")
+                    .text(d.name); // the order may have changed
+                d3.select(this).select(".bar")
+                  .transition()
+                    .attr("width", barScale(d[chart.current.key]))
+                    .style("fill", d3.color(chart.current.color)
+                                     .darker(colorScale(d[chart.current.key])));
+                d3.select(this).select(".label.value")
+                  .transition()
+                    .attr("x", barScale(d[chart.current.key]) + 105)
+                    .text(format(d[chart.current.key]) + " AU");
+            });
+    }
+
+
+
+
+</script>
+</body>
+</html>

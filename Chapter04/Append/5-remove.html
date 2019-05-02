@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        div {
+            margin: 2px 50px;
+            padding: 5px;
+            width: 300px;
+            border: solid 1px blue;
+            overflow: visible
+        }
+
+        div > div {
+            border: solid 1px red;
+            width: 200px;
+        }
+
+        div:nth-child(3) {
+            border: solid 1px green;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <div>One</div>
+    <div>Two</div>
+    <div>Three</div>
+    <div>Four</div>
+</div>
+
+<script>
+
+    d3.select("div").insert("div", ":nth-child(3)").text("INSERTED");
+
+    d3.select("div").selectAll(":nth-child(2n)").remove();
+
+
+</script>
+
+</body>
+</html>

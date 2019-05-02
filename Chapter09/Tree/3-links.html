@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        line {
+            stroke: black;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000, height = 600;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[60,60]})`);
+
+    const root = d3.hierarchy(simpleHierarchy);
+
+    const tree = d3.tree()
+            .size([width-120,height-120]); // top-down
+    const treeData = tree(root);
+
+    console.log(treeData);
+
+    const links = treeData.links();
+
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(links, k => k.target.height));
+
+    drawLinks();
+
+    function drawLinks() {
+        chart.selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y)
+            .style("stroke-width", d => widthScale(d.target.height))
+            .style("opacity", d => d.target.depth *.25 * .6 + .4)
+    }
+
+</script>
+</body>
+</html>

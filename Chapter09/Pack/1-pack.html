@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+        }
+        circle {
+            stroke: black;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800, height = 800;
+    const svg = d3.select("body").append("svg")
+                                 .attr("height", height).attr("width", width);
+    const chart = svg.append("g")
+                     .attr("transform", d => `translate(${[50,50]})`);
+
+    const root = d3.hierarchy(simpleHierarchy)
+                   .sum(d => d.values ? (d.values[0] * d.values[0]) : 0);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeGnBu[5])
+            .domain(d3.extent(root, n => n.height));
+
+    const pack = d3.pack()
+                   .size([width-100,height-100]);
+
+    const nodes = pack(root).descendants();
+
+    draw();
+
+    function draw() {
+        chart.selectAll("circle")
+            .data(nodes)
+            .join("circle")
+              .attr("cx", d => d.x)
+              .attr("cy", d => d.y)
+              .attr("r", d => d.r)
+              .style("fill", d => colorScale(d.height));
+    }
+</script>
+</body>
+</html>

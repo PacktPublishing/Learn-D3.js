@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+        }
+        text.parallels, text.meridians {
+            font-size: 12px;
+            fill-opacity: .4
+        }
+        .highlight, .highlight path {
+            fill: lightgreen;
+            fill-opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 500;
+    const height = 500;
+
+    const color = d3.scaleOrdinal(d3.schemeGreens[9]);
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    const popScale = d3.scaleSqrt().range([0.1, 10]);
+    const fontScale = d3.scaleSqrt().range([10,20])
+    const projection = d3.geoChamberlinAfrica().scale(300).translate([250,250]).center([13,3]);
+    const geoPath = d3.geoPath().projection(projection);
+
+    const format = d3.format(".0f");
+
+    Promise.all([
+        d3.json('../Data/africa.geojson'),
+        d3.json('../Data/africa-rivers.geojson'),
+        d3.csv('../Data/africa-1500-cities.csv', function(row) {
+            return {
+                city: row.city,
+                coordinates: [+row.lng, +row.lat],
+                population: +row.population
+            };
+        })
+    ])
+    .then(([countries, rivers, cities]) =>  {
+        const filteredCities = cities.filter(d => d.population > 1000);
+        popScale.domain([0, d3.max(filteredCities, d => d.population)]);
+        fontScale.domain([0, d3.max(filteredCities, d => d.population)]);
+        drawGraticules(countries);
+        drawCountries(countries);
+        drawRivers(rivers);
+        drawCities(filteredCities);
+
+    });
+
+    function drawCountries(data) {
+        svg.selectAll("g.country")
+                .data(data.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .style("fill", (d,i) => d3.rgb(color(i)).darker())
+                .style("fill-opacity", .4)
+                .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+    }
+
+    function drawRivers(data) {
+        console.log(data)
+        svg.selectAll("g.river")
+                .data(data.features)
+                .enter()
+                .append("g")
+                .attr("class","river")
+                .style("fill", 'none')
+                .style("opacity", 1)
+                .append("path")
+                .style('stroke-width', d => d.properties.StrokeWeig)
+                .attr('d', geoPath)
+                .style("stroke", "navy");
+    }
+
+    function drawCities(data) {
+        svg.selectAll("g.city")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class","city")
+                .attr('transform', d => `translate(${projection(d.coordinates)})`)
+                .on('mouseenter', showName)
+                .on('mouseleave', hideName)
+                .append("circle")
+                .style("fill", 'red')
+                .style("fill-opacity", d => popScale(d.population) <= 1 ? 1 : .25)
+                .attr('r', d => popScale(d.population))
+                .style("stroke-width", d => popScale(d.population) > 1 ? .25 : 0)
+                .style("stroke", "black");
+    }
+
+    function drawGraticules() {
+        svg.append("g").attr("class","equator")
+                .datum(d3.geoCircle().center([0,90]))
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style("fill", "none")
+                .style('stroke-width', 1)
+                .style('stroke-opacity', .5);
+
+        const bounds = [[-30,-40],[60.1,40.1]];
+        const graticule = d3.geoGraticule().extent(bounds);
+        const meridians = graticule.lines().filter(d => d.coordinates[0][0] == d.coordinates[1][0]);
+        const parallels = graticule.lines().filter(d => d.coordinates[0][1] == d.coordinates[1][1]);
+
+        svg.append("g").attr("class","graticule")
+                .datum(graticule)
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style('stroke-width', d => '.25');
+
+        // graticule labels
+        svg.selectAll("text.parallels")
+                .data(parallels)
+                .enter()
+                .append("text").attr("class","parallels")
+                .attr("transform", d => `translate(${[projection(bounds[0])[0], projection(d.coordinates[0])[1]]})`)
+                .text(d => format(d.coordinates[0][1]) + '°').attr("x",-65).attr("y",2.5)
+
+        svg.selectAll("text.meridians")
+                .data(meridians)
+                .enter()
+                .append("text").attr("class","meridians")
+                .attr("transform", d => `translate(${[projection(d.coordinates[0])[0], projection(bounds[1])[1]]})`)
+                .text(d => format(d.coordinates[0][0]) + '°').attr("y",-25)
+    }
+
+    function showName(d) {
+        console.log(d.city)
+        d3.select(this)
+                .append('text')
+                .style('font-size', d => fontScale(d.population))
+                .text(d.city)
+        d3.selectAll(".country")
+                .classed("highlight", c => d3.geoContains(c, d.coordinates))
+    }
+    function hideName(d) {
+        d3.select(this).select('text').remove();
+        d3.selectAll(".country").classed("highlight", false);
+    }
+</script>
+
+</body>
+</html>

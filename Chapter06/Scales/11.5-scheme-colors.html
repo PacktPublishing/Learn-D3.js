@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scale</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text,* {
+            font-family: 'Yanone Kaffeesatz','sans-serif';
+        }
+        h1 {
+            font-size: 16pt;
+            text-align: center;
+            font-weight: normal;
+        }
+        text {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+<h1>Categorical schemes</h1>
+<svg width="800" height="800"></svg>
+<script>
+    const data = d3.range(0,100,5);
+
+    const bandScale = d3.scaleBand()
+            .domain(data).range([0,800]).padding(.1);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeBrBG[4]).domain([0,600]);
+
+    d3.select("body").append("svg").attr("height", 200).attr("width", 850);
+
+    d3.select("svg").append("g")
+            .selectAll("rect")
+            .data(data).enter()
+            .append("rect")
+            .attr("x", d => bandScale(d))
+            .attr("y",22)
+            .attr("width", d => bandScale.bandwidth())
+            .attr("height", d => Math.random() * 200)
+            .attr("fill", (d,i) => colorScale(i));
+
+</script>
+
+</body>
+</html>

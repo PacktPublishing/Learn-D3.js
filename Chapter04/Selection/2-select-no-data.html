@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p>
+
+<script>
+
+    // d3.select/selectAll and selection.select/selectAll
+    const selection = d3.selectAll("p");
+    const nodelist = selection.nodes();
+    console.log("Nodelist with 5 p elements: ", nodelist);         // shows nodelist with 5 p elements
+    console.log("Third element in nodelist: ", nodelist[2]);       // prints <p>Three</p> in console
+    console.log("Text contents of node: ", nodelist[2].innerText); // prints ‘Three’
+
+    const first_p = d3.select("p");
+    console.log("first <p>", first_p, first_p.node());
+
+    const all_p = d3.selectAll("p");
+    console.log("all <p>", all_p, all_p.nodes());
+
+    const all_p_in_div = d3.select("div").selectAll("p");
+    console.log("all <p> in <div>", all_p_in_div, all_p_in_div.nodes());
+
+    const all_p_not_in_div = d3.selectAll(":not(div) >p");
+    console.log("all <p> not in <div>", all_p_not_in_div, all_p_not_in_div.nodes());
+
+    const all_p_in_div_root = d3.selectAll("div#words p");
+    console.log("all <p> in <div> ROOT", all_p_in_div_root, all_p_in_div_root.nodes());
+
+
+</script>
+</body>
+</html>

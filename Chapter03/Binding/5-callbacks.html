@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<body>
+
+<script>
+
+    let numbers = [6, 2, 5, 7, 9];
+
+    d3.select("body")         // select the body element
+        .append("ul")         // append an <ul> element inside <body>
+            .selectAll("li")  // select all <li> elements (there are none)
+            .data(numbers)    // load the data from the numbers array
+            .enter()          // create an enter array with 5 objects
+            .append("li")     // create 5 new <li> elements and append to <ul>
+                 .text(function(d, i) {
+                     return "Item " + (i+1) + ": " + d;
+                 })
+                 .style("font-size", function(d, i) {
+                    return ((i+2) * 5) + "pt";
+                 });
+
+</script>
+</body>
+</html>

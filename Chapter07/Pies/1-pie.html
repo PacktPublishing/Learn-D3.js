@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pie</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .slice {
+            stroke: white;
+            fill-opacity: .5;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+
+    const data = [12, 45, 99, 22, 10, 76];
+
+    const pie = d3.pie();
+    const arcData = pie(data);
+    console.log(JSON.stringify(arcData));
+
+    const arc = d3.arc()
+            .innerRadius(0)
+            .outerRadius(100);
+
+    console.log(arcData.map(d => arc(d)));
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const svg = d3.select("body").append("svg").attr("height",400).attr("width",width);
+
+    svg.selectAll("path.slice")
+            .data(arcData)
+            .enter()
+            .append("path").attr("class", "slice")
+            .attr("d", d => arc(d))  // Or .attr("d", arc)
+            .style("fill", (d,i) => colorScale(i))
+            .attr("transform", "translate(120,120)");
+
+</script>
+</body>
+</html>

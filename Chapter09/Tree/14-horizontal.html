@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        path {
+            stroke: black;
+            fill: none;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000, height = 800;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[60,60]})`);
+
+    const root = d3.hierarchy(simpleHierarchy);
+    root.sort((a,b) => a.height - b.height ); // sorting root
+
+    // generate labels
+    root.eachBefore(function(d) {
+        if(!d.parent) {
+            d.number = 1;
+        } else {
+            d.number = d.parent.number + "." + (d.parent.children.indexOf(d) + 1);
+        }
+    });
+
+    // because of nodesize, must move tree to center
+    chart.attr("transform", d => `translate(${[60, height/2]})`);
+
+    const tree = d3.tree()
+            .nodeSize([40,220]); // nodesize instead of size
+    const treeData = tree(root);
+
+    console.log(treeData);
+
+    const nodes = treeData.descendants();
+    const links = treeData.links();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.depth));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(links, k => k.target.height));
+
+    const horizontalLink = d3.linkHorizontal()
+            .x(function(d) { return d.y; })
+            .y(function(d) { return d.x; });
+
+
+    drawLinks();
+    drawNodes();
+    drawLabels();
+
+
+    function drawNodes() {
+        chart.selectAll("g")
+            .data(nodes)
+            .join("g").attr("class", "node")
+            .attr("transform", d => `translate(${[d.y, d.x]})`)
+            .append("circle")
+            .attr("r", d => (d.height + 1) * tree.nodeSize()[0]/5) // using nodesize
+            .style("fill", d => colorScale(d.depth));
+    }
+
+    function drawLinks() {
+        chart.selectAll("path")
+            .data(links)
+            .join("path")
+            .attr("d", horizontalLink)
+            .style("stroke-width", d => (d.target.height + 1) * (d.target.height + 1))
+            .style("opacity", d => d.target.depth *.25 * .6 + .4);
+    }
+
+    function drawLabels() { // relative to node <g>
+        chart.selectAll("g.node")
+            .append("text")
+            .text(d => d.number) // number  generated using eachBefore()
+            .style("fill", d => d.height != 0 ? 'white' : 'black')
+            .attr("transform", d => d.height == 0 ? `translate(15,5)` : "translate(0,5)")
+            .style("text-anchor", d => d.height != 0 ? "middle" : "start")
+            .style("font-size", d => 14 + (d.height*d.height));
+    }
+</script>
+</body>
+</html>

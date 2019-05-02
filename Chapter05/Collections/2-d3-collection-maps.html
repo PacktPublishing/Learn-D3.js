@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+</head>
+<body>
+<p>See Console log for results</p>
+<script>
+    // ES Map - add values
+    const esmap = new Map();
+    esmap.set("A", 108);
+    esmap.set("B", 109);
+    esmap.set("C", 110);
+
+    const entries = [['A',108],['B',109],['C',110]];
+
+    // ES Map create with entries array and add value
+    const esmap2 = new Map(entries);
+    esmap2.set("D", 111);
+
+    // Convert to array
+    const arrayOfArray1 = [...esmap];
+    const arrayOfArray2 = Array.from(esmap);
+
+    console.log("ES Map 1", esmap);
+    console.log("ES Map 2", esmap2);
+    console.log("Array from Map: spread", arrayOfArray1);
+    console.log("Array from Map: Array.from", arrayOfArray2);
+
+    // D3 map - add values
+    const d3map = d3.map();
+    d3map.set("A", 108);
+    d3map.set("B", 109);
+    d3map.set("C", 110);
+
+    const object = {A: 108, B: 109, C: 110};
+
+    // D3 Map create with object and add value
+    const d3map2 = d3.map(object);
+    d3map2.set("D", 111);
+
+    // Spread operator fails for D3 maps (not iterable)
+    //const arrayOfArray3 = [...d3map];
+
+    // Array.from fails for D3 maps (empty)
+    const arrayOfArray4 = Array.from(d3map);
+
+    console.log("D3 Map 1", d3map);
+    console.log("D3 Map 2", d3map2);
+    //console.log("Array from D3Map: spread", arrayOfArray3);
+    console.log("Array from D3Map: Array.from", arrayOfArray4);
+
+    // Converting
+    const esmap3 = new Map(d3map2.entries().map(d => [d.key, d.value]));
+    console.log("ES converted D3 Map 2", esmap3);
+
+    // Convert to array
+    const arrayOfArray5 = [...esmap3];
+    const arrayOfArray6 = Array.from(esmap3);
+
+    console.log("Array from ES version of D3Map: spread", arrayOfArray5);
+    console.log("Array from ES version of D3Map: Array.from", arrayOfArray6);
+
+</script>
+</body>
+</html>

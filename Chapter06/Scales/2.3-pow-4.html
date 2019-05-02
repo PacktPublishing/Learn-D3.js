@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill-opacity: 1;
+            fill: red;
+        }
+        line, path {
+            stroke: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    const data = d3.range(0,33);
+
+    const scale = d3.scalePow()
+            .exponent(4)
+            .domain([0,32])
+            .range([0,1000]);
+
+    const xAxis = d3.axisBottom().scale(scale).tickSize(25);
+
+    console.log(0, scale(0));
+    console.log(5, scale(5));
+    console.log(10, scale(10));
+    console.log(15, scale(15));
+    console.log(20, scale(20));
+    console.log(25, scale(25));
+
+    d3.select("body").append("svg")
+            .append("g")
+            .attr("transform","translate(25,25)")
+            .call(xAxis);
+
+    d3.select("svg").attr("height", 550).attr("width", 1050)
+            .selectAll("circle")
+            .data(data).enter()
+            .append("circle")
+            .attr("r", 5)
+            .attr("cx", d=>scale(d)+25)
+            .attr("cy", 25);
+
+
+
+</script>
+
+</body>
+</html>

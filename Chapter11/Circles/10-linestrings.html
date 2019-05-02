@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="../JavaScript/wgs84_resampling.js"></script>
+    <style>
+        .meridian, .parallel {
+            fill: none;
+            stroke-width: 3;
+            stroke-opacity: .2;
+        }
+        .circle {
+            fill: none;
+            stroke-dasharray: 5 5;
+            stroke-opacity: .6;
+            stroke: purple;
+        }
+        .equator {
+            stroke: blue;
+        }
+        .prime {
+            stroke: red;
+        }
+        .anti {
+            stroke: black;
+        }
+        .country {
+            stroke: white;
+            stroke-width: .25;
+            fill: gray;
+            fill-opacity: .7;
+        }
+        .graticule {
+            fill: none;
+            stroke-width: .25;
+            stroke: green;
+        }
+        .outline {
+            stroke-width: 3;
+            stroke: black;
+            fill: none;
+        }
+        .background {
+            fill: hsl(30,100%,95%);
+        }
+        .shadow {
+            fill: rgba(0%,0%,0%,0.4);
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const defs = svg.append("defs");
+    defs.append("filter")
+            .attr("id","blur")
+            .append("feGaussianBlur")
+            .attr("in", "SourceGraphic")
+            .attr("stdDeviation", 2);
+
+    // choose a projection
+    const projection = d3.geoWinkel3();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+                //console.log(topology); // TopoJSON topology
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features;
+
+                drawBackgroundCircle();
+                drawGraticules();
+                draw();
+                drawForegroundOutline();
+                drawShadow();
+
+            });
+
+    function drawShadow() {
+        svg.append("path").attr("class","west shadow")
+                .datum(d3.geoCircle().center([-90,-23.5]))
+                .attr("d", geoPath)
+                .attr("filter", "url(#blur)");
+    }
+
+    function drawBackgroundCircle() {
+        svg.append("path").attr("class","background")
+                .datum({type: "Sphere"})
+                .attr("d", geoPath);
+    }
+
+    function drawForegroundOutline() {
+        svg.append("path").attr("class","outline")
+                .datum({type: "Sphere"})
+                .attr("d", geoPath);
+    }
+
+    function draw() {
+        svg.selectAll("path.country")
+                .data(map.features).enter()
+                .append("path").attr("class","country")
+                .attr("d", geoPath);
+    }
+
+    function drawGraticules() {
+
+        svg.append("path").attr("class","tropic circle cancer")
+                .datum(resample({type: "LineString", coordinates: [[-179.9,23.5],[179.9,23.5]]}))
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","tropic circle capricorn")
+                .datum(resample({type: "LineString", coordinates: [[-179.9,-23.5],[179.9,-23.5]]}))
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","antarctic polar circle")
+                .datum(resample({type: "LineString", coordinates: [[-179.9,-66.5],[179.9,-66.5]]}))
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","arctic polar circle")
+                .datum(resample({type: "LineString", coordinates: [[-179.9,66.5],[179.9,66.5]]}))
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","graticule")
+                .datum(d3.geoGraticule10())
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","equator parallel")
+                .datum({type: "LineString", coordinates: [[-179.9,0],[0,0],[179.9,0]]})
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","prime meridian")
+                .datum(resample({type: "LineString", coordinates: [[0,-90],[0,90]]}))
+                .attr("d", geoPath);
+
+        svg.append("path").attr("class","anti meridian")
+                .datum(resample({type: "LineString", coordinates: [[180,-90],[180,90]]}))
+                .attr("d", geoPath);
+
+    }
+
+</script>
+</body>
+</html>

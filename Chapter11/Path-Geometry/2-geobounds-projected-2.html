@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script src="../JavaScript/wgs84_resampling.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const rotate = [2,-52,0]; // Center in London
+    const extent = [[0,5],[width, height-10]];
+
+    // reference
+    const projection = d3.geoOrthographic()
+            .rotate(rotate)
+            .fitExtent(extent, {type: "Sphere"})
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features
+
+                map.features.map(d => d.id = isNaN(d.id) ? d.properties.ISO_A3 : d.properties.ADMIN);
+
+                drawGraticules();
+                draw();
+
+            });
+
+    function draw() {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .on('mouseenter', showProjectedBoundsAndCentroid)
+                .on('mouseleave', hideProjectedBoundsAndCentroid)
+
+        globe.append("path")
+                .style("fill", '#333')
+                .style("fill-opacity", .8)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+    }
+
+    function showProjectedBoundsAndCentroid(d) {
+        showProjectedBounds(this, d);
+        showGeoCentroid(this, d);
+    }
+
+    function showGeoCentroid(node, d) {
+        console.log('centroid', geoPath.centroid(d))
+        console.log('geo centroid', d3.geoCentroid(d))
+        d3.select(node)
+                .append("path").attr("id", "geoCentroid_" + d.id)
+                .datum({type: "Point", coordinates: d3.geoCentroid(d)})
+                .style("fill", "white")
+                .style("fill-opacity", .7)
+                .style("stroke", "purple")
+                .style("stroke-width", 2)
+                .attr("d", geoPath);
+    }
+    function showProjectedBounds(node, d) {
+        const minLngLat = d3.geoBounds(d)[0]; // left, bottom
+        const maxLngLat = d3.geoBounds(d)[1]; // right, top
+
+        const minLng = minLngLat[0];
+        const minLat = minLngLat[1];
+        const maxLng = maxLngLat[0];
+        const maxLat = maxLngLat[1];
+
+        const coords = [minLngLat, [minLng,maxLat], maxLngLat, [maxLng,minLat], minLngLat];
+
+        if(minLng > maxLng) { // antimeridian correction
+            coords[0][0] = coords[1][0] = coords[4][0] = minLng - 360;
+        }
+
+        d3.select(node).raise()
+                .append("path").attr("id", "projBounds_" + d.id)
+                .datum(resample({type: 'Polygon', coordinates: [coords]}))
+                .attr("d", geoPath)
+                .style("stroke", "black")
+                .style("fill", "aquamarine")
+                .style("fill-opacity", .3)
+                .attr("pointer-events", "none")
+    }
+
+    function hideProjectedBoundsAndCentroid(d) {
+        hideGeoCentroid(d);
+        hideProjectedBounds(d);
+    }
+    function hideProjectedBounds(d) {
+        svg.select("#projBounds_"+d.id).remove();
+    }
+    function hideGeoCentroid(d) {
+        svg.select("#geoCentroid_"+d.id).remove();
+    }
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', .25);
+    }
+
+</script>
+
+</body>
+</html>

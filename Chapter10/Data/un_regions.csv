@@ -1,0 +1,220 @@
+Country,Supercontinent,Continent,UN_Region,Area_km2,Pop_2016,HDI_2017,Code
+Kazakhstan,Eurasia,Asia,Central Asia,2724902,17794055,0.800,KAZ
+Kyrgystan,Eurasia,Asia,Central Asia,199949,6079500,0.655,KGZ
+Tajikistan,Eurasia,Asia,Central Asia,141376,8734951,0.650,TJK
+Turkmenistan,Eurasia,Asia,Central Asia,488100,5662544,0.706,TKM
+Uzbekistan,Eurasia,Asia,Central Asia,447400,31847900,0.710,UZB
+Brunei,Eurasia,Asia,Southeast Asia,5770,423196,0.853,BRN
+Cambodia,Eurasia,Asia,Southeast Asia,181040,15762370,0.582,KHM
+East Timor,Eurasia,Asia,Southeast Asia,14870,1268671,0.625,TLS
+Indonesia,Eurasia,Asia,Southeast Asia,1910931,261115456,0.694,IDN
+Laos,Eurasia,Asia,Southeast Asia,236800,6758353,0.601,LAO
+Malaysia,Eurasia,Asia,Southeast Asia,330800,31187265,0.802,MYS
+Myanmar,Eurasia,Asia,Southeast Asia,676590,52885223,0.578,MMR
+Philippines,Eurasia,Asia,Southeast Asia,300000,103320222,0.699,PHL
+Singapore,Eurasia,Asia,Southeast Asia,719,5607283,0.932,SGP
+Thailand,Eurasia,Asia,Southeast Asia,513120,68863514,0.755,THA
+Vietnam,Eurasia,Asia,Southeast Asia,330967,94569072,0.694,VNM
+Turkey,Eurasia,Asia,Western Asia,785350,79512426,0.791,TUR
+Bahrain,Eurasia,Asia,Western Asia,771,1425171,0.846,BHR
+Kuwait,Eurasia,Asia,Western Asia,17820,4052584,0.803,KWT
+Oman,Eurasia,Asia,Western Asia,309500,4424762,0.821,OMN
+Qatar,Eurasia,Asia,Western Asia,11610,2569804,0.856,QAT
+Saudi Arabia,Eurasia,Asia,Western Asia,2149690,32275687,0.853,SAU
+United Arab Emirates,Eurasia,Asia,Western Asia,83600,9269612,0.863,ARE
+Yemen,Eurasia,Asia,Western Asia,527970,27584213,0.452,YEM
+Armenia,Eurasia,Asia,Western Asia,29740,2924816,0.755,ARM
+Azerbaijan,Eurasia,Asia,Western Asia,86600,9757812,0.757,AZE
+Georgia,Eurasia,Asia,Western Asia,69700,3719300,0.780,GEO
+Iraq,Eurasia,Asia,Western Asia,435050,37202572,0.685,IRQ
+Israel,Eurasia,Asia,Western Asia,22070,8546000,0.903,ISR
+Jordan,Eurasia,Asia,Western Asia,89320,9455802,0.735,JOR
+Lebanon,Eurasia,Asia,Western Asia,10450,6006668,0.757,LBN
+Palestine,Eurasia,Asia,Western Asia,6020,4790705,0.686,PSE
+Syria,Eurasia,Asia,Western Asia,185180,18430453,0.536,SYR
+Iran,Eurasia,Asia,Western Asia,1745150,80277428,0.798,IRN
+Cyprus,Eurasia,Asia,Western Asia,9250,1170125,0.869,CYP
+China,Eurasia,Asia,Eastern Asia,9562911,1378665000,0.752,CHN
+Hong Kong,Eurasia,Asia,Eastern Asia,1105,7336600,0.933,HKG
+Macau,Eurasia,Asia,Eastern Asia,30,612167,0.909,MAC
+Japan,Eurasia,Asia,Eastern Asia,377962,126994511,0.909,JPN
+North Korea,Eurasia,Asia,Eastern Asia,120540,25368620,0.733,PRK
+South Korea,Eurasia,Asia,Eastern Asia,100280,51245707,0.903,KOR
+Mongolia,Eurasia,Asia,Eastern Asia,1564120,3027398,0.741,MNG
+Taiwan,Eurasia,Asia,Eastern Asia,36188,23540000,0.885,TWN
+Afghanistan,Eurasia,Asia,Southern Asia,652860,34656032,0.498,AFG
+Bangladesh,Eurasia,Asia,Southern Asia,147630,162951560,0.608,BGD
+Bhutan,Eurasia,Asia,Southern Asia,38394,797765,0.612,BTN
+India,Eurasia,Asia,Southern Asia,3287259,1324171354,0.640,IND
+Maldives,Eurasia,Asia,Southern Asia,300,427756,0.717,MDV
+Nepal,Eurasia,Asia,Southern Asia,147180,28982771,0.574,NPL
+Pakistan,Eurasia,Asia,Southern Asia,796100,193203476,0.562,PAK
+Sri Lanka,Eurasia,Asia,Southern Asia,65610,21203000,0.770,LKA
+Argentina,Americas,South America,South America,2780400,43847430,0.825,ARG
+Bolivia,Americas,South America,South America,1098580,10887882,0.693,BOL
+Brazil,Americas,South America,South America,8515770,207652865,0.759,BRA
+Chile,Americas,South America,South America,756096,17909754,0.843,CHL
+Colombia,Americas,South America,South America,1141749,48653419,0.747,COL
+Ecuador,Americas,South America,South America,256370,16385068,0.752,ECU
+French Guyana,Americas,South America,South America,91000,266812,0.781,GUF
+Guyana,Americas,South America,South America,214970,773303,0.654,GUY
+Paraguay,Americas,South America,South America,406752,6725308,0.702,PRY
+Peru,Americas,South America,South America,1285220,31773839,0.750,PER
+Suriname,Americas,South America,South America,163820,558368,0.720,SUR
+Uruguay,Americas,South America,South America,176220,3444006,0.804,URY
+Venezuela,Americas,South America,South America,912050,31568179,0.761,VEN
+Bermuda,Americas,North America,Northern America,50,65341,0.981,BMU
+Canada,Americas,North America,Northern America,9984670,36264604,0.926,CAN
+Greenland,Americas,North America,Northern America,410450,56186," 0.839",GRL
+USA,Americas,North America,Northern America,9831510,323405935,0.924,USA
+Mexico,Americas,North America,Central America,1964380,127540423,0.774,MEX
+Belize,Americas,North America,Central America,22970,366954,0.708,BLZ
+Costa Rica,Americas,North America,Central America,51100,4857274,0.794,CRI
+El Salvador,Americas,North America,Central America,21040,6344722,0.674,SLV
+Guatemala,Americas,North America,Central America,108890,16582469,0.650,GTM
+Honduras,Americas,North America,Central America,112490,9112867,0.617,HND
+Nicaragua,Americas,North America,Central America,130370,6149928,0.658,NIC
+Panama,Americas,North America,Central America,75420,4034119,0.789,PAN
+Antigua and Barbuda,Americas,North America,Caribbean,440,100963,0.780,ATG
+Aruba,Americas,North America,Caribbean,180,104822,0.908,ABW
+Bahamas,Americas,North America,Caribbean,13880,391232,0.807,BHS
+Barbados,Americas,North America,Caribbean,430,284996,0.800,BRB
+British Virgin Islands,Americas,North America,Caribbean,150,30661,0.945,VGB
+US Virgin Islands,Americas,North America,Caribbean,350,107510,0.894,VIR
+Cayman Islands,Americas,North America,Caribbean,264,60765,0.983,CYM
+Cuba,Americas,North America,Caribbean,109880,11475982,0.777,CUB
+Curacao,Americas,North America,Caribbean,444,159663,0.811,CUW
+Dominica,Americas,North America,Caribbean,750,73543,0.715,DMA
+Dominican Republic,Americas,North America,Caribbean,48670,10648791,0.736,DOM
+Grenada,Americas,North America,Caribbean,340,107317,0.772,GRD
+Haiti,Americas,North America,Caribbean,27750,10847334,0.498,HTI
+Jamaica,Americas,North America,Caribbean,10990,2881355,0.732,JAM
+Puerto Rico,Americas,North America,Caribbean,8870,3406520,0.845,PRI
+Saint Kitts and Nevis,Americas,North America,Caribbean,260,54821,0.778,KNA
+Saint Lucia,Americas,North America,Caribbean,620,178015,0.747,LCA
+Saint Vincent and the Grenadines,Americas,North America,Caribbean,390,109643,0.723,VCT
+Trinidad and Tobago,Americas,North America,Caribbean,5130,1364962,0.784,TTO
+Turks and Caicos Islands,Americas,North America,Caribbean,950,34900,0.873,TCA
+Burundi,Africa,Africa,Eastern Africa,27830,10524117,0.417,BDI
+Comoros,Africa,Africa,Eastern Africa,1861,795601,0.503,COM
+Djibouti,Africa,Africa,Eastern Africa,23200,942333,0.476,DJI
+Eritrea,Africa,Africa,Eastern Africa,117600,4954645,0.440,ERI
+Ethiopia,Africa,Africa,Eastern Africa,1104300,102403196,0.463,ETH
+Kenya,Africa,Africa,Eastern Africa,580370,48461567,0.590,KEN
+Madagascar,Africa,Africa,Eastern Africa,587295,24894551,0.519,MDG
+Malawi,Africa,Africa,Eastern Africa,118480,18091575,0.477,MWI
+Mauritius,Africa,Africa,Eastern Africa,2040,1263473,0.790,MUS
+Mozambique,Africa,Africa,Eastern Africa,799380,28829476,0.437,MOZ
+Rwanda,Africa,Africa,Eastern Africa,26340,11917508,0.524,RWA
+Seychelles,Africa,Africa,Eastern Africa,460,94677,0.797,SYC
+Somalia,Africa,Africa,Eastern Africa,637660,14317996,0.364,SOM
+South Sudan,Africa,Africa,Eastern Africa,644330,12230730,0.388,SSD
+Tanzania,Africa,Africa,Eastern Africa,947300,55572201,0.538,TZA
+Uganda,Africa,Africa,Eastern Africa,241550,41487965,0.516,UGA
+Zambia,Africa,Africa,Eastern Africa,752610,16591390,0.588,ZMB
+Zimbabwe,Africa,Africa,Eastern Africa,390760,16150362,0.535,ZWE
+Angola,Africa,Africa,Middle Africa,1246700,28813463,0.581,AGO
+Cameroon,Africa,Africa,Middle Africa,475440,23439189,0.556,CMR
+Central African Republic,Africa,Africa,Middle Africa,622980,4594621,0.367,CAF
+Chad,Africa,Africa,Middle Africa,1284000,14452543,0.404,TCD
+Congo DR,Africa,Africa,Middle Africa,2344860,78736153,0.457,COD
+Eq. Guinea,Africa,Africa,Middle Africa,28050,1221490,0.591,GNQ
+Gabon,Africa,Africa,Middle Africa,267670,1979786,0.702,GAB
+Congo Rep.,Africa,Africa,Middle Africa,342000,5125821," 0.606",COG
+S. Tome & Principe,Africa,Africa,Middle Africa,960,199910,0.589,STP
+Algeria,Africa,Africa,Northern Africa,2381740,40606052,0.754,DZA
+Egypt,Africa,Africa,Northern Africa,1001450,95688681,0.696,EGY
+Libya,Africa,Africa,Northern Africa,1759540,6293253,0.706,LBY
+Morocco,Africa,Africa,Northern Africa,446550,35276786,0.667,MAR
+Sudan,Africa,Africa,Northern Africa,1879357,39578828,0.502,SDN
+Tunisia,Africa,Africa,Northern Africa,163610,11403248,0.735,TUN
+Western Sahara,Africa,Africa,Northern Africa,266000,538755,,ESH
+Botswana,Africa,Africa,Southern Africa,581730,2250260,0.717,BWA
+Eswatini,Africa,Africa,Southern Africa,17360,1343098,0.588,SWZ
+Lesotho,Africa,Africa,Southern Africa,30360,2203821,0.520,LSO
+Namibia,Africa,Africa,Southern Africa,824290,2479713,0.647,NAM
+South Africa,Africa,Africa,Southern Africa,1219090,56015473,0.699,ZAF
+Benin,Africa,Africa,Western Africa,114760,10872298,0.515,BEN
+Burkina Faso,Africa,Africa,Western Africa,274220,18646433,0.423,BFA
+Cabo Verde,Africa,Africa,Western Africa,4030,539560,0.654,CPV
+Cote d'Ivoire,Africa,Africa,Western Africa,322460,23695919,0.492,CIV
+Gambia,Africa,Africa,Western Africa,11300,2038501,0.460,GMB
+Ghana,Africa,Africa,Western Africa,238540,28206728,0.592,GHA
+Guinea,Africa,Africa,Western Africa,245860,12395924,0.459,GIN
+Guinea-Bissau,Africa,Africa,Western Africa,36130,1815698,0.455,GNB
+Liberia,Africa,Africa,Western Africa,111370,4613823,0.435,LBR
+Mali,Africa,Africa,Western Africa,1240190,17994837,0.427,MLI
+Mauritania,Africa,Africa,Western Africa,1030700,4301018,0.520,MRT
+Niger,Africa,Africa,Western Africa,1267000,20672987,0.354,NER
+Nigeria,Africa,Africa,Western Africa,923770,185989640,0.532,NGA
+Senegal,Africa,Africa,Western Africa,196710,15411614,0.505,SEN
+Sierra Leone,Africa,Africa,Western Africa,72300,7396190,0.419,SLE
+Togo,Africa,Africa,Western Africa,56790,7606374,0.503,TGO
+Australia,Oceania,Oceania,Australasia,7741220,24210809,0.939,AUS
+New Zealand,Oceania,Oceania,Australasia,267710,4693200,0.917,NZL
+Fiji,Oceania,Oceania,Melanesia,18270,898760,0.741,FJI
+New Caledonia,Oceania,Oceania,Melanesia,18580,276550,0.789,NCL
+Papua New Guinea,Oceania,Oceania,Melanesia,462840,8084991,0.544,PNG
+Solomon Islands,Oceania,Oceania,Melanesia,28900,599419,0.546,SLB
+Vanuatu,Oceania,Oceania,Melanesia,12190,270402,0.603,VUT
+F.S. of Micronesia,Oceania,Oceania,Micronesia,700,104937,0.627,FSM
+Guam,Oceania,Oceania,Micronesia,540,162896,0.901,GUM
+Kiribati,Oceania,Oceania,Micronesia,810,114395,0.612,KIR
+Marshall Islands,Oceania,Oceania,Micronesia,180,53066,0.708,MHL
+Nauru,Oceania,Oceania,Micronesia,20,13049,0.721,NRU
+Northern Mariana Islands,Oceania,Oceania,Micronesia,460,55023,0.875,MNP
+Palau,Oceania,Oceania,Micronesia,460,21503,0.798,PLW
+American Samoa,Oceania,Oceania,Polynesia,200,55599,0.827,ASM
+French Polynesia,Oceania,Oceania,Polynesia,4000,280208,0.737,PYF
+Samoa,Oceania,Oceania,Polynesia,2840,195125,0.713,WSM
+Tonga,Oceania,Oceania,Polynesia,750,107122,0.726,TON
+Tuvalu,Oceania,Oceania,Polynesia,30,11097,0.711,TUV
+Austria,Eurasia,Europe,Western Europe,83879,8736668,0.908,AUT
+Belgium,Eurasia,Europe,Western Europe,30530,11331422,0.916,BEL
+France,Eurasia,Europe,Western Europe,549087,66859768,0.901,FRA
+Germany,Eurasia,Europe,Western Europe,357380,82348669,0.936,DEU
+Liechtenstein,Eurasia,Europe,Western Europe,160,37666,0.916,LIE
+Luxembourg,Eurasia,Europe,Western Europe,2590,582014,0.904,LUX
+Monaco,Eurasia,Europe,Western Europe,2,38499,0.956,MCO
+Netherlands,Eurasia,Europe,Western Europe,41540,17030314,0.931,NLD
+Switzerland,Eurasia,Europe,Western Europe,41290,8373338,0.944,CHE
+Albania,Eurasia,Europe,Southern Europe,28750,2876101,0.785,ALB
+Andorra,Eurasia,Europe,Southern Europe,470,77281,0.858,AND
+Bosnia and Herzegovina,Eurasia,Europe,Southern Europe,51210,3516816,0.768,BIH
+Croatia,Eurasia,Europe,Southern Europe,56590,4174349,0.831,HRV
+Kosovo,Eurasia,Europe,Southern Europe,10887,1816200,0.739,XKX
+Gibraltar,Eurasia,Europe,Southern Europe,10,34408,0.961,GIB
+Greece,Eurasia,Europe,Southern Europe,131960,10775971,0.870,GRC
+Italy,Eurasia,Europe,Southern Europe,301340,60627498,0.880,ITA
+Macedonia,Eurasia,Europe,Southern Europe,25710,2081206,0.757,MKD
+Malta,Eurasia,Europe,Southern Europe,320,455356,0.878,MLT
+Montenegro,Eurasia,Europe,Southern Europe,13810,622303,0.814,MNE
+Portugal,Eurasia,Europe,Southern Europe,92225,10325452,0.847,PRT
+San Marino,Eurasia,Europe,Southern Europe,60,33203,0.961,SMR
+Serbia,Eurasia,Europe,Southern Europe,88360,7058322,0.787,SRB
+Slovenia,Eurasia,Europe,Southern Europe,20270,2065042,0.896,SVN
+Spain,Eurasia,Europe,Southern Europe,505940,46484062,0.891,ESP
+Vatican City,Eurasia,Europe,Southern Europe,,801,,VAT
+Denmark,Eurasia,Europe,Northern Europe,42922,5728010,0.929,DNK
+Estonia,Eurasia,Europe,Northern Europe,45230,1315790,0.871,EST
+Faroe Islands,Eurasia,Europe,Northern Europe,1396,49117,0.950,FRO
+Finland,Eurasia,Europe,Northern Europe,338420,5495303,0.920,FIN
+Iceland,Eurasia,Europe,Northern Europe,103000,335439,0.935,ISL
+Ireland,Eurasia,Europe,Northern Europe,70280,4755335,0.938,IRL
+Isle of Man,Eurasia,Europe,Northern Europe,570,83737,0.950,IMN
+Latvia,Eurasia,Europe,Northern Europe,64490,1959537,0.847,LVA
+Lithuania,Eurasia,Europe,Northern Europe,65286,2868231,0.858,LTU
+Norway,Eurasia,Europe,Northern Europe,385178,5234519,0.953,NOR
+Sweden,Eurasia,Europe,Northern Europe,447420,9923085,0.933,SWE
+UK,Eurasia,Europe,Northern Europe,243610,65595565,0.922,GBR
+Belarus,Eurasia,Europe,Eastern Europe,207600,9501534,0.808,BLR
+Bulgaria,Eurasia,Europe,Eastern Europe,111000,7127822,0.813,BGR
+Czech Republic,Eurasia,Europe,Eastern Europe,78870,10566332,0.888,CZE
+Hungary,Eurasia,Europe,Eastern Europe,93030,9814023,0.838,HUN
+Poland,Eurasia,Europe,Eastern Europe,312680,37970087,0.865,POL
+Moldova,Eurasia,Europe,Eastern Europe,33850,3551954,0.700,MDA
+Romania,Eurasia,Europe,Eastern Europe,238390,19702332,0.811,ROU
+Russia,Eurasia,Europe,Eastern Europe,17098250,144342396,0.816,RUS
+Slovakia,Eurasia,Europe,Eastern Europe,49035,5430798,0.855,SVK
+Ukraine,Eurasia,Europe,Eastern Europe,603550,45004645,0.751,UKR
+Antarctica,Antarctica,Antarctica,Antarctica,14000000,1000,,ATA

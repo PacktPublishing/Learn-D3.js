@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+    .reds {
+        fill: red;
+    }
+    .semitr {
+        fill-opacity: 0.5;
+    }
+</style>
+<body>
+<h2>SVG rect</h2>
+<svg width="600" height="200">
+    <rect x="50" y="50" width="90" height="90" class="semitr"/>
+    <rect x="200" y="50" width="175" height="100" rx="40" ry="40" class="reds semitr"/>
+    <rect x="450" y="25" width="100" height="150" class="reds"/>
+</svg>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 15px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .2;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000;
+    const height = 600;
+    const margin = 100;
+
+    const nodes = [];
+
+    const color = d3.scaleSequential(d3.interpolateRainbow);
+    const widthScale = d3.scalePow().exponent(.75).range([0,25]);
+
+    d3.csv("../Data/migrations_2017_continent.csv", function(row) {
+        nodes.push({node: row.Destination, total: +row.Total, code: row.Code, pop: +row.Population, continent: row.Continent});
+
+        const line = [];
+        for(key in row) {
+            if(key != 'Population' && key != 'Destination' && key != 'Total' && key != 'Code') {
+                if(isNaN(row[key])) continue;
+                const obj = {
+                    value: +row[key] ,
+                    target: row.Destination,
+                    source: key
+                }
+                line.push(obj);
+            }
+        }
+        return line;
+
+    }).then(function(data) {
+
+        const edges = d3.merge(data)
+
+        const filteredNodes  = nodes.filter(d => d.continent == 'South America')
+                                    .sort((a,b) => d3.ascending(a.total, b.total))
+                                    .filter((d,i) => i < 50)
+
+        const filteredEdges = edges.filter(d => filteredNodes.find(e => e.node == d.target));
+
+        const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+        const arcData = arcDiagLayout(filteredNodes, filteredEdges);
+
+        color.domain([0,filteredNodes.length]);
+        widthScale.domain([0, d3.max(filteredEdges, d => d.value)]);
+
+        draw(arcData);
+    });
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,height/2]})`);
+
+        const curve = dvj.curve()
+                         .size([width-margin, height]);
+
+        chart.selectAll("path")
+                .data(data.links())
+                .enter()
+                .append("path")
+                .attr("d", curve)
+                .style("stroke-width", d => widthScale(d.value))
+                .style("stroke", d => d3.rgb(color(d.source.i)).darker(.5))
+                .style("stroke-opacity", .6)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("cx", d => d.x)
+                .style("fill", (d,i) => d3.rgb(color(i)).darker(.5))
+                .attr("r", 30)
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle").classed('faded', false));;
+
+        chart.selectAll("text")
+                .data(data.nodes())
+                .enter()
+                .append("text")
+                .attr("x", d => d.x)
+                .text(d => d.node)
+                .style("font-size", function() {
+                    return 20 * 30 / this.getComputedTextLength();
+                })
+
+    }
+
+    function highlight(d) {
+        d3.selectAll("path")
+                .classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle")
+                .classed('faded', n => !(n === d  || n.sources.filter(s => s.target === d).filter(k => k.value > 1000).length > 0
+        || n.targets.filter(s => s.source === d).filter(k => k.value > 1000).length > 0));
+    }
+
+</script>
+</body>
+</html>

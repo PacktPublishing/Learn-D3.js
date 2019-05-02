@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        #container {
+            width: 500px;
+            margin: 10px;
+        }
+        form {
+            margin: 10px 0;
+        }
+        .letter {
+            width: 20px;
+            padding: 0 10px;
+            font-family: 'impact', sans-serif;
+            font-size: 24pt;
+            border: solid 2px black;
+            color: white;
+        }
+        button {
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="container"/>
+<form/>
+<script>
+    const datasets = [
+        ["o","n","e"],
+        ["t","w","o"],
+        ["t","h","r","e","e"],
+        ["f","o","u","r"],
+    ];
+    let currentWord = datasets[0];
+    const colorScale = d3.scaleOrdinal(d3.schemeSet1);
+
+    d3.select("form")
+        .selectAll("button")
+            .data(datasets)
+            .enter()
+            .append("button")
+            .attr("type", "button")
+            .attr("id", (d,i) => 'w'+i)
+            .property("disabled", d => d == currentWord)
+            .style("background-color", d => colorScale(d))
+            .text(d => d.join("").toUpperCase())
+            .on("click", function() {
+                currentWord = datasets[d3.select(this).attr("id").substring(1)];
+                redraw();
+            });
+
+    redraw();
+
+    function redraw() {
+        // bind
+        const step_select = d3.select("#container").selectAll(".letter")
+        const step_bind   = step_select.data(currentWord)
+
+        d3.selectAll("button").property("disabled", d => d == currentWord);
+
+        //exit
+        const step_exit   = step_bind.exit();
+        const step_remove = step_exit.remove();
+
+        // enter
+        const step_enter  = step_bind.enter();
+        const step_append = step_enter.append("span").attr("class", "letter");
+
+        // merge + update
+        const step_merge = step_append.merge(step_select)
+        const step_update =
+                step_merge.style("background-color", d => colorScale(currentWord))
+                          .text(d => d);
+
+        console.log("2) UPDATE");
+
+        console.log(currentWord + ": step_select", step_select._groups[0]);
+        console.log(currentWord + ": step_bind", step_bind._groups[0]);
+        console.log(currentWord + ": step_bind: enter", step_bind._enter[0]);
+        console.log(currentWord + ": step_bind: exit",  step_bind._exit[0]);
+        console.log(currentWord + ": step_update", step_update._groups[0]);
+
+        console.log("3) UPDATE/ENTER/APPEND");
+
+        console.log(currentWord + ": step_enter", step_enter._groups[0]);
+        console.log(currentWord + ": step_append", step_append._groups[0]);
+        console.log(currentWord + ": step_merge", step_merge._groups[0]);
+
+        console.log("4) UPDATE/EXIT/REMOVE");
+
+        console.log(currentWord + ": step_exit", step_exit._groups[0]);
+        console.log(currentWord + ": step_remove", step_remove._groups[0]);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<script>
+    const data = d3.range(0,100,2);
+
+    const pointScale = d3.scalePoint()
+            .domain(data)
+            .range([0,800]);
+
+    console.log(0, pointScale(0));
+    console.log(20, pointScale(20));
+    console.log(40, pointScale(40));
+    console.log(60, pointScale(60));
+    console.log(80, pointScale(80));
+    console.log(100, pointScale(100));
+
+    const colorScale = d3.scaleSequential(d3.interpolateRainbow)
+            .domain([0,100]);
+
+    console.log("step", pointScale.step());
+    console.log("padding", pointScale.padding());
+    console.log("color", colorScale(0));
+
+    const axisScale = d3.scaleLinear()
+            .domain(d3.extent(data))
+            .range([0,800]);
+
+    d3.select("body").append("svg").attr("height", 650).attr("width", 850);
+
+    d3.select("svg").append("g")
+            .selectAll("circle")
+            .data(data).enter()
+            .append("circle")
+            .attr("cx", d => pointScale(d) + 25)
+            .attr("cy",22)
+            .attr("r", 5)
+            .style("fill", d => colorScale(d));
+</script>
+
+</body>
+</html>

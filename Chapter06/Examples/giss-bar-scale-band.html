@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GISS World temperatures</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+            font-size: 8pt;
+        }
+        .zero-axis line {
+            stroke-opacity: .3;
+        }
+        .zero-axis text {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 600;
+    const margin = 100;
+    const labelPaddingX = 5;
+    const labelPaddingY = 5;
+    const tickBleed = 5;
+
+    const data = {};
+
+    // Choose the year (1880 to 2016)
+    const year = 2016;
+
+    d3.json('../Data/monthly_json.json')
+            .then(function(result) {
+                data.values = result
+                                .filter(d => d.Source == 'GISTEMP')
+
+                data.filteredValues = data.values.filter(d => d3.isoParse(d.Date).getFullYear() == year);
+
+                // Scales configuratoon
+                const scaleY = d3.scaleLinear()
+                                 .domain([d3.min(data.filteredValues, d => d.Mean > 0 ? 0 : d.Mean),
+                                          d3.max(data.filteredValues, d => d.Mean < 0 ? 0 : d.Mean)])
+                                 .range([height - margin/2, margin/2]);
+
+                const scaleX = d3.scaleBand()
+                                 .domain(data.filteredValues.map(d => d3.isoParse(d.Date)))
+                                 .range([margin/2, width - margin/2])
+                                 .paddingInner(.1)  // 10% of bar is padding
+                                 .paddingOuter(.2); // before and after chart
+
+                // Viewport configuration
+                const svg = d3.select("body")
+                        .append("svg")
+                        .attr("height",height)
+                        .attr("width",width);
+
+                // Axis configuration
+                const tickValues = data.filteredValues.map(d => d3.isoParse(d.Date));
+
+                const axisX = d3.axisBottom(scaleX) // this scale doesn't implement ticks!
+                        .tickPadding(5)
+                        .tickFormat(d3.timeFormat("%b"))
+                        .tickValues(tickValues)
+
+                const axisY = d3.axisLeft(scaleY)
+                        .tickPadding(tickBleed)
+                        .tickSizeOuter(0);
+
+                const axisZero = d3.axisRight(scaleY)
+                        .tickValues([0])
+                        .tickSizeOuter(0)
+                        .tickSizeInner(width - margin);
+
+                // Axis rendering
+                const x = svg.append("g").attr("class", "x-axis")
+                        .attr("transform", `translate(${[0, height - margin/2]})`)
+                        .call(axisX);
+
+                const y = svg.append("g").attr("class", "y-axis")
+                        .attr("transform", `translate(${[margin/2,0]})`)
+                        .call(axisY);
+
+                svg.append("g").attr("class", "zero-axis")
+                        .attr("transform", `translate(${[margin/2,0]})`)
+                        .call(axisZero);
+
+                x.append("text")
+                        .attr("class","label")
+                        .text("Years")
+                        .attr("transform", `translate(${[(width/2),(margin/2 - labelPaddingY)]})`)
+                y.append("text")
+                        .attr("class","label")
+                        .text("Average global temperature anomaly (°C)")
+                        .attr("transform", `translate(${[-(margin/2 - labelPaddingX),(height/2)]}) rotate(90)`)
+
+                // Bar chart;
+                svg.selectAll("rect.bar")
+                        .data(data.filteredValues)
+                        .enter()
+                        .append("rect").attr("class", "bar")
+                        .attr("width", scaleX.bandwidth())
+                        .attr("height", d => Math.abs(scaleY(d.Mean) - scaleY(0)))
+                        .attr("x", d => scaleX(d3.isoParse(d.Date)))
+                        .attr("y", d => d.Mean < 0 ? scaleY(0) : scaleY(d.Mean))
+                        .style("fill", d => d.Mean < 0 ? "blue" : "red");
+
+            });
+</script>
+</body>
+</html>

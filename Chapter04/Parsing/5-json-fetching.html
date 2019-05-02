@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML fetching and data</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+
+<h1>Open JavaScript console to see results</h1>
+<script>
+
+    d3.json("../Data/sol_2016.json")
+        .then(function(data) {
+            console.log(data);
+        });
+
+</script>
+</body>
+</html>

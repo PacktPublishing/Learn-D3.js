@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/d3-sankey@0"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .5;
+        }
+        path.link {
+            stroke-opacity: .5;
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 550;
+    const margin = 100;
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const nodes = ['A','B','C','D','E','F','G','H'].map(n => ({node: n}));
+
+    // one-way (no cycles): use target > source
+    const links = [
+        {source: 0, target: 1, value: 3},
+        {source: 0, target: 2, value: 4},
+        {source: 1, target: 3, value: 2},
+        {source: 1, target: 4, value: 1},
+        {source: 2, target: 5, value: 3},
+        {source: 5, target: 6, value: 1},
+        {source: 5, target: 3, value: 2},
+        {source: 2, target: 3, value: 1},
+        {source: 6, target: 3, value: .5},
+        {source: 4, target: 3, value: .5},
+        {source: 6, target: 7, value: .5},
+        {source: 4, target: 7, value: .5},
+    ];
+
+    color.domain([0, nodes.length]);
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g");
+
+    const sankey = d3.sankey()
+                     .nodePadding(300)
+                     .extent([[margin/2, margin/2], [width-margin, height-margin]])
+                     .nodeAlign(d3.sankeyRight)
+                     .iterations(100);
+
+    const graph = sankey({nodes: nodes, links: links});
+    console.log(graph)
+
+    chart.selectAll('path.link')
+            .data(graph.links).join("path")
+            .attr("class", "link")
+            .attr("d", d3.sankeyLinkHorizontal())
+            .style("stroke-width", d => d.width)
+            .style("stroke", d => color(d.source.index))
+            .on("mouseover", highlightPath)
+            .on("mouseout", fade);
+
+    chart.selectAll('g.node')
+            .data(graph.nodes).join("g")
+            .attr("transform", d => `translate(${[d.x0, d.y0]})`)
+            .attr("class", 'node')
+            .each(function(d,i) {
+                d3.select(this).append("rect")
+                    .attr("width", d.x1 - d.x0)
+                    .attr("height", d.y1 - d.y0)
+                    .style("fill", color(i))
+                d3.select(this).append("text")
+                    .attr("x", (d.x1 - d.x0)/2)
+                    .attr("y", (d.y1 - d.y0)/2 + 2)
+                    .text(d.node);
+            })
+            .on("mouseover", highlightNode)
+            .on("mouseout", fade)
+            .call(d3.drag()
+                    .on('start', dragStart)
+                    .on('drag', dragging)
+                    .on('end', dragEnd)
+            );
+
+    let timeout = 0;
+
+    function highlightNode(node) {
+        timeout = setTimeout(function () {
+            d3.selectAll(".node").classed('faded', d => !(d === node));
+            d3.selectAll(".link").classed('faded', edge => !(edge.source === node || edge.target == node));
+        }, 500);
+    }
+    function highlightPath(edge) {
+        timeout = setTimeout(function () {
+            d3.selectAll(".node").classed('faded', node => !(node === edge.source || node === edge.target));
+            d3.selectAll(".link").classed('faded', d => !(d === edge));
+        }, 500);
+    }
+    function fade(d) {
+        clearTimeout(timeout);
+        d3.selectAll(".node, .link").classed('faded', false)
+    }
+
+    function dragStart(d) {
+        d.dy = d3.event.y - d.y0;
+        d3.selectAll(".link, .node").style("pointer-events", 'none');
+        d3.select(this).raise().classed("active", true);
+    }
+
+    function dragging(d) {
+        d.y0 = d3.event.y - d.dy;
+        d3.select(this).attr("transform", `translate(${[d.x0,d.y0]})`);
+        sankey.update(graph);
+        chart.selectAll("path").attr("d", d3.sankeyLinkHorizontal());
+    }
+
+    function dragEnd(d) {
+        d3.selectAll(".link, .node").style("pointer-events", 'auto')
+        d3.select(this).classed("active", false);
+    }
+</script>
+</body>
+</html>

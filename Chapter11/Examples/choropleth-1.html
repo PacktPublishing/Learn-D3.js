@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .country {
+            fill: white;
+            stroke: white;
+            stroke-width: .05;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "municipios_br.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const colorScale = d3.scaleSqrt(["hsla(240,100%,50%,.1)", "red"]);
+
+    const map = {};
+
+    Promise.all([
+        d3.json('../Data/' + FILE),
+        d3.csv('../Data/mortes_acidentes_transito_2016.csv', function(row) {
+            return {
+                cod_ibge: +row.cod_ibge.substring(0,6),
+                deaths: +row.obitos
+            }
+        }),
+        d3.csv('../Data/populacao_2016_municipios.csv', function(row) {
+            return {
+                cod_ibge: +row.cod_ibge.substring(0,6),
+                population: +row.populacao
+            }
+        })
+    ]).then(function([shapes, thematic1, thematic2]) {
+        console.log(shapes);   // shape data
+        console.log(thematic1); // death data
+        console.log(thematic2); // population data
+
+        // save in a global context
+        map.features   = shapes.features;
+
+        // add data to properties
+        map.features.forEach(function(d) {
+            const entry1 = thematic1.filter(t => t.cod_ibge == d.properties.id.substring(0,6))[0];
+            const entry2 = thematic2.filter(t => t.cod_ibge == d.properties.id.substring(0,6))[0];
+            if(entry1 && entry2) {
+                d.properties.deaths = entry1.deaths;
+                d.properties.population = entry2.population;
+                d.properties.deathsPerHab = entry1.deaths / entry2.population;
+            } else {
+                d.properties.deaths = 0;
+                d.properties.population = 0;
+                d.properties.deathsPerHab = 0;
+            }
+        })
+
+        projection.fitSize([width, height], shapes);
+
+        // configure the scale
+        colorScale.domain([0, d3.max(map.features, d => d.properties.deathsPerHab)])
+        draw();
+    });
+
+    function draw() {
+        svg.selectAll("path.country")
+                .data(map.features)
+                .enter()
+                .append("path")
+                .attr("class","country")
+                .attr('d', geoPath)
+                .style("fill", d => colorScale(d.properties.deathsPerHab))
+    }
+</script>
+
+</body>
+</html>

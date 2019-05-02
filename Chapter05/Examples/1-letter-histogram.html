@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 10pt;
+        }
+        .label {
+            font-size: 8pt;
+        }
+        svg {
+            border: solid 1px gray;
+        }
+    </style>
+</head>
+<body>
+<svg width="100%" height="100%" viewBox="0 0 500 300"/>
+<script>
+    const w = 500, h = 300, marginH = 50, marginW = 25;
+    const scaleX = d3.scaleLinear().range([marginW,w-marginW]);
+    const scaleY = d3.scaleLinear().range([marginH,h-marginH]);
+    const color  = d3.scaleSequential(d3.interpolateCubehelix("blue","green"));
+
+    const data = {};
+
+    const format = d3.format(".1%")
+
+    d3.json("../Data/common-letters.json")
+        .then(function(jsonData) {
+            data.total = jsonData.sample;
+            data.bins  = jsonData.frequencies
+                                 .sort((a,b) => d3.ascending(a.letter, b.letter));
+            data.barWidth = (w - marginW*2)/data.bins.length;
+
+            scaleY.domain([0,d3.max(data.bins, d => d.frequency)]);
+            scaleX.domain([0,data.bins.length]);
+            color.domain([0,d3.max(data.bins, d => d.frequency)]);
+
+            draw();
+        });
+
+    function draw() {
+        d3.select("svg").selectAll(".bar")
+                .data(data.bins)
+                .enter()
+                .append("g")
+                .attr("transform", (d,i) => `translate(${[scaleX(i), (h-marginH/3) - scaleY(d.frequency)]})`)
+                .each(function(d,i) {
+
+                    d3.select(this).append("rect")
+                        .attr("height", scaleY(d.frequency))
+                        .attr("width", data.barWidth - 2)
+                        .style("fill", color(d.frequency));
+
+                    d3.select(this).append("text")
+                        .text(d.letter)
+                        .attr("x", data.barWidth/3)
+                        .attr("y", scaleY(d.frequency) + 12);
+
+                    d3.select(this).append("text")
+                        .attr("class","label")
+                        .text(format(d.frequency / data.total))
+                        .attr("transform", `rotate(-90,${[data.barWidth/4,-data.barWidth/3]})`);
+                });
+
+    }
+
+</script>
+</body>
+</html>

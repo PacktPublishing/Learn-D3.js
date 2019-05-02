@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .country {
+            fill: gray;
+            stroke: white;
+            stroke-width: .5;
+        }
+        .graticule {
+            fill: none;
+            stroke: green;
+            stroke-width: .25
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "world-lowres.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // add objects to globe, so they can be zoomed
+    const globe = svg.append("g");
+
+    // choose a projection
+    const projection = d3.geoMercator();
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+                      .projection(projection);
+
+    const map = {};
+
+    d3.json('../Data/' + FILE)
+    .then(function(shapes) {
+        map.features   = shapes.features;
+
+        drawGraticules();
+        draw();
+    });
+
+    // SVG zoom
+    const zoom = d3.zoom()
+            .scaleExtent([1, 30])
+            .translateExtent([[0,0],[width, height]])
+            .on('zoom', () => globe.attr("transform", d3.event.transform));
+
+    const rect = svg.append("rect").style("fill", "none")
+            .attr("pointer-events", "all")
+            .attr("width", width)
+            .attr("height", height)
+            .call(zoom);
+
+    function draw() {
+        globe.selectAll("path.country")
+                .data(map.features)
+                .enter()
+                .append("path")
+                .attr("class","country")
+                .attr('d', geoPath)
+    }
+
+    function drawGraticules() {
+        console.log(d3.geoGraticule10())
+        globe.append("path").attr("class","graticule")
+           .datum(d3.geoGraticule10())
+           .attr('d', geoPath)
+    }
+</script>
+
+</body>
+</html>

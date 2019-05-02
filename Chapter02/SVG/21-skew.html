@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG circle</h2>
+<svg width="600" height="300">
+    <defs>
+        <g id="coords">
+            <line x1="10" y1="10" x2="200" y2="10" />
+            <line x1="10" y1="10" x2="10" y2="150" />
+            <text x="200" y="20">x</text>
+            <text x="20" y="150">y</text>
+        </g>
+    </defs>
+
+    <use xlink:href="#coords"
+         stroke="black" />
+
+    <use xlink:href="#coords" stroke="red"
+         transform="translate (100,100) skewX(50)" />
+</svg>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale.v2.min.js"></script>
+    <script src="https://d3js.org/d3-array.v1.min.js"></script>
+    <script src="https://d3js.org/d3-format.v1.min.js"></script>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        .bar-chart {
+            border: solid 1px gray;
+            width: 800px;
+        }
+        .bar {
+            height: 20px;
+            fill: orange;
+        }
+        .label {
+            font-size: 9pt;
+        }
+        .category {
+            text-anchor: end;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const distances = [
+        {name: "Mercury", distance: 0.387},
+        {name: "Venus", distance: 0.723},
+        {name: "Earth", distance: 1},
+        {name: "Mars", distance: 1.52},
+        {name: "Jupiter", distance: 5.2},
+        {name: "Saturn", distance: 9.54},
+        {name: "Uranus", distance: 19.2},
+        {name: "Neptune", distance: 30.1},
+        {name: "Ceres", distance: 2.765},
+        {name: "Pluto", distance: 39.481},
+        {name: "Eris", distance: 67.67},
+        {name: "Haumea", distance: 43},
+        {name: "Makemake", distance: 45.346}
+    ];
+
+    const barScale = d3.scaleLinear()
+                       .domain([0, d3.max(distances, d => d.distance)])
+                       .range([0, 600]);
+
+    distances.sort((a,b) => d3.ascending(a.distance, b.distance));
+
+    // a formatting function to format the distances with 2 decimal points
+    const fmt = d3.format(".2f");
+
+    // selects the entire chart (one node)
+    const svg = d3.select("body")
+            .append("svg").attr("class", "bar-chart")
+            .style("height", distances.length * 21);
+
+    // selects each entry (a nodelist)
+    const entries = svg.selectAll("g").data(distances)
+                    .enter().append("g")
+                    .attr("class", "entry")
+                    .attr("transform", (d,i) => `translate(0, ${i * 21})`); // use attr instead of style
+
+    entries.each(function(d) {
+        const entry = d3.select(this); // the current entry
+
+        entry.append("text").attr("class", "label category")
+                .attr("y", 15)
+                .attr("x", 90)
+                .text(d.name);
+
+        entry.append("rect").attr("class", "bar")
+                .attr("x", 100)
+                .style("width", barScale(d.distance) + "px")
+
+        entry.append("text").attr("class", "label value")
+                .attr("y", 15)
+                .attr("x", barScale(d.distance) + 105)
+                .text(fmt(d.distance) + " AU");
+    });
+
+
+
+</script>
+</body>
+</html>

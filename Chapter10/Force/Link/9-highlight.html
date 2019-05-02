@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../../JavaScript/force-examples.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        svg {
+            border: solid 1px #eaeaea;
+        }
+        .margin {
+            stroke: blue;
+            opacity: .1;
+        }
+        .reflink {
+            opacity: .2;
+        }
+        .highlight text {
+            font-size: 150%;
+        }
+        .show text {
+            font-size: 120%;
+        }
+        .highlight circle, line.highlight {
+            stroke-width: 3px;
+        }
+        .fade {
+            opacity: .3;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 500;
+    const height = 500;
+    const margin = 100;
+
+    const cols = 3;
+
+    const nodes = [
+        {node: 'A', value: 1},
+        {node: 'B', value: 1},
+        {node: 'C', value: 2},
+        {node: 'D', value: 3},
+        {node: 'E', value: 5},
+        {node: 'F', value: 8},
+        {node: 'G', value: 13},
+        {node: 'H', value: 21},
+        {node: 'I', value: 34},
+    ];
+
+    const links = [
+        {source: 0, target: 4, value: 1},
+        {source: 1, target: 4, value: 1},
+        {source: 2, target: 4, value: 1},
+        {source: 3, target: 4, value: 1},
+        {source: 4, target: 4, value: 1},
+        {source: 5, target: 4, value: 1},
+        {source: 6, target: 4, value: 1},
+        {source: 7, target: 4, value: 1},
+        {source: 8, target: 4, value: 1},
+        {source: 2, target: 1, value: 1},
+        {source: 2, target: 5, value: 1}
+    ];
+
+    // Diverging colors (blue is negative, red is positive)
+    const colors = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'];
+
+    // Reference setup
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2,height/2]})`);
+
+
+    // SIMULATION SETUP
+    const sim = d3.forceSimulation(nodes);
+    sim.force("link", d3.forceLink(links).strength(.005));
+    drawReferenceBackgroundGrid(nodes, links);
+
+    // Update on ticks
+    sim.on("tick", updateChart)
+
+    // Results
+    drawChart();
+
+    // direct nodes connected by adjacent links
+    function connected(a, b) {
+        return targetLinks(a).filter(p => p.target == b).length > 0
+            || sourceLinks(a).filter(p => p.source == b).length > 0;
+    }
+
+    // links connected to node
+    function adjacentLinks(node) {
+        return d3.merge([targetLinks(node), sourceLinks(node)]);
+    }
+    function targetLinks(node) {
+        return links.filter(link => link.source == node);
+    }
+    function sourceLinks(node) {
+        return links.filter(link => link.target == node);
+    }
+
+    function highlight(node) {
+        const nodes = d3.selectAll('g.simulation'); // bound to nodes
+        nodes.classed('highlight', d => d === node); // highlight selected node
+
+        nodes.classed('show', d => connected(node, d)); // show connected nodes
+        nodes.classed('fade', d => !(d === node || connected(node, d)));  // fade unconnected nodes
+
+        const links = d3.selectAll('line.simulation'); // bound to links
+        links.classed('fade', d => adjacentLinks(node).filter(link => link == d).length == 0); // fade other links
+        links.classed('highlight', d => adjacentLinks(node).filter(link => link == d).length != 0); // highlight adjacent links
+    }
+
+    function drawChart() {
+        chart.selectAll('line.simulation')
+                .data(links).enter()
+                .append('line').attr("class",'simulation')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+                .style("fill", 'none')
+                .style("stroke", 'black')
+                .style("stroke-width", 1)
+
+        chart.selectAll('g.simulation')
+                .data(nodes).enter()
+                .append("g").attr("class", "simulation")
+                .attr("transform", d => `translate(${[d.x, d.y]})`)
+                .each(function(d,i) {
+                    d3.select(this)
+                            .append("circle")
+                            .attr("r", 15)
+                            .style("fill", colors[i])
+                            .style("stroke", 'black')
+                    d3.select(this)
+                            .append("text")
+                            .text(d.node)
+                            .style("fill", contrast(colors[i]))
+                })
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll('.simulation').classed('highlight show fade', false));
+    }
+
+</script>
+</body>
+</html>

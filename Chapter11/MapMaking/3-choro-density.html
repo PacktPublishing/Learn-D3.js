@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        svg {
+            border: solid 1px gray;
+        }
+        .country {
+            fill: gray;
+            stroke: gray;
+            stroke-width: .5;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const FILE = "world-lowres.geojson";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const projection = d3.geoMercator();
+    const geoPath = d3.geoPath().projection(projection);
+
+    const map = {};
+
+    const popScale = d3.scaleSequentialSqrt(d3.interpolateBlues);
+
+    Promise.all([
+         d3.json('../Data/' + FILE),
+         d3.csv('../Data/un_regions.csv', function(row) {
+             return {
+                 population: +row.Pop_2016,
+                 area: +row.Area_km2,
+                 hdi: +row.HDI_2017,
+                 code: row.Code
+             }
+         })
+    ]).then(function([shapes, thematic]) {
+            console.log(shapes);   // shape data
+            console.log(thematic); // thematic data
+
+            map.features   = shapes.features;
+            map.features.forEach(function(d) {
+                const entry = thematic.filter(t => t.code == d.id)[0];
+                if(entry) {
+                    d.properties.population = entry.population;
+                    d.properties.hdi = entry.hdi;
+                    d.properties.area = entry.area;
+                    d.properties.density = entry.population / entry.area;
+                }
+            })
+
+            popScale.domain(d3.extent(map.features, d => d.properties.density))
+            draw();
+    });
+
+    function draw() {
+        svg.selectAll("path.country")
+            .data(map.features)
+            .enter().append("path")
+            .attr("class","country")
+            .attr('d', geoPath)
+            .style("fill", d => popScale(d.properties.density))
+    }
+</script>
+
+</body>
+</html>

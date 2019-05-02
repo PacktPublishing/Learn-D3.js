@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {
+            pointer-events: all;
+            border: solid 1px blue;
+        }
+        rect {
+            fill: red;
+        }
+        .grid {
+            stroke: gray;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 600;
+    const margin = 100;
+    const chartWidth = width - margin*2,
+            chartHeight = height - margin*2;
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    const chart = svg.append("g").attr("class", "chart")
+            .attr("transform", `translate(${[margin,margin]})`);
+
+    const rect = chart.append("rect")
+            .attr("x",300)
+            .attr("y",200)
+            .attr("width", 100)
+            .attr("height", 100)
+
+    const exes = d3.range(0,chartWidth+1,50).map(d => [[d,0],[d,chartHeight]]);
+    const wyes = d3.range(0,chartHeight+1,50).map(d => [[0,d],[chartWidth,d]]);
+
+    const line = d3.line();
+
+    const grid = chart.selectAll(".grid")
+            .data(d3.merge([exes, wyes]))
+            .enter()
+            .append("path").attr("class","grid")
+            .attr("d", line)
+            .style("stroke-width", d => d[0][0] == chartWidth/2 || d[1][1] == chartHeight/2 ? 3 : 1)
+
+    const extent = [[0,0],[chartWidth,chartHeight]];
+
+    const zoomBehavior = d3.zoom()
+            .extent(extent)
+            .translateExtent(extent)
+            .scaleExtent([0.5,5])
+            .on('zoom', function() {
+                rect.attr("transform", d3.event.transform);
+                grid.attr("transform", d3.event.transform);
+            })
+
+    // order of scale and translate is significant when generating SVG string!!
+    console.log(""+d3.zoomIdentity.scale(2).translate(100,100));
+    console.log(""+d3.zoomIdentity.translate(100,100).scale(2));
+
+
+    // 3x scale + (-300,-200)
+    const transform1 = d3.zoomTransform(svg.node)
+            .translate(-300,-200) // translate first, scale second!
+            .scale(3);
+
+    // .75 scale + (-100,0)
+    const transform2 = transform1 // apply to previous transform
+            .translate(-100,0) // translate first, scale second!
+            .scale(0.75);
+
+    // zoom identity
+    const transform3 = d3.zoomIdentity;
+
+    // zoom identity
+    svg.call(zoomBehavior.transform, d3.zoomTransform(svg.node));
+    // transforms
+    const t = svg.transition().delay(1000).duration(1000)
+            .call(zoomBehavior.transform, transform1)
+            .transition().delay(1000)
+            .call(zoomBehavior.transform, transform2)
+            .transition().delay(1000)
+            .call(zoomBehavior.transform, transform3);
+
+
+
+
+
+</script>
+
+</body>
+</html>

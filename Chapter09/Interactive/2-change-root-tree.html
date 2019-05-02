@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        path {
+            stroke: black;
+            fill: none;
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 16px;
+        }
+        .leaf {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000, height = 600;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[60,60]})`);
+
+    const root = d3.hierarchy(simpleHierarchy);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(root.descendants(), n => n.depth));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(root.links(), k => k.target.height));
+
+    const tree = d3.cluster()
+            .size([width-120,height-120]); // top-down
+
+    const verticalLink = d3.linkVertical()
+            .x(function(d) { return d.x; })
+            .y(function(d) { return d.y; });
+
+    changeRoot(root);
+
+    function changeRoot(d) {
+        const treeData = tree(d);
+        draw(treeData.descendants(), treeData.links());
+    }
+
+    function draw(nodes, links) {
+        // links
+        chart.selectAll("path")
+                .data(links).join("path")
+                .attr("d", verticalLink)
+                .style("stroke-width", d => (d.target.height + 1) * (d.target.height + 1))
+                .style("opacity", d => d.target.depth *.25 * .6 + .4);
+
+        // nodes
+        chart.selectAll("g.node")
+            .data(nodes, d => d.data.id) // required since nodes are added/removed out of order!
+            .join(enter =>
+               enter.append("g").attr("class","node")
+                    .each(function(d) {
+                        const n = d3.select(this);
+                        n.append("circle")
+                         .attr("r", (d.height + 1) * 9)
+                         .style("fill", colorScale(d.depth));
+                        n.append("text").attr("transform", "translate(0,5)")
+                         .text(d.data.id)
+                         .style("fill", d.height != 0 ? 'white' : 'black')
+                         .style("font-size", 12 + (d.height*d.height))
+                         .attr("transform", d.height == 0 ? `rotate(-90) translate(-15,5)` : "translate(0,5)")
+                         .style("text-anchor", d.height != 0 ? "middle" : "end")
+                     })
+            )
+            .attr("transform", d => `translate(${[d.x, d.y]})`)
+            .classed("leaf", d => !d.children)
+            .on("click", changeRoot)
+            .on("dblclick", () => changeRoot(root))
+        chart.selectAll("g.node").raise();
+    }
+</script>
+</body>
+</html>

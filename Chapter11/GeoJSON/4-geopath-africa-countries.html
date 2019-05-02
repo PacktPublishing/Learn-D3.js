@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .country {
+            stroke: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    // This file contains outlines of african countries
+    d3.json('../Data/africa.geojson')
+            .then(function(data) {
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        const svg = d3.select("body").append("svg")
+                      .attr("width", width).attr("height", height);
+
+        const geoPath = d3.geoPath().projection(d3.geoMercator());
+
+        svg.selectAll("path").attr("class", "country")
+                .data(data.features).enter()
+                .append("path").attr('d', geoPath)
+                .style("fill", (d,i) => color(i))
+    })
+</script>
+
+</body>
+</html>

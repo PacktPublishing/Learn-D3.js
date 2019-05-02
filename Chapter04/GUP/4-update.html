@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        #container {
+            width: 500px;
+            margin: 10px;
+        }
+        form {
+            margin: 10px 0;
+        }
+        .letter {
+            width: 20px;
+            padding: 0 10px;
+            font-family: 'impact', sans-serif;
+            font-size: 24pt;
+            border: solid 2px black;
+            color: white;
+            display: inline-block;
+        }
+        button {
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<form></form>
+<script>
+    const datasets = ["one", "two", "three", "four"];
+    const colors = ["red", "blue", "green", "purple"];
+    let idx = 0;
+
+    d3.select("form")
+        .selectAll("button")
+            .data(datasets)
+            .enter()
+            .append("button")
+            .attr("type", "button")
+            .attr("id", (d,i) => "b" + i)
+            .property("disabled", (d,i) => d == datasets[idx])
+            .style("background-color", (d,i) => colors[i])
+            .text(d => d.toUpperCase())
+            .on("click", function(d,i,nodes) {
+                idx = d3.select(nodes[i]).attr("id").substring(1);
+                d3.selectAll(nodes).property("disabled", (t) => t == datasets[idx]);
+                redraw();
+            });
+
+    draw();
+
+    function draw() {
+        const step_select = d3.select("#container").selectAll(".letter")
+        const step_bind   = step_select.data(datasets[idx].split(''))
+        const step_enter  = step_bind.enter();
+        const step_append = step_enter.append("div").attr("class", "letter")
+        const step_update =
+                step_append.style("background-color", d => colors[idx])
+                           .text(d => d);
+
+        console.log("1) CREATE/ENTER/APPEND");
+
+        console.log(datasets[idx] + ": step_select", step_select._groups[0]);
+
+        console.log(datasets[idx] + ": step_bind", step_bind._groups[0]);
+        console.log(datasets[idx] + ": step_bind: enter", step_bind._enter[0]);
+        console.log(datasets[idx] + ": step_bind: exit",  step_bind._exit[0]);
+
+        console.log(datasets[idx] + ": step_enter", step_enter._groups[0]);
+
+        console.log(datasets[idx] + ": step_append", step_append._groups[0]);
+
+    }
+
+    function redraw() {
+        const step_select = d3.select("#container").selectAll(".letter")
+        const step_bind   = step_select.data(datasets[idx].split(''))
+        const step_update =
+                step_bind.style("background-color", d => colors[idx])
+                         .text(d => d);
+
+        console.log("2) UPDATE");
+
+        console.log(datasets[idx] + ": step_select", step_select._groups[0]);
+
+        console.log(datasets[idx] + ": step_bind", step_bind._groups[0]);
+        console.log(datasets[idx] + ": step_bind: enter", step_bind._enter[0]);
+        console.log(datasets[idx] + ": step_bind: exit",  step_bind._exit[0]);
+
+        console.log(datasets[idx] + ": step_update", step_update._groups[0]);
+    }
+
+
+
+</script>
+</body>
+</html>

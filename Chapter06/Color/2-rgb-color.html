@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        text.label {
+            fill: black;
+            text-anchor: start;
+            font-size: 150%;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<svg height="500" width="700"></svg>
+<script>
+    const height=500, width=700;
+    const scaleB = d3.scaleLinear().range([50,500]).domain([0,255]);
+    const scaleR = d3.scaleLinear().range([50,500]).domain([0,255])
+    const scaleG = d3.scaleLinear().range([50,500]).domain([0,255])
+
+    const axis1 = d3.axisBottom(scaleR)
+            .tickValues([0,64,128,192,255]);
+    const axis2 = d3.axisBottom(scaleG)
+            .tickValues([0,64,128,192,255]);
+    const axis3 = d3.axisBottom(scaleB)
+            .tickValues([0,64,128,192,255]);
+
+    const r = d3.range(0,256), g = d3.range(0,256), b = d3.range(0,256);
+
+    drawScale(1, scaleR, axis1, r, d => d3.rgb(d,0,0), "R (red)");
+    drawScale(2, scaleG, axis2, g, d => d3.rgb(0,d,0), "G (green)");
+    drawScale(3, scaleB, axis3, b, d => d3.rgb(0,0,d), "B (blue)");
+
+    function drawScale(order, scale, axis, data, func, label) {
+        const g = d3.select("svg").append("g").call(axis)
+                .attr("transform",`translate(0,${50 * order})`);
+        g.selectAll("rect").data(data).enter().append("rect")
+                .attr("width",2).attr("height",20)
+                .attr("x", scale).attr("y",-20)
+                .style("fill", func) ;
+        g.append("text").attr("class", "label")
+                .attr("x", 510).attr("y",-5)
+                .text(label)
+    }
+
+</script>
+</body>
+</html>

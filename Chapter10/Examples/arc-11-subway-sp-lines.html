@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 16px;
+            alignment-baseline: middle;
+            text-anchor: end;
+            fill: 'black';
+        }
+        text.line {
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .2;
+        }
+        .active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 800;
+    const height = 500;
+    const margin = 100;
+
+    const colors = ['blue', 'green', 'red', 'gold', 'purple', 'silver'];
+    const lines  = [1,2,3,4,5,15];
+    const colorScale = d3.scaleOrdinal().domain(lines).range(colors);
+
+    d3.json('../Data/metrosp.json').then(function(data) {
+
+        data.nodes = data.nodes.map(n => ({node: n.station+':'+n.line}));
+        data.links = data.links.map(n => ({source: n.source+':'+n.lines[0], target: n.target+':'+n.lines[1], lines: n.lines, value: 1}));
+
+        const filteredLinks = data.links.filter(d => d.lines[0] != d.lines[1]);
+        const connectionNodes = data.nodes.filter(d => filteredLinks.map(k => k.source).indexOf(d.node) >= 0)
+
+        const arcDiagLayout = dvj.arcDiagram().width(width-margin);
+        const arcData = arcDiagLayout(connectionNodes, filteredLinks);
+
+        console.log(arcData.nodes(), arcData.links())
+
+        draw(arcData);
+
+    });
+
+    function stationConnection(d) {
+        return 'M' + d.source.x + ',0L' + d.target.x + ',0z';
+    }
+
+    function draw(data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,height - margin]})`);
+
+        const lineConnection = dvj.curve().size([width-margin, 2 * height]);
+
+        chart.selectAll("path")
+                .data(data.links().filter(d => d.source.x < d.target.x))
+                .enter()
+                .append("path")
+                .attr("d", d => d.lines[0] == d.lines[1] ? stationConnection(d) : lineConnection(d))
+                .style("stroke-width", d => d.lines[0] == d.lines[1] ? 2 : 5)
+                .style("stroke", 'black')
+                .style("stroke-opacity", d => d.lines[0] == d.lines[1] ? 1 : .5)
+                .style("fill", 'none');
+
+        chart.selectAll("circle")
+                .data(data.nodes())
+                .enter()
+                .append("circle")
+                .attr("id", d => d.node)
+                .attr("cx", d => d.x)
+                .attr("r", 10)
+                .style("fill", d => colorScale(d.node.split(':')[1]))
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle").classed('faded', false));;
+
+        chart.selectAll('text.location')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'location')
+                .attr("x", d => d.x - 15)
+                .attr("transform",d => `rotate(-90,${[d.x,0]})`)
+                .text(d => d.node.split(':')[0])
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("path, circle, .location").classed('faded', false));;
+
+        chart.selectAll('text.line')
+                .data(data.nodes())
+                .enter()
+                .append("text").attr("class",'line')
+                .attr("x", d => d.x)
+                .style("text-anchor", 'middle')
+                .style("fill", d => contrast(colorScale(d.node.split(':')[1])))
+                .text(d => d.node.split(':')[1]);
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 130 ? 'black' : 'white';
+    }
+
+    function highlight(d) {
+        d3.selectAll("path")
+                .classed('faded', s => !(s.source === d || s.target === d))
+        d3.selectAll("circle, .location")
+                .classed('faded', n => !(n === d  || n.sources.filter(s => s.target === d).length > 0
+        || n.targets.filter(s => s.source === d).length > 0));
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML fetching</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Open JavaScript console to see results</h1>
+<script>
+    fetch("../Data/SolarSystemData.csv") // Standard EcmaScript fetch() function
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(csvData) {
+                const data = d3.csvParse(csvData);
+                console.log(data);
+                // do something with the data
+            });
+
+</script>
+</body>
+</html>

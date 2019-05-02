@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill: red;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    // 1) Chained transitions, executing sequentially
+    const svg = d3.select("body").append("svg").attr("width", 800).attr("height", 600);
+    svg.append("circle")
+            .attr("r", 30)
+            .attr("transform", `translate(${[400,300]})`)
+            .transition().delay(500).duration(2000)
+            .attr("r", 100)
+            .transition().duration(2000)
+            .attr("transform", `translate(${[600,500]})`)
+            .transition().duration(2000)
+            .style("fill", "yellow")
+
+</script>
+</body>
+</html>

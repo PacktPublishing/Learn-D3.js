@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+    <style>
+        .bar-chart {
+            border: solid 1px gray;
+            position: relative;
+        }
+        .bar {
+            height: 20px;
+            background-color: orange;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+    const distances = [
+        {name: "Mercury", distance: 0.387},
+        {name: "Venus", distance: 0.723},
+        {name: "Earth", distance: 1},
+        {name: "Mars", distance: 1.52},
+        {name: "Jupiter", distance: 5.2},
+        {name: "Saturn", distance: 9.54},
+        {name: "Uranus", distance: 19.2},
+        {name: "Neptune", distance: 30.1},
+        {name: "Ceres", distance: 2.765},
+        {name: "Pluto", distance: 39.481},
+        {name: "Eris", distance: 67.67},
+        {name: "Haumea", distance: 43},
+        {name: "Makemake", distance: 45.346}
+    ];
+
+    d3.select("body")
+        .append("div").attr("class", "bar-chart")          // appends div for the chart
+            .style("height", distances.length * 21 + "px")  // set chart height
+            .selectAll("div").data(distances)              // binds data
+                .enter().append("div")                     // appends one div for each data element
+                    .attr("class", "bar")                  // these divs are the bars of the chart
+                    .style("top", (d,i) => i * 21 + "px") // stacks bars on top of each other
+                    .style("width", "100px")               // fixed width
+
+</script>
+</body>
+</html>

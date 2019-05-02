@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 14px;
+        }
+        .selected {
+            stroke-width: 4;
+            stroke: white;
+            stroke-opacity: 1
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // reference
+    const projection = d3.geoMercator()
+            .scale(380)
+            .center([-60,45]);
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    const colorScale = d3.scaleLog().range(['yellow', 'red'])
+    const widthScale = d3.scaleLinear().range([2, 4])
+    const transparencyScale = d3.scaleLinear().range([.2, .5]);
+
+    Promise.all([
+                d3.json('../Data/' + file),
+                d3.json('../Data/airports-selected.json'),
+                d3.json('../Data/routes-selected.json')
+            ])
+            .then( function([topology, airports, routes]) {
+
+                colorScale.domain(d3.extent(routes, d => d.airlines))
+                widthScale.domain(colorScale.domain())
+                transparencyScale.domain(colorScale.domain())
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features
+
+                drawGraticules();
+                draw(airports, routes.filter((k,i) => k.source && k.target));
+
+            });
+
+    function lineString(d) {
+        return {
+            id: d.id,
+            properties: {
+                airlines: d.airlines
+            },
+            type: "LineString",
+            coordinates: [
+                    d.source.coordinates,
+                    d.target.coordinates
+            ]
+        }
+    }
+
+    function draw(airports, routes) {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+
+        globe.append("path")
+                .style("fill", '#333')
+                .style("fill-opacity", .6)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+        svg.selectAll("g.route")
+                .data(routes)
+                .enter()
+                .append("g")
+                .attr("class","route")
+                .append("g")
+                .datum(lineString)
+                .on('mouseenter', showMeasure)
+                .on('mouseleave', hideMeasure)
+                .append("path").attr("d", geoPath)
+                .style("fill", 'none')
+                .style("stroke-opacity", d => transparencyScale(d.properties.airlines))
+                .style("stroke", d => colorScale(d.properties.airlines))
+                .style('stroke-width', d => widthScale(d.properties.airlines))
+
+        const airport = svg.selectAll("g.airport")
+                .data(airports.filter(d => routes.filter(k => k.id.split('-')[0] == d.id || k.id.split('-')[1] == d.id).length > 0))
+                .enter()
+                .append("g")
+                .attr("class","airport")
+                .attr("transform", d => `translate(${projection(d.coordinates)})`)
+        airport.append("circle")
+                            .style("fill", 'yellow')
+                            .style("stroke", "black")
+                            .attr('r', 4);
+        airport.append("text").text(d => d.id).attr("x", 7)
+
+
+
+    }
+
+    const format = d3.format(',.0f')
+
+    function showMeasure(d) {
+        console.log('measure', geoPath.measure(d),
+                               d3.geoLength(d), // same as geoLength, with GeoJSON
+                               d3.geoDistance(d.coordinates[0], d.coordinates[1])) // same as geoLength (with points)
+
+        // Compute middle of the line
+        const interpolator = d3.geoInterpolate(d.coordinates[0], d.coordinates[1]);
+        const geoMiddle = interpolator(0.5);
+        console.log(geoMiddle); // geo coords
+        const middle = projection(geoMiddle);
+        console.log(middle); // pixel coords
+
+        const radians = 2 * Math.PI; // radians in 180 deg
+        const earth = 40075; // circumference of the earth
+
+        const km = d3.geoLength(d) / radians * earth;
+
+        d3.select(this).append("rect").attr("class", "bkg").attr("rx",5).attr("ry",5)
+                .attr("x",-30).attr("y",-30)
+                .attr("height",55).attr("width",60)
+                .style("fill",'black').style("fill-opacity",.5)
+                .attr("transform", `translate(${middle})`)
+
+        d3.select(this).raise()
+                .append("text").attr("id", "measure_" + d.id)
+                .each(function() {
+                    d3.select(this).append("tspan")
+                            .text(d => d.id).attr("y",-15)
+                    d3.select(this).append("tspan").attr("x", 0).attr("dy", 20)
+                            .text(d => format(geoPath.measure(d)) + " px")
+                    d3.select(this).append("tspan").attr("x", 0).attr("dy", 15)
+                            .text(d => format(km) + " km")
+                })
+                .style("fill", "white")
+                .attr("text-anchor", "middle")
+                .attr("transform", `translate(${middle})`);
+
+        d3.select(this).select("path").classed("selected", true);
+    }
+
+    function hideMeasure(d) {
+        d3.select("#measure_"+d.id).remove();
+        d3.select(".bkg").remove();
+        d3.select(this).select("path").classed("selected", false);
+    }
+
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+        svg.append("path").attr("class","background")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath) // clip the path!
+                .style("stroke", "black")
+                .style("fill", "blue")
+                .style("fill-opacity", .3)
+                .style('stroke-width', 2);
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', .25);
+
+        svg.append("path").attr("class","outline")
+                .datum(d3.geoGraticule().outline())
+                .attr('d', geoPath)
+                .style("stroke", "black")
+                .style("fill", "none")
+                .style('stroke-width', 3);
+    }
+
+</script>
+
+</body>
+</html>

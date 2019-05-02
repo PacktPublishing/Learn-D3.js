@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random</title>
+    <script src="https://d3js.org/d3-random.v1.min.js"></script>
+</head>
+<body>
+
+<p>Open Console for results.</p>
+
+<script>
+
+    console.log('JS uniform', Math.random() * 10);
+    console.log('JS uniform', Math.random() * 10 | 1);
+    console.log('JS uniform', Math.ceil(Math.random() * 10));
+
+    const uniform = d3.randomUniform(1, 10);
+    console.log('D3 uniform',uniform());
+    console.log('D3 uniform',uniform());
+    console.log('D3 uniform',uniform());
+
+    const normal = d3.randomNormal(0,1);
+    console.log('D3 normal',normal());
+    console.log('D3 normal',normal());
+    console.log('D3 normal',normal());
+
+    const logNorm = d3.randomLogNormal(0, 1);
+    console.log('D3 logNorm',logNorm());
+    console.log('D3 logNorm',logNorm());
+    console.log('D3 logNorm',logNorm());
+
+    const bates = d3.randomBates(10);
+    console.log('D3 bates',bates());
+    console.log('D3 bates',bates());
+    console.log('D3 bates',bates());
+
+    const irwin = d3.randomIrwinHall(10);
+    console.log('D3 irwin',irwin());
+    console.log('D3 irwin',irwin());
+    console.log('D3 irwin',irwin());
+
+    const exp = d3.randomExponential(.05);
+    console.log('D3 exponential',exp());
+    console.log('D3 exponential',exp());
+    console.log('D3 exponential',exp());
+
+
+</script>
+
+</body>
+</html>

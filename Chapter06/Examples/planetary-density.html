@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+    <style>
+        circle {
+            opacity: .9;
+        }
+        path.domain {
+            fill: none;
+            stroke: #999;
+        }
+
+        text, h1 {
+            color: #ddd;
+            font-family: sans-serif;
+            font-size: 16pt;
+            text-align: center;
+        }
+
+        text {
+            fill: white;
+            font-size: 8pt;
+            font-family: sans-serif;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        text.label, text.scale {
+            font-size: 10pt;
+        }
+
+        line {
+            stroke: #666;
+            shape-rendering: crispEdges;
+        }
+
+        body, svg {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Density x Volume of worlds with diameter > 900km</h1>
+
+<script>
+    var height = 800;
+    var width = 1000;
+
+    var dimensions = {
+        height: "100%",
+        width: "100%",
+    };
+
+    var margin = 50;
+
+    var viewBox = {
+        viewBox: "0 0 " + width + " " + height
+    };
+
+    var xScale = d3.scaleLog()
+            .range([margin, width - margin * 2]);
+    var yScale = d3.scaleLinear()
+            .range([height - margin * 2, margin]);
+    var dScale = d3.scaleLinear()
+            .range([4, 115]);
+
+    var xAxis = d3.axisTop()
+            .scale(xScale)
+            .tickPadding(10)
+            .tickSize(height - margin * 3);
+    var yAxis = d3.axisRight()
+            .scale(yScale)
+            .tickPadding(15)
+            .tickSize(width - margin * 3);
+
+    var plotCircle = {
+        "r": function (d) {
+            return dScale(d.diameterKm);
+        },
+        "cx": function (d, i) {
+            return xScale(d.volume);
+        },
+        "cy": function (d) {
+            return yScale(d.density);
+        }
+    };
+
+    var colors = function(n) {
+        var planetColors = ["#ff9900", "coral", "aqua", "cornflowerblue", "#0099c6", "gold", "orange", "coral", "green", "#dc3912"];
+        return planetColors[n % planetColors.length];
+    }
+
+    var plot = function (data) {
+        var svg = d3.select("body")
+                .append("div").attrs(dimensions)
+                .append("svg").attrs(viewBox);
+
+        var defs = svg.append("defs");
+
+        var gradient = defs.selectAll("radialGradient")
+                .data(data)
+                .enter()
+                .append("radialGradient")
+                .attr("cx", .7).attr("cy", .6).attr("r", .9)
+                .attr("id", function (d) {
+                    return "gradient-" + d.id.replace(/\./g, "_");
+                });
+        gradient.append("stop")
+                .attr("stop-color", function(d, i) {
+                    return d3.hsl(colors(i)).brighter();
+                })
+                .attr("offset", "0%")
+        gradient.append("stop")
+                .attr("stop-color", function(d, i) {
+                    return colors(i);
+                })
+                .attr("offset", "33%")
+                .attr("stop-opacity", 1)
+        gradient.append("stop")
+                .attr("stop-color", function(d, i) {
+                    return d3.hsl(colors(i)).darker();
+                })
+                .attr("offset", "66%")
+                .attr("stop-opacity", .6)
+        gradient.append("stop")
+                .attr("stop-color", function(d, i) {
+                    return d3.hsl(colors(i)).darker().darker();
+                })
+                .attr("offset", "100%")
+                .attr("stop-opacity", .2);
+
+        var xExtent = d3.extent(data, function (d) {
+            return d.volume;
+        });
+        var yExtent = d3.extent(data, function (d) {
+            return d.density;
+        });
+        var dExtent = d3.extent(data, function (d) {
+            return d.diameterKm;
+        });
+
+        xScale.domain([xExtent[0] / 2, xExtent[1] * 20]);
+        yScale.domain([yExtent[0], yExtent[1] * 1.05]);
+        dScale.domain(dExtent);
+
+        svg.append("g")
+                .attr("id", "x")
+                .attr("transform", "translate(0," + (height - margin * 2) + ")")
+                .call(xAxis);
+        svg.append("g")
+                .attr("id", "y")
+                .attr("transform", "translate(" + (margin) + ",0)")
+                .call(yAxis);
+
+
+        svg.select("#x")
+                .append("text").attr("class", "scale")
+                .text("Volume in km3")
+                .attr("transform", "translate("+ (width/2) +","+ margin/2 +")");
+
+        svg.select("#y")
+                .append("text").attr("class", "scale")
+                .text("Density in g/cm3")
+                .attr("transform", "rotate (-90, 0, 0) translate("+ -(height/2) +","+ -margin/3 +")");
+
+        var entries = svg.selectAll(".entry")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class", "entry");
+
+        entries.append("circle")
+                .attrs(plotCircle)
+                .attr("fill", function(d,i) {
+                    return "url(#gradient-" + d.id.replace(/\./g, "_") + ")";
+                });
+
+        entries.on("mouseover", function (d) {
+                    var text = d3.select(this)
+                            .append("text").attr("class", "label")
+                            .attr("id", "label-"+d.id.replace(/\./g, "_"))
+                            .text(function (d) {
+                                return d.name + ((d.planet) ? " (" + d.planet + ")" : "");
+                            })
+                            .attr("transform", function (d, i) {
+                                return "translate("
+                                        + (xScale(d.volume) - 20)
+                                        + ","
+                                        + (yScale(d.density) - 20)
+                                        + ")";
+                            });
+                    text.append("tspan")
+                            .attr("dy", 20)
+                            .attr("x", 0)
+                            .text(function(d) {
+                                return d.density + " g/cm3";
+                            });
+                    svg.node().appendChild(text.node());
+                })
+                .on("mouseout", function (d) {
+                    d3.select("#label-"+d.id.replace(/\./g, "_"))
+                            .remove();
+                });
+
+
+    }
+
+    d3.json("../Data/sol_2016.json").then(function (data) {
+        var planets = d3.merge([data.planets, data.tnos, data.asteroids, data.centaurs]);
+
+        var satellites = [];
+        planets.forEach(function (d) {
+            if (d.satellites) {
+                d.satellites.forEach(function (e) {
+                    e["planet"] = d.name;
+                });
+                satellites = d3.merge([satellites, d.satellites]);
+            }
+        });
+
+        var dataset = d3.merge([planets, satellites]).filter(function (d) {
+            return d.density && d.volume;
+        }).sort(function (a, b) {
+            return d3.descending(a.diameterKm, b.diameterKm);
+        });
+
+        console.log(dataset);
+
+        plot(dataset);
+
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/un_regions.js"></script>
+    <style>
+        text {font-family: sans-serif}
+    </style>
+</head>
+<body>
+<script>
+    const width = 1200;
+    const height = 1600;
+
+    d3.csv("../Data/un_regions.csv").then(function(result) {
+        console.log("tabular data", result);
+
+        const nested = d3.nest()
+                        .key(d => d.Supercontinent)
+        .key(d => d.Continent)
+        .key(d => d.UN_Region)
+        .key(d => d.Country)
+        .rollup(d => d.map(c => ({area: +c.Area_km2, population: +c.Pop_2016, hdi: +c.HDI_2017})))
+        .entries(result);
+
+        const root = d3.hierarchy(makeRoot(nested, true));
+        root.sort((a,b) => b.height - a.height || a.value - b.value);
+        root.sum(d => 1);
+
+        console.log("Sorted", root);
+
+        const partition = d3.partition()
+                .size([height-50,width-50])
+                .padding(1);
+        const data = partition(root)
+        // rounding
+        // padding
+
+        draw(data.descendants());
+    });
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+    function draw(data) {
+        const svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+        const chart = svg.append("g").attr("transform", d => `translate(${[25,25]})`);
+
+        drawPartition(chart.append("g").attr("class", "partition"), data);
+    }
+
+    function drawPartition(g, data) {
+        console.log("Partition data", data);
+        const cell = g.selectAll("g.cell")
+                .data(data)
+                .enter()
+                .append("g")
+                .attr("class", "cell");
+
+        cell.append("rect")
+                .attr("x", d => d.y0)
+                .attr("y", d => d.x0)
+                .attr("width", d => d.y1 - d.y0)
+                .attr("height", d => d.x1 - d.x0)
+                .attr("fill", function(d) {
+                    if(d.height == 0) {
+                        return 'rgb(255,255,200)';
+                    } else {
+                        return colorScale(d.depth);
+                    }
+                });
+
+        cell.append("text")
+                .text(d => d.data.id)
+                .attr("font-size", function(d) {
+                    return d.children ? d.children.length * (d.height*d.height) + 5 : 5;
+                })
+                .attr("x", d => d.y0 + 5)
+                .attr("y", d => d.x0 + (d.children ? d.children.length * (d.height*d.height) + 5 : 5) )
+    }
+
+</script>
+</body>
+</html>

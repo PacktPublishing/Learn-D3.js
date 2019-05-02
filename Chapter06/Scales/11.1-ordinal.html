@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Scales</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        circle {
+            fill-opacity: .1;
+            fill: red;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    let data = d3.range(0,5.1,.25);
+
+    const colorScale = d3.scaleOrdinal().domain(data).range(['#000','#00d','#d00','#0a0']);
+    const sizeScale  = d3.scaleOrdinal().domain(data).range([12,8,10,8]);
+    const boldScale  = d3.scaleOrdinal().domain(data).range(['bold','normal']);
+
+    colorScale.unknown('red');
+    sizeScale.unknown('16');
+    boldScale.unknown('bold');
+
+    const unknown = '5.33';
+    //data = d3.merge([data, [unknown]]);
+
+    console.log(data)
+
+    console.log(3, colorScale(3));
+    console.log(4.5, colorScale(4.5));
+    console.log(6.75, colorScale(6.75));
+    console.log(5, sizeScale(5));
+    console.log(6.25, sizeScale(6.25));
+    console.log(7.5, sizeScale(7.5));
+    console.log(8, boldScale(8));
+    console.log(8.25, boldScale(8.25));
+    console.log(9.5, boldScale(9.5));
+
+    console.log(5.33, boldScale(5.33));
+    console.log(5.33, sizeScale(5.33));
+    console.log(5.33, colorScale(5.33));
+
+    const axisScale = d3.scaleLinear()
+            .domain(d3.extent(data))
+            .range([0,400]);
+
+    d3.select("body").append("svg").attr("height", 650).attr("width", 850);
+
+    d3.select("svg").append("g")
+            .selectAll("text")
+            .data(data).join("text")
+            .attr("x", d => axisScale(d) + 22)
+            .attr("y",22)
+            .style("font-weight", d => boldScale(d))
+            .style("font-size", d => sizeScale(d))
+            .style("fill", d => colorScale(d))
+            .text(d => d);
+
+</script>
+
+</body>
+</html>

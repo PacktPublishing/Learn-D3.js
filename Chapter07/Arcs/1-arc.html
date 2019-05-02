@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Arc</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 400;
+
+    const arc = d3.arc()
+            .innerRadius(0)
+            .outerRadius(100)
+            .startAngle(Math.PI * 45/180)
+            .endAngle(Math.PI * 135/180);
+
+    const slice = arc();
+    console.log(slice);
+
+    const svg = d3.select("body").append("svg").attr("height",400).attr("width",width);
+
+    svg.append("path")
+            .datum(slice)
+            .attr("d", d => d)
+            .style("stroke", "red")
+            .style("fill", "lightgray")
+            .attr("transform", "translate(120,120)");
+
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Area</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text, h1 {
+             font-family: 'Yanone Kaffeesatz', sans-serif;
+        }
+        h1 {
+            font-weight: normal;
+            font-size: 16pt
+        }
+        .legend {
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+<h1>Population growth (1950 to 2000)</h1>
+<script>
+    const width  = 800, height = 600, margin = 50;
+
+    const populations = [
+        {"year":1950,"Argentina":17150,"Bolivia":3090,"Brazil":53975,"Chile":6188,"Colombia":12341,"Ecuador":3470,"Guianas":647,"Paraguay":1473,"Peru":7728,"Uruguay":2239,"Venezuela":5482},
+        {"year":1960,"Argentina":20619,"Bolivia":3693,"Brazil":72208,"Chile":7717,"Colombia":16480,"Ecuador":4546,"Guianas":894,"Paraguay":1903,"Peru":10062,"Uruguay":2539,"Venezuela":8147},
+        {"year":1970,"Argentina":23973,"Bolivia":4506,"Brazil":95327,"Chile":9564,"Colombia":22061,"Ecuador":6073,"Guianas":1124,"Paraguay":2474,"Peru":13341,"Uruguay":2810,"Venezuela":11588},
+        {"year":1980,"Argentina":28106,"Bolivia":5590,"Brazil":121160,"Chile":11266,"Colombia":27738,"Ecuador":7976,"Guianas":1210,"Paraguay":3181,"Peru":17359,"Uruguay":2916,"Venezuela":15344},
+        {"year":1990,"Argentina":32730,"Bolivia":6856,"Brazil":149352,"Chile":13242,"Colombia":34272,"Ecuador":10218,"Guianas":1266,"Paraguay":4214,"Peru":21827,"Uruguay":3110,"Venezuela":19862},
+        {"year":2000,"Argentina":37057,"Bolivia":8340,"Brazil":175288,"Chile":15263,"Colombia":40404,"Ecuador":12629,"Guianas":1288,"Paraguay":5303,"Peru":25915,"Uruguay":3321,"Venezuela":24488}
+    ];
+
+    // Selecting and sorting the keys
+    const keys = Object.entries(populations[0])
+                    .sort((a,b) => d3.descending(a[1],b[1]))
+                    .filter(d => d[0] != "year")
+                    .map(d => d[0]);
+
+    // Selecting data for the horizontal axis
+    const years = populations.map(d => new Date(d.year,1,1));
+
+    // Configuring the stack
+    const stack = d3.stack()
+            .keys(keys)
+            .order(d3.stackOrderDescending);
+    const stackedData = stack(populations);
+
+    console.log(stackedData)
+
+    // Scales configuration
+    const scaleTime = d3.scaleTime()
+            .domain([new Date(1949,12,1),new Date(2000,1,1)])
+            .range([margin, width - margin])
+
+    const colorScale = d3.scaleOrdinal(d3.schemeSpectral[11])
+            .domain([0,stack.keys().length]);
+
+    const scaleY = d3.scaleLinear()
+            .domain([0, d3.max(d3.merge(d3.merge(stackedData)))])
+            .range([height - margin, 10])
+            .nice();
+
+    // Area chart configuration
+    const area = d3.area()
+                   .x((d,i) => scaleTime(years[i]))
+                   .y0(d  => scaleY(d[0]))
+                   .y1(d => scaleY(d[1]))
+                   .curve(d3.curveMonotoneX);
+
+    // Axis configuration
+    const timeAxis = d3.axisBottom(scaleTime).ticks(6);
+    const yAxis = d3.axisLeft(scaleY);
+
+    // View setup
+    const svg = d3.select("body")
+                .append("svg")
+                .attr("height",height)
+                .attr("width",width);
+    const axes = svg.append('g')
+                    .attr("class", "axes");
+
+    // Data binding
+    svg.selectAll("path")
+        .data(stackedData)
+        .enter()
+        .append("path")
+        .attr("d", area)
+        .style("fill", (d,i) => colorScale(stack.keys().length - i - 1));
+
+    // Axis rendering
+    axes.append('g').call(timeAxis)
+            .attr("transform", "translate("+[0, height - margin]+")");
+    axes.append('g').call(yAxis)
+            .attr("transform", "translate("+[margin, 0]+")");
+
+    const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", "translate("+[margin, height - margin/4]+")");
+
+    // Legends
+    legend.selectAll("rect")
+            .data(stack.keys())
+            .enter()
+            .append("rect")
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("x", (d,i) => i * 60)
+            .style("fill", (d,i) => colorScale(stack.keys().length - i - 1));
+
+    legend.selectAll("text")
+            .data(stack.keys())
+            .enter().append("text")
+            .attr("y", 10)
+            .attr("x", (d,i) => i * 60 + 15)
+            .text(d => d);
+
+
+</script>
+</body>
+</html>

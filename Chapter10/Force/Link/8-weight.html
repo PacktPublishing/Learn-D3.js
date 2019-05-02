@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../../JavaScript/force-examples.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 14px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+        svg {
+            border: solid 1px #eaeaea;
+        }
+        .margin {
+            stroke: blue;
+            opacity: .1;
+        }
+        .reflink {
+            opacity: .2;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 500;
+    const height = 500;
+    const margin = 100;
+
+    const cols = 3;
+
+    const nodes = [
+        {node: 'A', value: 1},
+        {node: 'B', value: 1},
+        {node: 'C', value: 2},
+        {node: 'D', value: 3},
+        {node: 'E', value: 5},
+        {node: 'F', value: 8},
+        {node: 'G', value: 13},
+        {node: 'H', value: 21},
+        {node: 'I', value: 34},
+    ];
+
+    const links = [
+        {source: 0, target: 4, value: 1},
+        {source: 1, target: 4, value: 1},
+        {source: 2, target: 4, value: 1},
+        {source: 3, target: 4, value: 1},
+        {source: 4, target: 4, value: 1},
+        {source: 5, target: 4, value: 1},
+        {source: 6, target: 4, value: 1},
+        {source: 7, target: 4, value: 1},
+        {source: 8, target: 4, value: 1},
+        {source: 2, target: 1, value: 1},
+        {source: 2, target: 5, value: 1}
+    ];
+
+    // Diverging colors (blue is negative, red is positive)
+    const colors = ['#b2182b','#d6604d','#f4a582','#fddbc7','#f7f7f7','#d1e5f0','#92c5de','#4393c3','#2166ac'];
+
+    // Reference setup
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    const chart = svg.append("g").attr("transform", `translate(${[width/2,height/2]})`);
+
+
+    // SIMULATION SETUP
+    const sim = d3.forceSimulation(nodes);
+    sim.force("link", d3.forceLink(links).strength(.005));
+    drawReferenceBackgroundGrid(nodes, links);
+
+    // Update on ticks
+    sim.on("tick", updateChart)
+
+    // Results
+    drawChart();
+
+    // use average of node values as weight
+    function weight(link) {
+        return (link.source.value + link.target.value)/2
+    }
+
+    function drawChart() {
+        chart.selectAll('line.simulation')
+                .data(links).enter()
+                .append('line').attr("class",'simulation')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+                .style("fill", 'none')
+                .style("stroke", 'black')
+                .style("stroke-width", d => weight(d)/2)
+
+        chart.selectAll('g.simulation')
+                .data(nodes).enter()
+                .append("g").attr("class", "simulation")
+                .attr("transform", d => `translate(${[d.x, d.y]})`)
+                .each(function(d,i) {
+                    d3.select(this)
+                            .append("circle")
+                            .attr("r", 15)
+                            .style("fill", colors[i])
+                            .style("stroke", 'black')
+                    d3.select(this)
+                            .append("text")
+                            .text(d.node)
+                            .style("fill", contrast(colors[i]))
+                });
+    }
+
+
+</script>
+</body>
+</html>

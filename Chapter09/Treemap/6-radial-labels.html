@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchy</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        path {
+            stroke: black;
+
+        }
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            text-anchor: middle;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 1000;
+    const height = 800;
+
+    const colorScale = d3.scaleOrdinal(d3.schemeSet3);
+
+    console.log("Original hierarchy", simpleHierarchy);
+
+    const root = d3.hierarchy(simpleHierarchy);
+    root.sort((a,b) => b.height - a.height );
+
+    console.log("Root", root);
+
+    // required to generate value attributes used by treemap
+    root.sum(d => d.values ? d.values[0] : 0);
+
+    // generate label numbers
+    root.eachBefore(function(d) {
+        if(!d.parent) {
+            d.number = 1;
+        } else {
+            d.number = d.parent.number + "." + (d.parent.children.indexOf(d) + 1);
+        }
+    });
+
+    const arc = d3.arc()
+                .startAngle(d => d.x0 * Math.PI / 180) // angles in radians
+                .endAngle(d => d.x1 * Math.PI / 180)
+                .innerRadius(d => d.y0)
+                .outerRadius(d => d.y1);
+
+    const treemap = d3.treemap()
+                    .size([360, height/2 - 10]) // angles in degrees
+                    .paddingInner(5)
+                    .paddingOuter(5)
+                    .paddingBottom(20);
+    const mapData = treemap(root);
+    const nodes = mapData.descendants();
+
+    colorScale.domain(d3.extent(nodes, n => n.height));
+
+    drawTreemap(nodes);
+
+    function drawTreemap(nodes) {
+        const svg = d3.select("body")
+                .append("svg")
+                .attr("height", height)
+                .attr("width", width);
+        const chart = svg.append("g")
+                        .attr("transform", d => `translate(${[width/2,height/2]})`);
+
+        drawCells(chart, nodes);
+        drawLabels(chart, nodes);
+    }
+
+    function drawCells(chart, nodes) {
+        chart.selectAll("path")
+            .data(nodes)
+            .enter()
+            .append("path")
+            .attr("d", arc)
+            .attr("fill", d => colorScale(d.height));
+    }
+
+    function anchor(node, padding) {
+        const startAngle = arc.startAngle(); // radians
+        const endAngle   = arc.endAngle();   // radians
+        const innerRadius = arc.innerRadius();
+        const outerRadius = arc.outerRadius();
+        const angle  = (startAngle(node) + endAngle(node)) * .5 ;
+        const radius = outerRadius(node) - padding;
+        return d3.pointRadial(angle, radius);
+    }
+
+    function cartesian(degrees, radius) {
+        const radians = (Math.PI/180) * degrees;
+        return [radius * Math.cos(radians), radius * Math.sin(radians)];
+    }
+
+    function drawLabels(chart, nodes) {
+        chart.selectAll("text")
+            .data(nodes)
+            .enter()
+            .append("text")
+                .attr("x", d => d.height == 0 ? arc.centroid(d)[0] : anchor(d,15)[0])
+                .attr("y", d => d.height == 0 ? arc.centroid(d)[1] : anchor(d,15)[1])
+                .attr("transform", d => `rotate(${(d.x0+d.x1)/2},${d.height == 0 ? arc.centroid(d) : anchor(d,15)})`)
+                .text(d => arc.endAngle()(d) - arc.startAngle()(d) > .5 || arc.outerRadius()(d) > 200 ? d.number : '')
+    }
+</script>
+</body>
+</html>

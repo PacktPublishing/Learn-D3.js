@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 10px;
+            alignment-baseline: middle;
+        }
+        .faded {
+            opacity: .3;
+        }
+        .highlight {
+            font-weight: bold;
+            font-size: 120%;
+        }
+        rect.highlight {
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1200;
+    const height = 1200;
+    const margin = 200;
+
+    const color = d3.scaleSqrt().range(['lightyellow','red']);
+
+    const nodes = [];
+
+    d3.csv("../Data/migration_2017.csv", function(row) {
+        nodes.push({node: row.Destination, total: +row.Total, code: row.Code, pop: +row.Population});
+
+        const line = [];
+        for(key in row) {
+            if(key != 'Population' && key != 'Destination' && key != 'Total' && key != 'Code') {
+                if(isNaN(row[key]) || +row[key] <= 0) continue;
+                const obj = {
+                    value: +row[key] ,
+                    target: row.Destination,
+                    source: key
+                }
+                line.push(obj);
+            }
+        }
+        return line;
+
+    }).then(function(data) {
+
+        const edges = d3.merge(data);
+
+        const filteredNodes  = nodes.filter(d => d.total > 15000000 || d.pop > 15000000)
+                                    .sort((a,b) => d3.descending(a.total, b.total));
+
+        const filteredEdges = edges.filter(edge => filteredNodes.find(n => n.node == edge.target))
+                                   .filter(edge => filteredNodes.find(n => n.node == edge.source));
+
+        filteredEdges.forEach(function(edge) {
+            edge.source = filteredNodes.map(n => n.node).indexOf(edge.source);
+            edge.target = filteredNodes.map(n => n.node).indexOf(edge.target);
+        });
+
+        const matrixLayout = dvj.adjacencyMatrix().size([width-margin,height-margin]);
+
+        const matrix = dvj.linksToMatrix(filteredNodes, filteredEdges);
+
+        const result = matrixLayout(filteredNodes, matrix);
+
+        color.domain([0,d3.max(edges, d => d.value)]);
+
+        draw(filteredNodes, result);
+    });
+
+    function draw(nodes, data) {
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+
+        chart.selectAll("rect")
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("x", d => d.x)
+                .attr("y", d => d.y)
+                .attr("height", d => d.h)
+                .attr("width", d => d.w)
+                .attr("rx",d => d.w/4).attr("ry", d => d.h/4)
+                .style("stroke", 'black').style("stroke-width", 0.1)
+                .style("fill", d => d.value ? color(d.value) : 'white')
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("rect, text").classed('faded highlight', false));
+
+        chart.selectAll('text.source')
+                .data(data.filter(d => d.y == 0))
+                .enter()
+                .append("text").attr("class",'source')
+                .attr("y", d => d.x + d.w/2)
+                .style("text-anchor", 'start')
+                .attr("x", 5)
+                .attr("transform",`rotate(-90) `)
+                .text((d,i) => nodes[i].node)
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("rect, text").classed('faded highlight', false));
+        chart.append("text")
+                .style("text-anchor", 'middle')
+                .attr("transform",`rotate(-90,${[0,height/2 - margin/2]}) translate(${[0, height/2 - margin/2 - 75]})`)
+                .style("font-size", 24)
+                .text('FROM');
+
+        chart.selectAll('text.target')
+                .data(data.filter(d => d.x == 0))
+                .enter()
+                .append("text").attr("class",'target')
+                .attr("y", d => d.y + d.h/2)
+                .style("text-anchor", 'end')
+                .attr("x", -10)
+                .text((d,i) => nodes[i].node)
+                .on("mouseover", highlight)
+                .on("mouseout", d => d3.selectAll("rect, text").classed('faded highlight', false));
+        chart.append("text")
+                .style("text-anchor", 'middle')
+                .attr("transform",`translate(${[width/2 - margin/2, -75]})`)
+                .style("font-size", 24)
+                .text('TO');
+
+    }
+
+    function highlight(d) {
+        d3.selectAll("rect").classed('faded', k => !(k.x == d.x || k.y == d.y))
+        d3.selectAll("rect").classed('highlight', k => k.x == d.x || k.y == d.y)
+        d3.selectAll("text.source").classed('highlight', k => k.x == d.x)
+        d3.selectAll("text.target").classed('highlight', k => k.y == d.y)
+    }
+</script>
+</body>
+</html>

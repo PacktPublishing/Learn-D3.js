@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <style>
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+        }
+        .parallels, .meridians {
+            font-weight: 100;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    const color = d3.scaleOrdinal(d3.schemeGreens[9]);
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+    d3.select("svg").append("g").attr("id", "tiles");
+
+    const projection = d3.geoMercator()
+            .center([-73.8,40.74])
+            .scale(40000)
+    const geoPath = d3.geoPath().projection(projection);
+
+    const map = {};
+
+    Promise.all([
+        d3.json('../Data/nyc.topojson'),
+        d3.json('../Data/NY_subway.geojson')
+    ])
+    .then(([land, subway]) =>  {
+
+        map.topology   = land.objects['nyc'];
+        map.geometries = map.topology.geometries;
+        map.features   = topojson.feature(land, map.topology).features;
+        map.merge      = topojson.merge(land, map.geometries)
+
+        drawGraticules();
+        drawLand();
+        drawSubway(subway)
+
+    });
+
+    const colors = ['red','red','red','blue','blue','blue','orange','orange','orange','orange','yellow','yellow','yellow','yellow',
+                    'green','green','green','green','brown','brown','brown','gray','purple','black'];
+    const lines = ['1','2','3','A','C','E','B','D','F','V','R','N','Q','W','4','5','6','J','M','Z','L','7','S','G'];
+    const colorScale = d3.scaleOrdinal().range(colors).domain(lines);
+
+    function drawLand() {
+        svg.append("g").attr("class","land")
+                .datum(map.merge)
+                .style("fill", "gray")
+                .attr("opacity", .4)
+                .append("path")
+                    .attr('d', geoPath)
+                    .style("stroke", "white")
+    }
+
+    function drawSubway(data) {
+        svg.selectAll("g.subway")
+                .data(data.features)
+                .enter()
+                .append("g")
+                .attr("class","subway")
+                .style("fill", "none")
+                .style("stroke", d => lines.indexOf(d.properties.name) >= 0 ? colorScale(d.properties.name) : 'gray')
+                .style("stroke-width", 2)
+                .append("path")
+                .attr('d', geoPath)
+    }
+
+    const format = d3.format(".1f");
+
+    function drawGraticules() {
+        const bounds = d3.geoBounds(map.merge);
+
+        const graticule = d3.geoGraticule().extent(bounds).step([.1,.1]);
+
+        console.log(graticule.lines())
+
+        const meridians = graticule.lines().filter(d => d.coordinates[0][0] == d.coordinates[1][0]);
+        const parallels = graticule.lines().filter(d => d.coordinates[0][1] == d.coordinates[1][1]);
+
+
+        svg.append("g").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .append("path")
+                .attr('d', geoPath)
+                .style("stroke", "gray")
+                .style('stroke-width', d => .25);
+
+        // graticule labels
+        svg.selectAll("text.parallels")
+                .data(parallels)
+                .enter()
+                .append("text").attr("class","parallels")
+                .attr("transform", d => `translate(${[projection(bounds[0])[0], projection(d.coordinates[0])[1] - 5]})`)
+                .text(d => format(d.coordinates[0][1]) + '°');
+
+        svg.selectAll("text.meridians")
+                .data(meridians)
+                .enter()
+                .append("text").attr("class","meridians")
+                .attr("transform", d => `translate(${[projection(d.coordinates[0])[0], projection(bounds[1])[1]]})`)
+                .text(d => format(d.coordinates[0][0]) + '°')
+    }
+
+</script>
+
+</body>
+</html>

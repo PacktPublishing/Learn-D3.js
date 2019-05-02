@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/dvj-all.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 35px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 900;
+    const height = 600;
+    const margin = 200;
+
+    const nodes = [
+        {node: 'A'},
+        {node: 'C'},
+        {node: 'B'},
+        {node: 'D'},
+    ];
+
+    const edges = [
+        {source: 'A', target: 'B', value: 'a'},
+        {source: 'B', target: 'A', value: 'b'},
+        {source: 'A', target: 'C', value: 'c'},
+        {source: 'C', target: 'A', value: "d"},
+        {source: 'A', target: 'D', value: 'e'},
+        {source: 'C', target: 'D', value: 'f'},
+        {source: 'D', target: 'B', value: "g"},
+    ];
+
+    const grid  = dvj.squareGrid()
+                     .gridSize([3,3])
+                     .size([width-margin*2.5, height-margin*1.3])
+                     .step(2)
+                     .offset(1);
+    const data = grid(nodes, edges);
+
+    console.log(data.nodes(), data.edges())
+
+    const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+    svg.append("image")
+            .attr("xlink:href", "../Data/images/euler.png")
+            .attr("width", 671)
+            .attr("height", 327)
+            .attr("transform",`translate(${[margin/2,margin/2]})`);
+
+    const chart = svg.append("g").attr("transform", `translate(${[margin*1.3,margin*.55]})`);
+
+    const line = dvj.graphLink()
+            .size([width-margin, height-margin])
+            .curvature(.8)
+            .symmetric(true);
+
+    chart.selectAll("path")
+            .data(data.edges())
+            .enter()
+            .append("path")
+            .attr("d", line)
+            .style("stroke", 'blue')
+            .style("fill", 'none')
+            .style("stroke-width", 10)
+            .style("stroke-opacity", .5)
+
+    chart.selectAll("circle")
+            .data(data.nodes())
+            .enter()
+            .append("circle")
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .style("fill", (d,i) => 'red')
+            .attr("r", 30);
+
+    chart.selectAll("text")
+            .data(data.nodes())
+            .enter()
+            .append("text")
+            .attr("x", d => d.x)
+            .attr("y", d => d.y)
+            .text(d => d.node);
+
+
+</script>
+</body>
+</html>

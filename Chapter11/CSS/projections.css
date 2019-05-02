@@ -1,0 +1,63 @@
+.country {
+    fill: gray;
+    stroke: white;
+    stroke-width: .25;
+}
+
+.equator {
+    stroke: blue;
+    fill: none;
+    stroke-width: 3;
+    stroke-opacity: .2;
+}
+
+.graticule {
+    fill: none;
+    stroke: green;
+    stroke-width: .25;
+}
+
+.parallel-1 {
+    fill: white;
+}
+
+.parallel-2 {
+    fill: orange;
+    fill-opacity: .5;
+}
+
+.outline {
+    fill: none;
+    stroke-width: 3;
+    stroke: gray;
+}
+
+.container {
+    position: absolute;
+    width: 1300px;
+}
+
+#sidebar {
+    position: absolute;
+    left: 0;
+    width: 320px;
+}
+
+#map {
+    position: absolute;
+    left: 340px;
+}
+
+p {
+    margin: 0;
+}
+
+p:hover {
+    font-color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+p.selected {
+    font-weight: bold;
+}

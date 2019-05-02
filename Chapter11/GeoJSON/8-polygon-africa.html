@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        .continent {
+            stroke: white;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+
+    d3.json('../Data/africa-simple-multipolygon.geojson')
+            .then(function(data) {
+
+        console.log(data);
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        const latScale = d3.scaleLinear().domain([-90,90]).range([height,0]);
+        const lonScale = d3.scaleLinear().domain([-180,180]).range([0,width])
+
+        const svg = d3.select("body").append("svg")
+                      .attr("width", width).attr("height", height);
+
+        svg.selectAll("g.continent") // each Feature
+                .data(data.features).enter()
+                .append("g").attr("class","continent")
+                .style("fill", (d,i) => color(i))
+                .selectAll("polygon") // each Geometry
+                   .data(d => d.geometry.type == 'MultiPolygon' ? d3.merge(d.geometry.coordinates) : d.geometry.coordinates)
+                   .enter()
+                   .append("polygon")
+                   .attr("points", d => d3.merge(d.map(coord => [lonScale(coord[0]), latScale(coord[1])])))
+    })
+</script>
+
+</body>
+</html>

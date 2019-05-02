@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            border: solid 1px black;
+            padding: 2px;
+        }
+        thead {
+            font-weight: bold
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead><tr><td>Format</td><td>Result</td></tr></thead>
+    <tbody></tbody>
+</table>
+<script>
+    const height=500, width=700;
+    const formats = [
+        "%c",
+        "%x",
+        "%X",
+        "%A, %B, %d, %Y",
+        "%A","%a","%d","%e","%j","%B","%b","%m","%Y","%y","%u","%w",
+        "%H","%I","%M","%S","%L","%f","%p","%Z"
+    ];
+    const date = new Date();
+
+    const pt_BR = {
+        "dateTime": "%A, %e de %B de %Y. %X",
+        "date": "%d/%m/%Y",
+        "time": "%H:%M:%S",
+        "periods": ["AM", "PM"],
+        "days": ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+        "shortDays": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+        "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+        "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    };
+
+    d3.timeFormatDefaultLocale(pt_BR);
+
+    formats.forEach(function(d, i) {
+        const formatTime = d3.timeFormat(d);
+        const tr = d3.select("tbody").append("tr")
+        tr.append("td").text(d)
+        tr.append("td").text(formatTime(date))
+    });
+
+
+</script>
+</body>
+</html>

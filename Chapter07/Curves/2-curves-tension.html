@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Line</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width  = 800;
+    const height = 700;
+    const cols = 3;
+    const rows = 5;
+    const margin = 30;
+
+    const parameter = [0, .25, .5, .75, 1];
+
+    const data = [[1,0],[2,4],[3,1],[4,3]];
+
+    const scaleX = d3.scaleLinear()
+                     .domain(d3.extent(data, d => d[0]))
+                     .range([margin,width/cols - margin]);
+
+    const scaleY = d3.scaleLinear()
+            .domain(d3.extent(data, d => d[1]))
+            .range([height/rows - margin, margin/2]); // invert - place 0 at bottom
+
+    const point = d3.symbol().type(d3.symbolCircle).size(25);
+
+    const svg = d3.select("body").append("svg").attr("height",height).attr("width",width);
+
+    parameter.forEach((d,i) => draw('curveCardinal', 'tension', d, i));
+    parameter.forEach((d,i) => draw('curveCatmullRom', 'alpha', d, i+5));
+    parameter.forEach((d,i) => draw('curveBundle', 'beta', d, i+10));
+
+    function draw(curve, paramName, paramValue, index) {
+
+        const i = index % rows;
+        const j = Math.floor(index / rows);
+
+        const g = svg.append("g")
+                .attr("transform", "translate("+[j * width/cols,i * height/rows]+")");
+
+        const line = d3.line()
+                        .x(d => scaleX(d[0]))
+                        .y(d => scaleY(d[1]));
+
+        g.append("path")
+                .attr("d", line(data))
+                .attr("stroke", "lightgray")
+                .attr("fill", "none");
+
+        line.curve(d3[curve][paramName](paramValue));
+
+        let string = '';
+        if(i == 0) {
+            string = "d3." + curve + " : ";
+        }
+        string += paramName + " = " + paramValue;
+
+        g.append("path")
+                .attr("d", line(data))
+                .attr("stroke", "red")
+                .attr("fill", "none");
+        g.append("text")
+                .text(string)
+                .attr("text-anchor", "middle")
+                .attr("x", width/(cols * 2))
+                .attr("y", height/rows - margin/2);
+
+        g.selectAll(".point")
+                .data(data)
+                .enter()
+                .append("path").attr("class", "point")
+                .attr("d", point)
+                .attr("fill", 'red')
+                .attr("transform", d => "translate("+[scaleX(d[0]), scaleY(d[1])]+")");
+    }
+
+
+</script>
+</body>
+</html>

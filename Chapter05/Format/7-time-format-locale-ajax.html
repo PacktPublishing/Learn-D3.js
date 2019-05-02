@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Title</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            border: solid 1px black;
+            padding: 2px;
+        }
+        thead {
+            font-weight: bold
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead><tr><td>Format</td><td>Result</td></tr></thead>
+    <tbody></tbody>
+</table>
+<script>
+    const height=500, width=700;
+    const formats = [
+        "%c",
+        "%x",
+        "%X",
+        "%A, %B, %d, %Y",
+        "%A","%a","%d","%e","%j","%B","%b","%m","%Y","%y","%u","%w",
+        "%H","%I","%M","%S","%L","%f","%p","%Z"
+    ];
+    const date = new Date();
+
+    d3.json("https://unpkg.com/d3-time-format@2.1.3/locale/fr-CA.json")
+            .then(function(locale) {
+        d3.timeFormatDefaultLocale(locale);
+
+        const string = "2019-06-28";
+        const parser = d3.timeParse("%Y-%m-%d")  ;
+        console.log( parser(string) )
+
+        console.log(locale)
+        formats.forEach(function(d, i) {
+            const formatTime = d3.timeFormat(d);
+            const tr = d3.select("tbody").append("tr")
+            tr.append("td").text(d)
+            tr.append("td").text(formatTime(date))
+        });
+    });
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <style>
+        svg {border: solid 1px gray;}
+        text {
+            font-family: "Yanone Kaffeesatz", sans-serif;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 960;
+    const height = 500;
+    const file = "world-medres.topojson";
+    const key  = "world";
+
+    const svg = d3.select("body").append("svg")
+            .attr("width", width).attr("height", height);
+
+    // reference
+    const projection = d3.geoCylindricalEqualArea()
+            //.geoMercator().scale(130).center([0,50])
+            .fitExtent([[0,5],[width, height-10]], {type: "Sphere"});
+
+    // create a path generator function for the projection
+    const geoPath = d3.geoPath()
+            .projection(projection)
+
+    const map = {};
+
+    d3.json('../Data/' + file)
+            .then(function(topology) {
+
+                map.topology   = topology.objects[key];
+                map.geometries = map.topology.geometries;
+                map.features   = topojson.feature(topology, map.topology).features
+
+                map.features.map(d => d.id = isNaN(d.id) ? d.properties.ISO_A3 : d.properties.ADMIN);
+
+                drawGraticules();
+                draw();
+
+            });
+
+    function draw() {
+        const globe = svg.selectAll("g.country")
+                .data(map.features)
+                .enter()
+                .append("g")
+                .attr("class","country")
+                .on('mouseenter', showArea)
+                .on('mouseleave', hideArea)
+
+        globe.append("path")
+                .style("fill", d => d.id == 'GRL' || d.id == 'COD' ? "green" : '#333')
+               // .style("fill", '#333')
+                .style("fill-opacity", .6)
+                .attr('d', geoPath)
+                .style("stroke", "white")
+                .style('stroke-width', '.25')
+
+    }
+
+    const format = d3.format(',.0f')
+
+    function showArea(d) {
+        console.log('area', geoPath.area(d), d3.geoArea(d))
+
+        const steradians = 4 * Math.PI; // steradians in a perfect sphere
+        const earth = 510072000; // area of the earth
+
+        const sqkm = d3.geoArea(d) / steradians * earth;
+
+        d3.select(this).raise()
+                .append("text").attr("id", "area_" + d.id)
+                .each(function() {
+                    d3.select(this).append("tspan")
+                            .text(d => format(geoPath.area(d)) + " px2")
+                    d3.select(this).append("tspan").attr("x", 0).attr("dy", 12)
+                            .text(d => format(sqkm) + " km2")
+                })
+                .style("fill", "black")
+                .attr("text-anchor", "middle")
+                .attr("transform", `translate(${geoPath.centroid(d)})`);
+        d3.select(this).select("path")
+                .style("fill", "green")
+    }
+
+    function hideArea(d) {
+        d3.select(this).select("path")
+                .style("fill", '#333')
+        svg.select("#area_"+d.id).remove();
+    }
+
+
+    const graticule = d3.geoGraticule();
+
+    function drawGraticules() {
+
+        svg.append("path").attr("class","graticule")
+                .datum(graticule())
+                .style("fill", 'none')
+                .attr('d', geoPath)
+                .style("stroke", "green")
+                .style('stroke-width', .25);
+    }
+
+</script>
+
+</body>
+</html>

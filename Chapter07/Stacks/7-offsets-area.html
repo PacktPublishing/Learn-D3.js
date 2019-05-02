@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12pt;
+        }
+        .tick text {display: none}
+    </style>
+</head>
+<body>
+<script>
+
+    const width  = 800;
+    const height = 600;
+    const margin = 250;
+
+    const stackOffset = [
+        'stackOffsetNone',
+        'stackOffsetExpand',
+        'stackOffsetDiverging',
+        'stackOffsetSilhouette',
+        'stackOffsetWiggle'
+    ];
+
+    const data = [
+        {"A":-65,"B":7,"C":40},
+        {"A":23,"B":33,"C":36},
+        {"A":25,"B":9,"C":12},
+        {"A":35,"B":12,"C":67},
+        {"A":30,"B":-15,"C":-15},
+        {"A":21,"B":15,"C":78}
+    ];
+
+    // absolute values for stackOffsetExpand
+    const absData = JSON.parse(JSON.stringify(data));
+    absData.forEach(d => Object.keys(d).forEach(k => d[k] = Math.abs(d[k])));
+
+    const stack = d3.stack()
+            .keys(['A', 'B', 'C']);
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain([0,data.length]);
+    const scale = d3.scaleLinear()
+            .range([100,25]);
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("height",height)
+            .attr("width", width)
+            .attr("viewBox", -100 + " 0 " + width + " " + height);
+
+    const area = d3.area()
+                    .x((d,i) => i * 50)
+                    .curve(d3.curveCardinal);
+
+    const xAxis = d3.axisBottom(d3.scaleIdentity().domain([0,250]))
+            .ticks(6);
+    const yAxis = d3.axisLeft();
+
+    stackOffset.forEach((d,i) => draw(d, i));
+
+    function draw(offset, index) {
+        const j = Math.floor(index / 3);
+        const i = j > 0 ? (index % 2 + .25) * 1.25 : index % 3;
+        const min = j > 0 ? -50 : 0
+        const max = j > 0 ? 50 : 100;
+
+        yAxis.scale(d3.scaleIdentity().domain([min,max]));
+        let datasets = data;
+        let text = offset;
+
+        if(index == 1) {
+            scale.domain([0,1]);
+            datasets = absData;
+            text = offset + " (positive values only)"
+        } else {
+            scale.domain([0,100]);
+            datasets = data;
+            text= offset
+        }
+
+        area.y0(d => scale(d[0]))
+            .y1(d => scale(d[1]))
+
+        stack.offset(d3[offset]);
+        const stackedData = stack(datasets);
+
+        const g = svg.append("g")
+                .attr("transform", "translate("+[j * width/2,i * height/3]+")");
+
+        g.selectAll("path")
+                .data(stackedData)
+                .enter()
+                .append("path")
+                .attr("d", area)
+                .style("fill", (d, i) => colorScale(i))
+                .style("opacity", .7);
+
+        g.append('g').call(xAxis)
+                .attr("transform", "translate("+[0, 100]+")");
+        g.append('g').call(yAxis)
+                .attr("transform", "translate("+[0, -min*2]+")");
+
+        g.append("text")
+                .text(text)
+                .attr("x", 25)
+                .attr("y", 140 - min)
+    }
+
+</script>
+</body>
+</html>

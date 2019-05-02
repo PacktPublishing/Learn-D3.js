@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<h1>Use the JavaScript console to select elements</h1>
+<div id="words">
+    <p id="a1">One</p>
+    <p id="a2">Two</p>
+    <p id="a3">Three</p>
+</div>
+<p id="a4">Four</p>
+<p id="a5">Five</p>
+
+<script>
+    // selection.merge()
+
+    const a1 = d3.selectAll("div p") // 3 elements
+         .select(function() {
+             return d3.select(this).attr("id") == "a1" ? this : null
+         });
+    const a1_f = d3.selectAll("div #a1"); // same selection, but loses original index
+
+    const a3 = d3.selectAll("div p") // 3 elements (same parent)
+         .select(function() {
+             return d3.select(this).attr("id") == "a3" ? this : null
+         });
+    const a3_f = d3.selectAll("div #a3"); // same selection, but loses originalindex
+
+    const a5 = d3.selectAll("p") // 5 elements (different parent)
+        .select(function() {
+            return d3.select(this).attr("id") == "a5" ? this : null
+        });
+
+    // 1) works for selections with same parents and when indexes are preserved
+    const merged1 = a1.merge(a3);
+    console.log("merged", a1, a3, merged1, merged1._groups);
+
+    // But selection.merge() doesn't really merge...
+
+    // 2) fails because original indexes were lost
+    const merged2 = a1_f.merge(a3_f);
+    console.log("merged (fail 1 - index)", a1_f, a3_f, merged2, merged2._groups);
+
+    // 3) fails because parents are different and second selection (5) doesn' fit in first (3
+    const merged3 = a1.merge(a5); // [p#a1, empty × 2] (result is same as a1)
+    console.log("merged (fail 2 - parents)", a5, merged3, merged3._groups);
+
+    // 4) success because second selection (3) fits in first selection (5);
+    // same selections as (3) but in different order: selection.merge is NOT reflective!
+    const merged4 = a5.merge(a1); // [p#a1, empty × 3, p#a5]
+    console.log("merged (success)", a5, merged4, merged4._groups);
+
+    // 5) Real merging ignoring indexes with d3.merge(array) :
+    const merged5 = d3.select(d3.merge([a5.nodes(),a1.nodes()]));
+    console.log("d3.merge ", merged5);
+
+    // 6) Real merging ignoring indexes with concat(...):
+    const merged6 = d3.select(a5.nodes().concat(a1.nodes()));
+    console.log("concat ", merged6);
+
+</script>
+</body>
+</html>

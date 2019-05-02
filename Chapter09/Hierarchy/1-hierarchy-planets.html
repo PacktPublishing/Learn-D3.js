@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+<script>
+
+    d3.json("../Data/planets.json").then(function(result) {
+        console.log("Loaded hierarachy", result);
+
+        // convert existing hierarchy to standard format
+        const h = d3.hierarchy(result, function(d) {
+            if(d.category == 'rocky' || d.category == 'gaseous' || d.category == 'dwarf') {
+                return d.satellites;
+            }
+            return d.planets;
+        });
+        console.log("Converted hierarchy", h);
+
+        drawTable(h);
+
+    });
+
+    function drawTable(h) {
+        const table = d3.select("body").append("table").attr("border",1);
+        table.selectAll("tr")
+            .data(h.children).enter()
+            .append("tr")
+            .each(function(d) {
+                const tr = d3.select(this);
+                tr.append("td").text(d.data.name);
+                if(d.children) {
+                    tr.append("td")
+                        .text(d.children.map(s=>s.data.name));
+                }
+            });
+
+    }
+
+</script>
+<h1>See console for results</h1>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+</head>
+<style>
+    svg {
+        border: solid 1px lightgray;
+    }
+</style>
+<body>
+<h2>SVG lines and stroke using D3</h2>
+<script>
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 200);
+
+    svg.append("line")
+            .attr("x2", 200)
+            .style("stroke", "red")
+            .style("stroke-width", 20);
+
+    svg.append("line")
+            .attr("y2", 150)
+            .style("stroke", "blue")
+            .style("stroke-width", 20);
+
+    svg.append("line")
+            .attr("x2", 200)
+            .attr("y2", 150)
+            .style("stroke", "black")
+            .style("stroke-width", 20);
+</script>
+</body>
+</html>

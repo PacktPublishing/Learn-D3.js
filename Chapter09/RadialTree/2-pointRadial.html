@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hierarchies</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="../JavaScript/simple_hierarchical_data.js"></script>
+    <style>
+        line {
+            stroke: black;
+        }
+    </style>
+</head>
+<body>
+<script>
+
+    const width = 1000, height = 800;
+    const svg = d3.select("body").append("svg")
+            .attr("height", height)
+            .attr("width", width);
+    const chart = svg.append("g")
+                    .attr("transform", d => `translate(${[width/2,height/2]})`);
+
+    const root = d3.hierarchy(simpleHierarchy);
+    root.sort((a,b) => b.height - a.height );
+
+    const tree = d3.tree()
+                    .size([2 * Math.PI, height/2])
+                    .separation((a,b) => (a.parent == b.parent ? 1 : 2) / (a.depth*a.depth));
+    const treeData = tree(root);
+
+    console.log(treeData);
+
+    const nodes = treeData.descendants();
+    const links = treeData.links();
+
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+            .domain(d3.extent(nodes, n => n.depth));
+    const widthScale = d3.scaleLinear().range([1,16])
+            .domain(d3.extent(links, k => k.target.height));
+
+    drawLinks();
+    drawNodes();
+
+    function drawNodes() {
+        chart.selectAll("g")
+            .data(nodes)
+            .join("g").attr("class", "node")
+            .attr("transform", d => `translate(${d3.pointRadial(d.x + Math.PI/2, d.y)})`)
+            .append("circle")
+            .attr("r", d => (d.height + 3) * 4)
+            .style("fill", d => colorScale(d.depth));
+    }
+
+    function cartesian([angle, radius]) {
+        return [radius * Math.cos(angle), radius * Math.sin(angle)];
+    }
+
+    function drawLinks() {
+        chart.selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("x1", d => d3.pointRadial(d.source.x + Math.PI/2, d.source.y)[0])
+            .attr("y1", d => d3.pointRadial(d.source.x + Math.PI/2, d.source.y)[1])
+            .attr("x2", d => d3.pointRadial(d.target.x + Math.PI/2, d.target.y)[0])
+            .attr("y2", d => d3.pointRadial(d.target.x + Math.PI/2, d.target.y)[1])
+            .style("stroke-width", d => (d.target.height + 1) * (d.target.height + 1))
+            .style("opacity", d => d.target.depth *.25 * .6 + .4);
+    }
+
+
+</script>
+</body>
+</html>

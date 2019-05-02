@@ -1,0 +1,21 @@
+Country,Supercontinent,Continent,UN_Region,Area_km2,Pop_2016,HDI_2017,Code
+Austria,Eurasia,Europe,Western Europe,5,8736668,0.908,AUT
+Belgium,Eurasia,Europe,Western Europe,8,11331422,0.916,BEL
+France,Eurasia,Europe,Western Europe,3,66859768,0.901,FRA
+Germany,Eurasia,Europe,Western Europe,6,82348669,0.936,DEU
+Serbia,Eurasia,Europe,Southern Europe,12,7058322,0.787,SRB
+Slovenia,Eurasia,Europe,Southern Europe,7,2065042,0.896,SVN
+Spain,Eurasia,Europe,Southern Europe,10,46484062,0.891,ESP
+Vatican City,Eurasia,Europe,Southern Europe,,801,,VAT
+Denmark,Eurasia,Europe,Northern Europe,1,5728010,0.929,DNK
+Estonia,Eurasia,Europe,Northern Europe,22,1315790,0.871,EST
+Faroe Islands,Eurasia,Europe,Northern Europe,13,49117,0.950,FRO
+Finland,Eurasia,Europe,Northern Europe,9,5495303,0.920,FIN
+Iceland,Eurasia,Europe,Northern Europe,11,335439,0.935,ISL
+Poland,Eurasia,Europe,Eastern Europe,8,37970087,0.865,POL
+Moldova,Eurasia,Europe,Eastern Europe,4,3551954,0.700,MDA
+Romania,Eurasia,Europe,Eastern Europe,2,19702332,0.811,ROU
+Russian Federation,Eurasia,Europe,Eastern Europe,6,144342396,0.816,RUS
+Slovakia,Eurasia,Europe,Eastern Europe,14,5430798,0.855,SVK
+Ukraine,Eurasia,Europe,Eastern Europe,10,45004645,0.751,UKR
+Antarctica,Antarctica,Antarctica,Antarctica,11,1000,,ATA

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        text {
+            font-family: 'Yanone Kaffeesatz', sans-serif;
+            font-size: 12px;
+            alignment-baseline: middle;
+            text-anchor: middle;
+            fill: white;
+            pointer-events: none;
+        }
+        .faded {
+            opacity: .1;
+        }
+        .highlight {
+            stroke-width: 3;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const width = 1000;
+    const height = 800;
+    const margin = 100;
+
+    const nodes = [];
+    const links = [];
+
+    const scaleWidth = d3.scaleLinear().range([1,90]);
+    const scaleOpacity = d3.scaleLog().range([.7,.3]);
+    const scaleRadius  = d3.scaleLinear().range([20,60]);
+    const scaleDistance = d3.scaleLinear().range([1,15000])
+    const colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928','#ffed6f','black','#e7298a'];
+
+    const nodeDragged = d3.drag();
+
+    d3.csv("../Data/sa_borders.csv", function(row) {
+        nodes.push({node: row.Country})
+        return row;
+    }).then(function(data) {
+        data.forEach(function(d) {
+            for(const key in d) {
+                if(key != 'Country' && +d[key]) {
+                    const link = {};
+                    link.value = +d[key];
+                    link.source = nodes.map(n => n.node).indexOf(d.Country);
+                    link.target = nodes.map(n => n.node).indexOf(key);
+                    links.push(link);
+                }
+            }
+        });
+
+        nodes.forEach(function(node,i) {
+            const connections = links.filter(link => link.source == i || link.target == i)
+            node.connections = connections.length;
+            node.total = d3.sum(connections, d => d.value)
+        });
+
+        console.log(nodes, links)
+
+        scaleWidth.domain(d3.extent(links, d => d.value))
+        scaleOpacity.domain(d3.extent(links, d => d.value))
+        scaleDistance.domain(d3.extent(nodes, d => d.connections));
+        scaleRadius.domain(d3.extent(nodes, d => d.total));
+
+        const svg = d3.select("body").append("svg").attr("width",width).attr("height",height);
+        const chart = svg.append("g").attr("transform", `translate(${[width * .5,height * .5]})`);
+
+        const sim = d3.forceSimulation(nodes);
+        sim.force("center", d3.forceCenter());
+        sim.force("manybody", d3.forceManyBody().strength(d => -scaleDistance(d.connections)));
+        sim.force("link", d3.forceLink(links).iterations(2).distance(90))
+        sim.force('collision', d3.forceCollide(d => scaleRadius(d.total)))
+
+        sim.on("tick", redraw);
+
+        // Dragging behavior - using fixed nodes
+        nodeDragged.on('drag', function(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+            if(sim.alpha() < .05) {
+                sim.alpha(.05);
+                sim.restart();
+            }
+        });
+
+        draw(chart,data);
+
+    });
+
+    function isCoastline(d) {
+        return d.target.node == 'Atlantic' || d.source.node == 'Atlantic' ||
+               d.target.node == 'Pacific'  || d.source.node == 'Pacific';
+    }
+
+    function draw(chart, data) {
+        chart.selectAll('line.border')
+                .data(links).enter()
+                .append('line').attr("class", 'border')
+                .attr("x1", d => d.source.x)
+                .attr("x2", d => d.target.x)
+                .attr("y1", d => d.source.y)
+                .attr("y2", d => d.target.y)
+                .style("fill", 'none')
+                .style("stroke", d => isCoastline(d) ? 'blue' : 'black')
+                .style("stroke-opacity", d => scaleOpacity(d.value))
+                .style("stroke-width", d => scaleWidth(d.value))
+
+        const bubble = chart.selectAll('g.bubble')
+                .data(nodes).enter()
+                .append("g").attr("class", 'bubble')
+                .attr("transform", d => `translate(${[d.x, d.y]})`)
+                .call(nodeDragged);
+
+        bubble.append("circle")
+                .attr("r", d => scaleRadius(d.total))
+                .style("fill", (d,i) => colors[i])
+                .style("stroke", 'black')
+                .style("stroke-width", .5)
+                .on("mouseover", highlightNode)
+                .on("mouseout", d => d3.selectAll("circle, line").classed('faded highlight', false));
+
+        bubble.append("text")
+                .text(d => d.node)
+                .style("fill", (d,i) => contrast(colors[i]))
+                .style("font-size", function(d) {
+                    const size = Math.min(2.2*scaleRadius(d.total), (2.2*scaleRadius(d.total)-8) / this.getComputedTextLength() * 9);
+                    return size > 5 ? size : 0;
+                })
+    }
+
+    function redraw() {
+        d3.selectAll('.bubble').attr("transform", d => `translate(${[d.x, d.y]})`);
+
+        d3.selectAll('.border').attr("x1", d => d.source.x)
+                            .attr("x2", d => d.target.x)
+                            .attr("y1", d => d.source.y)
+                            .attr("y2", d => d.target.y)
+    }
+
+    function contrast(color) {
+        const c = d3.rgb(color);
+        return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 130 ? 'black' : 'white';
+    }
+
+    function highlightNode(node) {
+        d3.selectAll("circle").classed('highlight', d => d === node);
+        d3.selectAll("circle").classed('faded', d => !(d === node
+                            || links.filter(k => k.source == node).filter(m => m.target == d).length > 0
+                            || links.filter(k => k.target == node).filter(m => m.source == d).length > 0));
+        d3.selectAll("line").classed('faded', edge => !(edge.source === node || edge.target === node ));
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+        .label {
+            fill: black;
+            font-size: 12pt;
+            text-anchor: middle;
+        }
+        svg {
+            border: solid 1px lightblue;
+        }
+        .y-axis .domain {
+            stroke-width: 0;
+            fill: lightblue;
+        }
+        .y-axis .tick line {
+            stroke: white;
+        }
+        .y-axis .tick text {
+            fill: #62b6e6;
+        }
+        .x-axis .domain {
+            stroke-width: 2;
+            stroke: blue;
+        }
+        .x-axis .tick:nth-child(2n) line {
+            stroke: red;
+            stroke-width: 3;
+        }
+        .x-axis .tick:nth-child(2n-1) text {
+            fill: green;
+            font-weight: 100;
+            font-size: 200%;
+        }
+    </style>
+</head>
+<body>
+<script>
+    const height  = 500;
+    const width   = 800;
+    const marginX = 50;
+    const marginY = 50;
+
+    const scaleX = d3.scaleLinear().range([marginX, width - marginX]);
+    const scaleY = d3.scaleLinear().range([height - marginY, marginY]);
+
+    const axisX = d3.axisBottom(scaleX);
+    const axisY = d3.axisLeft(scaleY).tickSize(20);
+
+    const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height",height);
+
+    svg.append("g").attr("class", "x-axis")
+            .attr("transform", "translate(0,"+(height - marginY)+")")
+            .call(axisX);
+
+    svg.append("g").attr("class", "y-axis")
+            .attr("transform", "translate("+(marginX)+",0)")
+            .call(axisY);
+
+
+</script>
+</body>
+</html>
