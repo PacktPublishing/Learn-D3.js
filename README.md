@@ -1,8 +1,8 @@
 # Learn D3.js 
 
-<a href="Packt UTM URL of the Book"><img src="Cover Image URL of the Book" alt="Learn D3.js" height="256px" align="right"></a>
+<a href="https://www.packtpub.com/web-development/learn-d3js?utm_source=github&utm_medium=repository&utm_campaign=9781838645571"><img src="https://www.packtpub.com/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/1/3/13918_p.png" alt="Learn D3.js" height="256px" align="right"></a>
 
-This is the code repository for [Learn D3.js](Packt UTM URL of the Book), published by Packt.
+This is the code repository for [Learn D3.js](https://www.packtpub.com/web-development/learn-d3js?utm_source=github&utm_medium=repository&utm_campaign=9781838645571), published by Packt.
 
 **Create interactive data-driven visualizations for the web with the D3.js library**
 
