@@ -54,7 +54,7 @@
         const fmt = d3.format(".2f");
 
         // a color scale
-        colorScale = d3.scaleLinear()
+        const colorScale = d3.scaleLinear()
                        .domain([0, d3.max(distances, d => d.distance)])
                        .range([0,1])
 
