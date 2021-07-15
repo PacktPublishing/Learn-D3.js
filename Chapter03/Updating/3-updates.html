@@ -120,7 +120,7 @@
                 entry.append("rect").attr("class", "bar")
                     .attr("x", 100)
                     .attr("height", 20)
-                    .style("width", barScale(d[chart.current.key]) )
+                    .attr("width", barScale(d[chart.current.key]) )
                     .style("fill", d3.color(chart.current.color).darker(colorScale(d[chart.current.key])) )
 
                 entry.append("text").attr("class", "label value")
@@ -138,7 +138,7 @@
                 d3.select(this).select(".label.category")
                     .text(d.name); // the order may have changed
                 d3.select(this).select(".bar")
-                    .style("width", barScale(d[chart.current.key]))
+                    .attr("width", barScale(d[chart.current.key]))
                     .style("fill", d3.color(chart.current.color)
                                      .darker(colorScale(d[chart.current.key])));
                 d3.select(this).select(".label.value")
